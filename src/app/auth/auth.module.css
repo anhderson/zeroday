@@ -938,12 +938,34 @@
   border-radius: 50%;
 }
 
+/* --- Sincronia dos Vidros Fumê com as Esferas --- */
+.crystalShard {
+  animation: shardColorPulse 7s infinite ease-in-out;
+}
+
+@keyframes shardColorPulse {
+  /* 0 - 3.5s: Cinza transparente fumê enquanto as 8 esferas negras estão pequenas (0% - 50%) */
+  0%, 50% { 
+    filter: grayscale(100%) brightness(0.55) contrast(0.95); 
+  }
+  
+  /* 3.5s - 6s: Vidros levemente coloridos quando as esferas crescem e viram a imagem (50% - 85.7%) */
+  70%, 85.7% { 
+    filter: grayscale(30%) brightness(1.0) contrast(1.05); 
+  }
+  
+  /* 6s - 7s: Retorno ao cinza transparente fumê (85.7% - 100%) */
+  100% { 
+    filter: grayscale(100%) brightness(0.55) contrast(0.95); 
+  }
+}
+
 /* 8 Equal Shards mapping outward from exact Top Center (50% 0%) with subtle, elegant cracks between edges */
 
 /* Shard 1 */
 .shard1 {
   clip-path: polygon(50% 0%, 0% 0%, 0% 25%, 22% 16%);
-  background: linear-gradient(135deg, rgba(173, 216, 230, 0.35), rgba(173, 216, 230, 0.05), transparent);
+  background: linear-gradient(135deg, rgba(173, 216, 230, 0.22), rgba(173, 216, 230, 0.04), transparent);
   --crack-x: -12px; --crack-y: 6px;
   --crack-angle: 12deg; --crack-scale: 1;
   --shard-accent: #add8e6;
@@ -954,7 +976,7 @@
 /* Shard 2 */
 .shard2 {
   clip-path: polygon(50% 0%, 22% 16%, 0% 25%, 0% 55%, 28% 30%);
-  background: linear-gradient(145deg, rgba(0, 255, 0, 0.35), rgba(0, 255, 0, 0.05), transparent);
+  background: linear-gradient(145deg, rgba(0, 255, 0, 0.22), rgba(0, 255, 0, 0.04), transparent);
   --crack-x: -8px; --crack-y: 10px;
   --crack-angle: -25deg; --crack-scale: 1.1;
   --shard-accent: #00ff00;
@@ -965,7 +987,7 @@
 /* Shard 3 */
 .shard3 {
   clip-path: polygon(50% 0%, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%);
-  background: linear-gradient(160deg, rgba(0, 0, 139, 0.4), rgba(0, 0, 139, 0.1), transparent);
+  background: linear-gradient(160deg, rgba(0, 0, 139, 0.25), rgba(0, 0, 139, 0.06), transparent);
   --crack-x: -3px; --crack-y: 12px;
   --crack-angle: 50deg; --crack-scale: 0.9;
   --shard-accent: #00008b;
@@ -976,7 +998,7 @@
 /* Shard 4 */
 .shard4 {
   clip-path: polygon(50% 0%, 27% 55%, 12% 100%, 50% 100%, 50% 55%);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05), transparent);
   --crack-x: 0px; --crack-y: 15px;
   --crack-angle: -10deg; --crack-scale: 1.2;
   --shard-accent: #ffffff;
@@ -987,7 +1009,7 @@
 /* Shard 5 */
 .shard5 {
   clip-path: polygon(50% 0%, 50% 55%, 50% 100%, 88% 100%, 73% 55%);
-  background: linear-gradient(200deg, rgba(255, 255, 0, 0.4), rgba(255, 255, 0, 0.1), transparent);
+  background: linear-gradient(200deg, rgba(255, 255, 0, 0.22), rgba(255, 255, 0, 0.05), transparent);
   --crack-x: 3px; --crack-y: 12px;
   --crack-angle: 85deg; --crack-scale: 0.8;
   --shard-accent: #ffff00;
@@ -998,7 +1020,7 @@
 /* Shard 6 */
 .shard6 {
   clip-path: polygon(50% 0%, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%);
-  background: linear-gradient(220deg, rgba(147, 112, 219, 0.4), rgba(147, 112, 219, 0.1), transparent);
+  background: linear-gradient(220deg, rgba(147, 112, 219, 0.25), rgba(147, 112, 219, 0.06), transparent);
   --crack-x: 8px; --crack-y: 10px;
   --crack-angle: -40deg; --crack-scale: 1.1;
   --shard-accent: #9370db;
@@ -1009,7 +1031,7 @@
 /* Shard 7 */
 .shard7 {
   clip-path: polygon(50% 0%, 72% 30%, 100% 55%, 100% 25%, 78% 16%);
-  background: linear-gradient(250deg, rgba(255, 0, 0, 0.4), rgba(255, 0, 0, 0.1), transparent);
+  background: linear-gradient(250deg, rgba(255, 0, 0, 0.22), rgba(255, 0, 0, 0.05), transparent);
   --crack-x: 12px; --crack-y: 6px;
   --crack-angle: -15deg; --crack-scale: 1;
   --shard-accent: #ff0000;
@@ -1020,7 +1042,7 @@
 /* Shard 8 */
 .shard8 {
   clip-path: polygon(50% 0%, 78% 16%, 100% 25%, 100% 0%);
-  background: linear-gradient(270deg, rgba(255, 140, 0, 0.4), rgba(255, 140, 0, 0.1), transparent);
+  background: linear-gradient(270deg, rgba(255, 140, 0, 0.22), rgba(255, 140, 0, 0.05), transparent);
   --crack-x: 15px; --crack-y: 2px;
   --crack-angle: -5deg; --crack-scale: 0.9;
   --shard-accent: #ff8c00;
