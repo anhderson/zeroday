@@ -15,10 +15,11 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "OCN | Organic Consciousness Network",
+  title: "DZ | Dia Zero",
   description: "A natural social experience based on universal human actions.",
   icons: {
     icon: '/logo.jpg',
+    shortcut: '/logo.jpg',
     apple: '/logo.jpg',
   },
 };
