@@ -9,6 +9,7 @@ import styles from './auth.module.css';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [lang, setLang] = useState<'pt' | 'en'>('pt');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,53 @@ export default function AuthPage() {
   const [colorIndex, setColorIndex] = useState(3);
   const [showToggleMenu, setShowToggleMenu] = useState(false);
   const router = useRouter();
+
+  const t = {
+    pt: {
+      emptyFieldsError: 'Frequência de acesso não identificada. Preencha todos os campos.',
+      signUpSuccess: 'Verifique seu e-mail para confirmar o cadastro!',
+      unexpectedError: 'Ocorreu um erro inesperado.',
+      leftDecal: 'Zero Day',
+      leftTitle: 'Chegou a hora de se conhecer verdadeiramente',
+      leftText1: 'O Oculto deixará de ser invisível.',
+      leftText2: 'Aquilo que antes habitava nas entrelinhas da existência começa a emergir, como um sussurro que ganha forma, como uma frequência que finalmente encontra quem a escute.',
+      leftText3: 'Preparando espectros para o que está por vir…',
+      rightDecal: 'Dia Zero',
+      rightTitle: 'Crie sua indêntidade digital e faça a Simbiose.',
+      rightText1: 'Entre no Mundo Digital Novo, um limiar onde véus se dissolvem e a realidade deixa de ser apenas aquilo que os olhos alcançam. Aqui, o físico e o espiritual não caminham separados…',
+      rightText2: 'Eles se entrelaçam, se fundem, respiram como um só fluxo vivo.',
+      registering: 'CADASTRANDO',
+      syncColorTitle: 'Sincronizar Frequência de Cor',
+      radarErrorRing: 'FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ ',
+      enterNexus: 'Adentrar o Nexo',
+      manifestExistence: 'Manifestar Existência',
+      materialize: 'MATERIALIZAR',
+      dissolve: 'DISSOLVER',
+      quote: '"E se todas as suas verdades fossem apagadas, o que você escolheria acreditar?"',
+    },
+    en: {
+      emptyFieldsError: 'Unidentified access frequency. Please fill in all fields.',
+      signUpSuccess: 'Check your email to confirm your registration!',
+      unexpectedError: 'An unexpected error occurred.',
+      leftDecal: 'Zero Day',
+      leftTitle: 'The time has come to truly know yourself',
+      leftText1: 'The Hidden will no longer be invisible.',
+      leftText2: 'That which once dwelt between the lines of existence begins to emerge, like a whisper taking shape, like a frequency that finally finds someone to listen.',
+      leftText3: 'Preparing spectrums for what is to come…',
+      rightDecal: 'Day Zero',
+      rightTitle: 'Create your digital identity and achieve Symbiosis.',
+      rightText1: 'Enter the New Digital World, a threshold where veils dissolve and reality ceases to be only what the eyes can reach. Here, the physical and the spiritual do not walk apart…',
+      rightText2: 'They intertwine, merge, and breathe as one living flow.',
+      registering: 'REGISTERING',
+      syncColorTitle: 'Synchronize Color Frequency',
+      radarErrorRing: 'UNIDENTIFIED ACCESS FREQUENCY. FILL IN ALL FIELDS. ✦ ✦ ✦ ✦ ✦ UNIDENTIFIED ACCESS FREQUENCY. FILL IN ALL FIELDS. ✦ ✦ ✦ ✦ ✦ ',
+      enterNexus: 'Enter the Nexus',
+      manifestExistence: 'Manifest Existence',
+      materialize: 'MATERIALIZE',
+      dissolve: 'DISSOLVE',
+      quote: '"And if all your truths were erased, what would you choose to believe?"',
+    },
+  }[lang];
 
   const radarColors = [
     'rgba(173, 216, 230, 0.8)', // Shard 1
@@ -61,7 +109,7 @@ export default function AuthPage() {
       // mesmo que os campos estejam vazios ou incompletos
       if (!email || !password) {
         setTimeout(() => {
-          setError('Frequência de acesso não identificada. Preencha todos os campos.');
+          setError(t.emptyFieldsError);
           setLoading(false);
         }, 2500);
         return;
@@ -96,14 +144,14 @@ export default function AuthPage() {
           if (signUpError) {
             setError(signUpError.message);
           } else {
-            setMessage('Verifique seu e-mail para confirmar o cadastro!');
+            setMessage(t.signUpSuccess);
           }
           setLoading(false);
         }, 2500);
       }
     } catch (err: any) {
       setTimeout(() => {
-        setError(err.message || 'Ocorreu um erro inesperado.');
+        setError(err.message || t.unexpectedError);
         setLoading(false);
       }, 2500);
     }
@@ -113,6 +161,30 @@ export default function AuthPage() {
     <main className={styles.container}>
       {/* FULL SCREEN GIANT CRYSTAL BACKGROUND */}
       <div className={styles.crystalBackground}>
+        <div className={styles.topLightGlow} />
+        
+        {/* Core Black Circle + White Light */}
+        <div className={styles.voidCoreWrapper}>
+          <div className={styles.voidCore} />
+        </div>
+        
+        {/* Splinters / broken glass details around the crack */}
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
+          <div 
+            key={`splinter-wrapper-${id}`}
+            style={{
+              position: 'absolute',
+              top: 0, left: 0, width: '100%', height: '100%',
+              pointerEvents: 'none',
+              zIndex: 3,
+            }}
+          >
+            <div 
+              className={`${styles.splinter} ${styles[`sp${id}` as keyof typeof styles]}`}
+            />
+          </div>
+        ))}
+
         {[...Array(8)].map((_, i) => (
           <div 
             key={`shard-${i+1}`}
@@ -136,13 +208,13 @@ export default function AuthPage() {
         <div className={styles.binaryCode} style={{ marginBottom: '1.5rem', opacity: 0.4 }}>
           {binaryLeft}
         </div>
-        <div className={styles.cyberDecal}>Zero Day</div>
+        <div className={styles.cyberDecal}>{t.leftDecal}</div>
         <Eye className={styles.sideIcon} size={48} strokeWidth={1} />
-        <h2 className={styles.sideTitle}>Chegou a hora de se conhecer verdadeiramente</h2>
+        <h2 className={styles.sideTitle}>{t.leftTitle}</h2>
         <p className={styles.sideText}>
-          O Oculto deixará de ser invisível.<br />
-          Aquilo que antes habitava nas entrelinhas da existência começa a emergir, como um sussurro que ganha forma, como uma frequência que finalmente encontra quem a escute.<br /><br />
-          Preparando espectros para o que está por vir…
+          {t.leftText1}<br />
+          {t.leftText2}<br /><br />
+          {t.leftText3}
         </p>
         <div className={styles.neonBar} />
         <div className={styles.binaryCode}>
@@ -155,7 +227,7 @@ export default function AuthPage() {
           <div className={styles.statusHeader}>
             <div className={styles.statusLabel}>
               <span className={styles.statusLight} />
-              <span>CADASTRANDO</span>
+              <span>{t.registering}</span>
               <span className={styles.statusLight} />
             </div>
           </div>
@@ -172,7 +244,7 @@ export default function AuthPage() {
           onClick={() => {
             setColorIndex((colorIndex + 1) % radarColors.length);
           }}
-          title="Sincronizar Frequência de Cor"
+          title={t.syncColorTitle}
           type="button"
         >
           <div className={styles.radarBtnGlow} />
@@ -194,7 +266,7 @@ export default function AuthPage() {
               <textPath href="#radarCurve" startOffset="0%" textLength="1382" lengthAdjust="spacing">
                 {!error 
                   ? '' 
-                  : 'FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ '}
+                  : t.radarErrorRing}
               </textPath>
             </text>
           </svg>
@@ -263,7 +335,7 @@ export default function AuthPage() {
             type="submit" 
             disabled={loading} 
             className={styles.logoBtn}
-            title={isLogin ? 'Adentrar o Nexo' : 'Manifestar Existência'}
+            title={isLogin ? t.enterNexus : t.manifestExistence}
           >
             <div className={styles.logoArea}>
               <div className={styles.logoBorder}>
@@ -301,7 +373,7 @@ export default function AuthPage() {
               '--radar-accent': radarColors[colorIndex]
             } as any}
           >
-            {isLogin ? 'MATERIALIZAR' : 'DISSOLVER'}
+            {isLogin ? t.materialize : t.dissolve}
           </button>
         )}
       </div>
@@ -312,13 +384,13 @@ export default function AuthPage() {
         <div className={styles.binaryCode} style={{ marginBottom: '1.5rem', opacity: 0.4 }}>
           {binaryRight}
         </div>
-        <div className={styles.cyberDecal}>Dia Zero</div>
+        <div className={styles.cyberDecal}>{t.rightDecal}</div>
         <Fingerprint className={styles.sideIcon} size={48} strokeWidth={1} />
-        <h2 className={styles.sideTitle}>Crie sua indêntidade digital e faça a Simbiose.</h2>
+        <h2 className={styles.sideTitle}>{t.rightTitle}</h2>
         <p className={styles.sideText}>
-          Entre no Mundo Digital Novo, um limiar onde véus se dissolvem e a realidade deixa de ser apenas aquilo que os olhos alcançam. Aqui, o físico e o espiritual não caminham separados… 
+          {t.rightText1}
           <br /><br />
-          Eles se entrelaçam, se fundem, respiram como um só fluxo vivo.
+          {t.rightText2}
         </p>
         <div className={styles.neonBar} />
         <div className={styles.binaryCode}>
@@ -327,13 +399,27 @@ export default function AuthPage() {
       </div>
 
       <div className={styles.glitchQuote}>
-        "E se todas as suas verdades fossem apagadas, o que você escolheria acreditar?"
+        {t.quote}
       </div>
 
       <div className={styles.langSelector}>
-        <button className={styles.langBtn}>PT-BR</button>
+        <button 
+          type="button"
+          className={styles.langBtn} 
+          onClick={() => setLang('pt')}
+          style={{ opacity: lang === 'pt' ? 1 : 0.5 }}
+        >
+          PT-BR
+        </button>
         <div className={styles.langSeparator} />
-        <button className={styles.langBtn} style={{ opacity: 0.5 }}>EN-US</button>
+        <button 
+          type="button"
+          className={styles.langBtn} 
+          onClick={() => setLang('en')}
+          style={{ opacity: lang === 'en' ? 1 : 0.5 }}
+        >
+          EN-US
+        </button>
       </div>
     </main>
   );
