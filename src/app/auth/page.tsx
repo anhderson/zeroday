@@ -28,14 +28,16 @@ export default function AuthPage() {
       signUpSuccess: 'Verifique seu e-mail para confirmar o cadastro!',
       unexpectedError: 'Ocorreu um erro inesperado.',
       leftDecal: 'Zero Day',
-      leftTitle: 'Chegou a hora de se conhecer verdadeiramente',
-      leftText1: 'O Oculto deixará de ser invisível.',
-      leftText2: 'Aquilo que antes habitava nas entrelinhas da existência começa a emergir, como um sussurro que ganha forma, como uma frequência que finalmente encontra quem a escute.',
-      leftText3: 'Preparando espectros para o que está por vir…',
+      leftTitle: 'Chegou a hora de se conhecer um pouco mais.',
+      leftText1: 'Dar espaço ao que você sente, compartilhar o que imagina e descobrir novas formas de se expressar.',
+      leftText2: 'O que antes ficava nas entrelinhas pode virar texto, arte, música ou uma boa conversa.',
+      leftText3: 'Um espaço para ser você, no seu tempo, e encontrar pessoas pelo caminho.',
+      leftText4: 'Preparando algo novo para o que está por vir…',
       rightDecal: 'Dia Zero',
-      rightTitle: 'Crie sua indêntidade digital e faça a Simbiose.',
-      rightText1: 'Entre no Mundo Digital Novo, um limiar onde véus se dissolvem e a realidade deixa de ser apenas aquilo que os olhos alcançam. Aqui, o físico e o espiritual não caminham separados…',
-      rightText2: 'Eles se entrelaçam, se fundem, respiram como um só fluxo vivo.',
+      rightTitle: 'Crie sua identidade digital e faça parte dessa simbiose.',
+      rightText1: 'Entre em um novo mundo digital, onde suas ideias, sentimentos e formas de ver a vida encontram espaço para se expressar.',
+      rightText2: 'Aqui, o físico e o digital se conectam nas experiências e nos significados que você compartilha.',
+      rightText3: 'Um espaço para explorar quem você é e criar novas conexões.',
       registering: 'CADASTRANDO',
       syncColorTitle: 'Sincronizar Frequência de Cor',
       radarErrorRing: 'FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ FREQUÊNCIA DE ACESSO NÃO IDENTIFICADA. PREENCHA TODOS OS CAMPOS. ✦ ✦ ✦ ✦ ✦ ',
@@ -50,14 +52,16 @@ export default function AuthPage() {
       signUpSuccess: 'Check your email to confirm your registration!',
       unexpectedError: 'An unexpected error occurred.',
       leftDecal: 'Zero Day',
-      leftTitle: 'The time has come to truly know yourself',
-      leftText1: 'The Hidden will no longer be invisible.',
-      leftText2: 'That which once dwelt between the lines of existence begins to emerge, like a whisper taking shape, like a frequency that finally finds someone to listen.',
-      leftText3: 'Preparing spectrums for what is to come…',
+      leftTitle: 'The time has come to get to know yourself a little more.',
+      leftText1: 'Make room for what you feel, share what you imagine, and discover new ways to express yourself.',
+      leftText2: 'What once stayed between the lines can become text, art, music, or a good conversation.',
+      leftText3: 'A space to be yourself, at your own pace, and meet people along the way.',
+      leftText4: 'Preparing something new for what is to come…',
       rightDecal: 'Day Zero',
-      rightTitle: 'Create your digital identity and achieve Symbiosis.',
-      rightText1: 'Enter the New Digital World, a threshold where veils dissolve and reality ceases to be only what the eyes can reach. Here, the physical and the spiritual do not walk apart…',
-      rightText2: 'They intertwine, merge, and breathe as one living flow.',
+      rightTitle: 'Create your digital identity and be part of this symbiosis.',
+      rightText1: 'Enter a new digital world, where your ideas, feelings, and ways of seeing life find room to express themselves.',
+      rightText2: 'Here, the physical and the digital connect through the experiences and meanings you share.',
+      rightText3: 'A space to explore who you are and create new connections.',
       registering: 'REGISTERING',
       syncColorTitle: 'Synchronize Color Frequency',
       radarErrorRing: 'UNIDENTIFIED ACCESS FREQUENCY. FILL IN ALL FIELDS. ✦ ✦ ✦ ✦ ✦ UNIDENTIFIED ACCESS FREQUENCY. FILL IN ALL FIELDS. ✦ ✦ ✦ ✦ ✦ ',
@@ -212,9 +216,10 @@ export default function AuthPage() {
         <Eye className={styles.sideIcon} size={48} strokeWidth={1} />
         <h2 className={styles.sideTitle}>{t.leftTitle}</h2>
         <p className={styles.sideText}>
-          {t.leftText1}<br />
+          {t.leftText1}<br /><br />
           {t.leftText2}<br /><br />
-          {t.leftText3}
+          {t.leftText3}<br /><br />
+          {t.leftText4}
         </p>
         <div className={styles.neonBar} />
         <div className={styles.binaryCode}>
@@ -391,6 +396,8 @@ export default function AuthPage() {
           {t.rightText1}
           <br /><br />
           {t.rightText2}
+          <br /><br />
+          {t.rightText3}
         </p>
         <div className={styles.neonBar} />
         <div className={styles.binaryCode}>
