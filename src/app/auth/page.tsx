@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, Sparkles, Fingerprint, Eye, Zap, X, MoreHorizontal } from 'lucide-react';
+import { Mail, Lock, Unlock, Sparkles, Fingerprint, Eye, Zap, X, MoreHorizontal } from 'lucide-react';
 import styles from './auth.module.css';
 
 export default function AuthPage() {
@@ -12,6 +12,8 @@ export default function AuthPage() {
   const [lang, setLang] = useState<'pt' | 'en'>('pt');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showEmailWarningNotice, setShowEmailWarningNotice] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -27,6 +29,7 @@ export default function AuthPage() {
       emptyFieldsError: 'Frequência de acesso não identificada. Preencha todos os campos.',
       signUpSuccess: 'Verifique seu e-mail (inclusive a pasta de Spam / Lixo Eletrônico) para confirmar o cadastro!',
       emailAlreadyRegistered: 'Este e-mail já está cadastrado. Alterne para entrar com sua senha.',
+      emailErrorWarning: 'O e-mail ao ser confirmado pode apresentar erros, entretanto o processo funciona mesmo após o erro.',
       unexpectedError: 'Ocorreu um erro inesperado.',
       leftDecal: 'Zero Day',
       leftTitle: 'Chegou a hora de se conhecer um pouco mais.',
@@ -53,6 +56,7 @@ export default function AuthPage() {
       emptyFieldsError: 'Unidentified access frequency. Please fill in all fields.',
       signUpSuccess: 'Check your email (including Spam / Junk folder) to confirm your registration!',
       emailAlreadyRegistered: 'This email is already registered. Please switch to sign in with your password.',
+      emailErrorWarning: 'The email confirmation may display errors, however the process works even after the error.',
       unexpectedError: 'An unexpected error occurred.',
       leftDecal: 'Zero Day',
       leftTitle: 'The time has come to get to know yourself a little more.',
@@ -89,6 +93,15 @@ export default function AuthPage() {
   ];
 
   useEffect(() => {
+    // Checa se o usuário retornou de confirmação de e-mail
+    if (typeof window !== 'undefined' && window.location.search.includes('confirmed=true')) {
+      setMessage(
+        lang === 'pt'
+          ? 'E-mail confirmado com sucesso! Digite sua senha para entrar.'
+          : 'Email confirmed successfully! Enter your password to sign in.'
+      );
+    }
+
     // Inject registered characters into the crystal shards
     const fetchAvatars = async () => {
       const registeredCharacters = [
@@ -140,6 +153,7 @@ export default function AuthPage() {
         }, 2500);
 
       } else {
+        setShowEmailWarningNotice(true);
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
@@ -354,12 +368,17 @@ export default function AuthPage() {
           <div style={{ height: '80px', flexShrink: 0 }} />
 
           <div className={styles.inputGroup}>
-            <div className={styles.externalIconTop}>
-              <Lock size={16} />
-            </div>
+            <button
+              type="button"
+              className={styles.externalIconTopBtn}
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? (lang === 'pt' ? 'Ocultar senha' : 'Hide password') : (lang === 'pt' ? 'Mostrar senha' : 'Show password')}
+            >
+              {showPassword ? <Unlock size={16} /> : <Lock size={16} />}
+            </button>
             <div className={styles.inputWrapper}>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -418,6 +437,11 @@ export default function AuthPage() {
       {(!isLogin || loading) && (
         <div className={styles.registerPrompt}>
           {t.enterEmailPassword}
+        </div>
+      )}
+      {showEmailWarningNotice && (
+        <div className={styles.emailWarningPrompt}>
+          {t.emailErrorWarning}
         </div>
       )}
       </div>
