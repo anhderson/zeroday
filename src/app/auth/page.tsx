@@ -25,7 +25,8 @@ export default function AuthPage() {
   const t = {
     pt: {
       emptyFieldsError: 'Frequência de acesso não identificada. Preencha todos os campos.',
-      signUpSuccess: 'Verifique seu e-mail para confirmar o cadastro!',
+      signUpSuccess: 'Verifique seu e-mail (inclusive a pasta de Spam / Lixo Eletrônico) para confirmar o cadastro!',
+      emailAlreadyRegistered: 'Este e-mail já está cadastrado. Alterne para entrar com sua senha.',
       unexpectedError: 'Ocorreu um erro inesperado.',
       leftDecal: 'Zero Day',
       leftTitle: 'Chegou a hora de se conhecer um pouco mais.',
@@ -50,7 +51,8 @@ export default function AuthPage() {
     },
     en: {
       emptyFieldsError: 'Unidentified access frequency. Please fill in all fields.',
-      signUpSuccess: 'Check your email to confirm your registration!',
+      signUpSuccess: 'Check your email (including Spam / Junk folder) to confirm your registration!',
+      emailAlreadyRegistered: 'This email is already registered. Please switch to sign in with your password.',
       unexpectedError: 'An unexpected error occurred.',
       leftDecal: 'Zero Day',
       leftTitle: 'The time has come to get to know yourself a little more.',
@@ -138,7 +140,7 @@ export default function AuthPage() {
         }, 2500);
 
       } else {
-        const { error: signUpError } = await supabase.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -146,12 +148,43 @@ export default function AuthPage() {
           },
         });
 
-        setTimeout(() => {
+        setTimeout(async () => {
           if (signUpError) {
             setError(signUpError.message);
-          } else {
-            setMessage(t.signUpSuccess);
+            setLoading(false);
+            return;
           }
+
+          // Se já retornou sessão (confirmação desativada ou auto-confirmado no Supabase), entra imediatamente
+          if (signUpData?.session) {
+            router.push('/');
+            return;
+          }
+
+          // Se o usuário já existe no Supabase (identities vazio por proteção de enumeração)
+          if (
+            signUpData?.user &&
+            Array.isArray(signUpData.user.identities) &&
+            signUpData.user.identities.length === 0
+          ) {
+            // Tenta fazer login com a senha fornecida
+            const { error: autoSignInError } = await supabase.auth.signInWithPassword({
+              email,
+              password,
+            });
+
+            if (!autoSignInError) {
+              router.push('/');
+              return;
+            } else {
+              setError(t.emailAlreadyRegistered);
+              setLoading(false);
+              return;
+            }
+          }
+
+          // Se é uma nova conta criada aguardando link de ativação
+          setMessage(t.signUpSuccess);
           setLoading(false);
         }, 2500);
       }
