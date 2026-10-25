@@ -88,14 +88,14 @@ export default function AuthPage() {
     // Inject registered characters into the crystal shards
     const fetchAvatars = async () => {
       const registeredCharacters = [
-        '/personagens/LeviamonT.png?v=4',
-        '/personagens/BelphemonT.png?v=4',
-        '/personagens/DaemonT.png?v=4',
-        '/personagens/IlusiomonsT.png?v=4',
-        '/personagens/LucemonF.png?v=4',
-        '/personagens/LilithmonT.png?v=4',
-        '/personagens/BarbamonT.png?v=4',
-        '/personagens/BeelzemonT.png?v=4'
+        '/personagens/LeviamonT.png?v=5',
+        '/personagens/BelphemonT.png?v=5',
+        '/personagens/DaemonT.png?v=5',
+        '/personagens/IlusiomonsT.png?v=5',
+        '/personagens/LucemonF.png?v=5',
+        '/personagens/LilithmonT.png?v=5',
+        '/personagens/BarbamonT.png?v=5',
+        '/personagens/BeelzemonT.png?v=5'
       ];
       setCrystalAvatars(registeredCharacters);
     };
