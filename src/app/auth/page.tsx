@@ -76,14 +76,14 @@ export default function AuthPage() {
   }[lang];
 
   const radarColors = [
-    'rgba(173, 216, 230, 0.8)', // Shard 1
-    'rgba(0, 255, 0, 0.8)',     // Shard 2
-    'rgba(0, 0, 139, 0.8)',     // Shard 3
-    'rgba(255, 255, 255, 0.8)', // Shard 4
-    'rgba(255, 255, 0, 0.8)',   // Shard 5
-    'rgba(147, 112, 219, 0.8)', // Shard 6
-    'rgba(255, 0, 0, 0.8)',     // Shard 7
-    'rgba(255, 140, 0, 0.8)'    // Shard 8
+    'rgba(255, 105, 180, 0.8)', // Shard 1 - LeviamonT (Rosa)
+    'rgba(147, 112, 219, 0.8)', // Shard 2 - LilithmonT (Roxo)
+    'rgba(255, 0, 0, 0.8)',     // Shard 3 - BarbamonT (Vermelho)
+    'rgba(255, 140, 0, 0.8)',   // Shard 4 - BeelzemonT (Laranja)
+    'rgba(255, 255, 0, 0.8)',   // Shard 5 - LucemonF (Amarelo)
+    'rgba(0, 255, 0, 0.8)',     // Shard 6 - BelphemonT (Verde)
+    'rgba(0, 120, 255, 0.8)',   // Shard 7 - DaemonT (Azul)
+    'rgba(255, 255, 255, 0.8)'  // Shard 8 - IlusiomonsT (Branco)
   ];
 
   useEffect(() => {
@@ -169,9 +169,16 @@ export default function AuthPage() {
       <div className={styles.crystalBackground}>
         <div className={styles.topLightGlow} />
         
-        {/* Core Black Circle + White Light */}
+        {/* Core White Sphere (2x sharper) that transforms into Esfera777estrelas11 */}
         <div className={styles.voidCoreWrapper}>
-          <div className={styles.voidCore} />
+          <div className={styles.voidCore}>
+            <img
+              src="/esferas/Esfera777estrelas11.png"
+              alt=""
+              className={styles.topStarSphereImg}
+            />
+            <div className={styles.whiteSphereOverlay} />
+          </div>
         </div>
         
         {/* Splinters / broken glass details around the crack */}

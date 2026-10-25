@@ -837,27 +837,86 @@
 
 .voidCoreWrapper {
   position: absolute;
-  top: -2vh; left: calc(50vw - 3vh);
-  width: 6vh; height: 6vh;
-  z-index: -1;
+  top: 0.5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12vh;
+  height: 12vh;
+  z-index: 4;
+  pointer-events: none;
 }
 
 .voidCore {
-  width: 100%; height: 100%;
-  background: black;
+  position: relative;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  box-shadow: 0 0 30px 15px rgba(0, 0, 0, 0.95), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 18px 4px rgba(255, 255, 255, 0.85),
+    0 0 45px 12px rgba(255, 255, 255, 0.35);
 }
 
-.voidCore::after {
-  content: '';
+.topStarSphereImg {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 1.5vh; height: 1.5vh;
-  background: rgba(255, 255, 255, 1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
-  box-shadow: 0 0 40px 15px rgba(255, 255, 255, 1), 0 0 120px 50px rgba(255, 255, 255, 0.7), 0 0 250px 100px rgba(255, 255, 255, 0.3);
+  transform: scale(1.22);
+  filter: contrast(1.08) brightness(1.05);
+  animation: topStarSphereReveal 7s infinite ease-in-out;
+}
+
+.whiteSphereOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 35%,
+    #ffffff 0%,
+    #ffffff 55%,
+    #eef4ff 80%,
+    #d6e4ff 95%,
+    #ffffff 100%
+  );
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 1);
+  animation: whiteSphereTransform 7s infinite ease-in-out;
+}
+
+@keyframes whiteSphereTransform {
+  /* 0 - 3.5s: Esfera branca nítida enquanto as 8 esferas negras estão pequenas (0% - 50%) */
+  0%, 50% {
+    opacity: 1;
+  }
+  /* 3.5s - 6s: Transforma na Esfera777estrelas11 quando as esferas negras crescem (50% - 85.7%) */
+  70%, 85.7% {
+    opacity: 0;
+  }
+  /* 6s - 7s: Retorna para a esfera branca nítida (85.7% - 100%) */
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes topStarSphereReveal {
+  0%, 50% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  70%, 85.7% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
 }
 
 /* Cacos de vidro perdidos em volta da fratura */
@@ -1003,54 +1062,54 @@
 
 /* 8 Equal Shards mapping outward from exact Top Center (50% 0%) with subtle, elegant cracks between edges */
 
-/* Shard 1 */
+/* Shard 1 - LeviamonT (Rosa) */
 .shard1 {
-  clip-path: polygon(50% 0%, 0% 0%, 0% 25%, 22% 16%);
-  background: linear-gradient(135deg, rgba(173, 216, 230, 0.22), rgba(173, 216, 230, 0.04), transparent);
+  clip-path: polygon(44.6% 0%, 0% 0%, 0% 25%, 22% 16%, 43.5% 4.2%, 45.8% 2.8%);
+  background: linear-gradient(135deg, rgba(255, 105, 180, 0.28), rgba(255, 105, 180, 0.06), transparent);
   --crack-x: -12px; --crack-y: 6px;
   --crack-angle: 12deg; --crack-scale: 1;
-  --shard-accent: #add8e6;
+  --shard-accent: #ff69b4;
 }
 .shard1 .reflectionWrapper { left: 10%; top: 20%; }
 .shard1 .shardReflection { filter: none; }
 
-/* Shard 2 */
+/* Shard 2 - LilithmonT (Roxo) */
 .shard2 {
-  clip-path: polygon(50% 0%, 22% 16%, 0% 25%, 0% 55%, 28% 30%);
-  background: linear-gradient(145deg, rgba(0, 255, 0, 0.22), rgba(0, 255, 0, 0.04), transparent);
+  clip-path: polygon(46.2% 4.8%, 22% 16%, 0% 25%, 0% 55%, 28% 30%, 45.2% 8.5%, 44.0% 6.4%);
+  background: linear-gradient(145deg, rgba(147, 112, 219, 0.28), rgba(147, 112, 219, 0.06), transparent);
   --crack-x: -8px; --crack-y: 10px;
   --crack-angle: -25deg; --crack-scale: 1.1;
-  --shard-accent: #00ff00;
+  --shard-accent: #9370db;
 }
 .shard2 .reflectionWrapper { left: 15%; top: 35%; }
 .shard2 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 3 */
+/* Shard 3 - BarbamonT (Vermelho) */
 .shard3 {
-  clip-path: polygon(50% 0%, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%);
-  background: linear-gradient(160deg, rgba(0, 0, 139, 0.25), rgba(0, 0, 139, 0.06), transparent);
+  clip-path: polygon(45.6% 8.8%, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%, 47.8% 11.8%, 46.4% 10.2%);
+  background: linear-gradient(160deg, rgba(255, 0, 0, 0.26), rgba(255, 0, 0, 0.06), transparent);
   --crack-x: -3px; --crack-y: 12px;
   --crack-angle: 50deg; --crack-scale: 0.9;
-  --shard-accent: #00008b;
+  --shard-accent: #ff0000;
 }
 .shard3 .reflectionWrapper { left: 20%; top: 60%; }
 .shard3 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 4 */
+/* Shard 4 - BeelzemonT (Laranja) */
 .shard4 {
-  clip-path: polygon(50% 0%, 27% 55%, 12% 100%, 50% 100%, 50% 55%);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05), transparent);
+  clip-path: polygon(48.0% 12.0%, 27% 55%, 12% 100%, 50% 100%, 50% 55%, 49.8% 12.6%, 48.9% 10.8%);
+  background: linear-gradient(180deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.06), transparent);
   --crack-x: 0px; --crack-y: 15px;
   --crack-angle: -10deg; --crack-scale: 1.2;
-  --shard-accent: #ffffff;
+  --shard-accent: #ff8c00;
 }
 .shard4 .reflectionWrapper { left: 35%; top: 75%; }
 .shard4 .shardReflection { filter: none; }
 
-/* Shard 5 */
+/* Shard 5 - LucemonF / LucemonT (Amarelo) */
 .shard5 {
-  clip-path: polygon(50% 0%, 50% 55%, 50% 100%, 88% 100%, 73% 55%);
-  background: linear-gradient(200deg, rgba(255, 255, 0, 0.22), rgba(255, 255, 0, 0.05), transparent);
+  clip-path: polygon(50.2% 12.5%, 50% 55%, 50% 100%, 88% 100%, 73% 55%, 52.0% 11.9%, 51.1% 10.6%);
+  background: linear-gradient(200deg, rgba(255, 255, 0, 0.26), rgba(255, 255, 0, 0.06), transparent);
   --crack-x: 3px; --crack-y: 12px;
   --crack-angle: 85deg; --crack-scale: 0.8;
   --shard-accent: #ffff00;
@@ -1058,35 +1117,35 @@
 .shard5 .reflectionWrapper { left: 65%; top: 75%; }
 .shard5 .shardReflection { filter: none; }
 
-/* Shard 6 */
+/* Shard 6 - BelphemonT (Verde) */
 .shard6 {
-  clip-path: polygon(50% 0%, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%);
-  background: linear-gradient(220deg, rgba(147, 112, 219, 0.25), rgba(147, 112, 219, 0.06), transparent);
+  clip-path: polygon(52.3% 11.6%, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%, 54.4% 8.7%, 53.5% 10.4%);
+  background: linear-gradient(220deg, rgba(0, 255, 0, 0.25), rgba(0, 255, 0, 0.06), transparent);
   --crack-x: 8px; --crack-y: 10px;
   --crack-angle: -40deg; --crack-scale: 1.1;
-  --shard-accent: #9370db;
+  --shard-accent: #00ff00;
 }
 .shard6 .reflectionWrapper { left: 80%; top: 60%; }
 .shard6 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 7 */
+/* Shard 7 - DaemonT (Azul) */
 .shard7 {
-  clip-path: polygon(50% 0%, 72% 30%, 100% 55%, 100% 25%, 78% 16%);
-  background: linear-gradient(250deg, rgba(255, 0, 0, 0.22), rgba(255, 0, 0, 0.05), transparent);
+  clip-path: polygon(54.8% 8.4%, 72% 30%, 100% 55%, 100% 25%, 78% 16%, 55.8% 4.9%, 54.0% 6.5%);
+  background: linear-gradient(250deg, rgba(0, 120, 255, 0.28), rgba(0, 120, 255, 0.06), transparent);
   --crack-x: 12px; --crack-y: 6px;
   --crack-angle: -15deg; --crack-scale: 1;
-  --shard-accent: #ff0000;
+  --shard-accent: #0078ff;
 }
 .shard7 .reflectionWrapper { left: 85%; top: 35%; }
 .shard7 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 8 */
+/* Shard 8 - IlusiomonsT (Branco) */
 .shard8 {
-  clip-path: polygon(50% 0%, 78% 16%, 100% 25%, 100% 0%);
-  background: linear-gradient(270deg, rgba(255, 140, 0, 0.22), rgba(255, 140, 0, 0.05), transparent);
+  clip-path: polygon(56.5% 4.1%, 78% 16%, 100% 25%, 100% 0%, 55.4% 0%, 54.2% 2.7%);
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.07), transparent);
   --crack-x: 15px; --crack-y: 2px;
   --crack-angle: -5deg; --crack-scale: 0.9;
-  --shard-accent: #ff8c00;
+  --shard-accent: #ffffff;
 }
 .shard8 .reflectionWrapper { left: 90%; top: 22%; }
 .shard8 .shardReflection { filter: none; }
