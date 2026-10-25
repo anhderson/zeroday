@@ -169,7 +169,7 @@ export default function AuthPage() {
       <div className={styles.crystalBackground}>
         <div className={styles.topLightGlow} />
         
-        {/* Core White Sphere (2x sharper) that transforms into Esfera777estrelas11 */}
+        {/* Core White Sphere that transforms into Esfera777estrelas11 */}
         <div className={styles.voidCoreWrapper}>
           <div className={styles.voidCore}>
             <img
@@ -180,23 +180,6 @@ export default function AuthPage() {
             <div className={styles.whiteSphereOverlay} />
           </div>
         </div>
-        
-        {/* Splinters / broken glass details around the crack */}
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((id) => (
-          <div 
-            key={`splinter-wrapper-${id}`}
-            style={{
-              position: 'absolute',
-              top: 0, left: 0, width: '100%', height: '100%',
-              pointerEvents: 'none',
-              zIndex: 3,
-            }}
-          >
-            <div 
-              className={`${styles.splinter} ${styles[`sp${id}` as keyof typeof styles]}`}
-            />
-          </div>
-        ))}
 
         {[...Array(8)].map((_, i) => (
           <div 
