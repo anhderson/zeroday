@@ -840,8 +840,8 @@
   top: 0.5vh;
   left: 50%;
   transform: translateX(-50%);
-  width: 12vh;
-  height: 12vh;
+  width: 6vh;
+  height: 6vh;
   z-index: 4;
   pointer-events: none;
 }
@@ -856,10 +856,10 @@
   align-items: center;
   justify-content: center;
   background: #000;
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
   box-shadow:
-    0 0 18px 4px rgba(255, 255, 255, 0.85),
-    0 0 45px 12px rgba(255, 255, 255, 0.35);
+    0 0 12px 2px rgba(255, 255, 255, 0.9),
+    0 0 28px 8px rgba(255, 255, 255, 0.35);
 }
 
 .topStarSphereImg {
@@ -885,7 +885,7 @@
     #d6e4ff 95%,
     #ffffff 100%
   );
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 1);
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 1);
   animation: whiteSphereTransform 7s infinite ease-in-out;
 }
 
@@ -919,7 +919,7 @@
   }
 }
 
-/* Cacos de vidro perdidos em volta da fratura */
+/* Cacos de vidro grudados no contorno redondo da esfera (e afastando quando vira Esfera777) */
 .splinter {
   position: absolute;
   background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 100%);
@@ -927,16 +927,29 @@
   backdrop-filter: blur(5px);
   z-index: 3;
   transform-origin: center;
+  animation: splinterPush 7s infinite ease-in-out;
 }
 
-.sp1 { top: 5%; left: 44%; width: 20px; height: 35px; clip-path: polygon(100% 100%, 0 40%, 60% 0); background: linear-gradient(135deg, rgba(100, 100, 100, 0.8), rgba(200, 200, 200, 0.2)); }
-.sp2 { top: 7%; left: 51%; width: 15px; height: 30px; clip-path: polygon(0 100%, 100% 30%, 20% 0); background: linear-gradient(135deg, rgba(120, 120, 120, 0.8), rgba(220, 220, 220, 0.2)); }
-.sp3 { top: 10%; left: 47%; width: 25px; height: 25px; clip-path: polygon(50% 0, 100% 100%, 0 80%); background: linear-gradient(135deg, rgba(80, 80, 80, 0.8), rgba(180, 180, 180, 0.2)); }
-.sp4 { top: 4%; left: 48%; width: 12px; height: 28px; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: linear-gradient(135deg, rgba(150, 150, 150, 0.9), rgba(250, 250, 250, 0.3)); }
-.sp5 { top: 8%; left: 53%; width: 18px; height: 32px; clip-path: polygon(0 0, 100% 20%, 50% 100%); background: linear-gradient(135deg, rgba(110, 110, 110, 0.8), rgba(210, 210, 210, 0.2)); }
-.sp6 { top: 6%; left: 49%; width: 22px; height: 22px; clip-path: polygon(20% 0, 100% 40%, 0 100%); background: linear-gradient(135deg, rgba(90, 90, 90, 0.8), rgba(190, 190, 190, 0.2)); }
-.sp7 { top: 3%; left: 46%; width: 14px; height: 24px; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(135deg, rgba(130, 130, 130, 0.8), rgba(230, 230, 230, 0.2)); }
-.sp8 { top: 9%; left: 52%; width: 28px; height: 16px; clip-path: polygon(0 50%, 100% 0, 80% 100%); background: linear-gradient(135deg, rgba(140, 140, 140, 0.8), rgba(240, 240, 240, 0.2)); }
+@keyframes splinterPush {
+  0%, 50% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(var(--sp-rot, 0deg));
+  }
+  70%, 85.7% {
+    transform: translate(-50%, -50%) translate(var(--push-x, 0px), var(--push-y, 0px)) rotate(var(--sp-rot, 0deg));
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0) rotate(var(--sp-rot, 0deg));
+  }
+}
+
+.sp1 { top: 2.2vh; left: calc(50% - 3.15vh); width: 1.1vh; height: 1.8vh; --sp-rot: -15deg; --push-x: -1.3vh; --push-y: 0.2vh; clip-path: polygon(100% 100%, 0 40%, 60% 0); background: linear-gradient(135deg, rgba(100, 100, 100, 0.85), rgba(200, 200, 200, 0.25)); }
+.sp2 { top: 4.5vh; left: calc(50% - 3.05vh); width: 1.0vh; height: 1.7vh; --sp-rot: -35deg; --push-x: -1.2vh; --push-y: 0.7vh; clip-path: polygon(0 100%, 100% 30%, 20% 0); background: linear-gradient(135deg, rgba(120, 120, 120, 0.85), rgba(220, 220, 220, 0.25)); }
+.sp3 { top: 6.0vh; left: calc(50% - 2.15vh); width: 1.3vh; height: 1.4vh; --sp-rot: -55deg; --push-x: -0.9vh; --push-y: 1.1vh; clip-path: polygon(50% 0, 100% 100%, 0 80%); background: linear-gradient(135deg, rgba(80, 80, 80, 0.85), rgba(180, 180, 180, 0.25)); }
+.sp4 { top: 6.7vh; left: calc(50% - 0.8vh); width: 0.9vh; height: 1.6vh; --sp-rot: -10deg; --push-x: -0.4vh; --push-y: 1.3vh; clip-path: polygon(50% 0, 100% 100%, 0 100%); background: linear-gradient(135deg, rgba(150, 150, 150, 0.9), rgba(250, 250, 250, 0.3)); }
+.sp5 { top: 6.7vh; left: calc(50% + 0.8vh); width: 1.0vh; height: 1.7vh; --sp-rot: 12deg; --push-x: 0.4vh; --push-y: 1.3vh; clip-path: polygon(0 0, 100% 20%, 50% 100%); background: linear-gradient(135deg, rgba(110, 110, 110, 0.85), rgba(210, 210, 210, 0.25)); }
+.sp6 { top: 6.0vh; left: calc(50% + 2.15vh); width: 1.2vh; height: 1.3vh; --sp-rot: 50deg; --push-x: 0.9vh; --push-y: 1.1vh; clip-path: polygon(20% 0, 100% 40%, 0 100%); background: linear-gradient(135deg, rgba(90, 90, 90, 0.85), rgba(190, 190, 190, 0.25)); }
+.sp7 { top: 4.5vh; left: calc(50% + 3.05vh); width: 1.0vh; height: 1.6vh; --sp-rot: 35deg; --push-x: 1.2vh; --push-y: 0.7vh; clip-path: polygon(0 0, 100% 0, 50% 100%); background: linear-gradient(135deg, rgba(130, 130, 130, 0.85), rgba(230, 230, 230, 0.25)); }
+.sp8 { top: 2.2vh; left: calc(50% + 3.15vh); width: 1.3vh; height: 1.1vh; --sp-rot: 15deg; --push-x: 1.3vh; --push-y: 0.2vh; clip-path: polygon(0 50%, 100% 0, 80% 100%); background: linear-gradient(135deg, rgba(140, 140, 140, 0.85), rgba(240, 240, 240, 0.25)); }
 
 .crystalShard {
   --crack-mask: 
@@ -1044,108 +1057,201 @@
 }
 
 @keyframes shardColorPulse {
-  /* 0 - 3.5s: Cinza transparente fumê enquanto as 8 esferas negras estão pequenas (0% - 50%) */
+  /* 0 - 3.5s: Cinza transparente fumê e grudados na esfera branca (0% - 50%) */
   0%, 50% { 
     filter: grayscale(100%) brightness(0.55) contrast(0.95); 
+    transform: translate(0, 0);
   }
   
-  /* 3.5s - 6s: Vidros levemente coloridos quando as esferas crescem e viram a imagem natural (50% - 85.7%) */
+  /* 3.5s - 6s: Vidros levemente coloridos e afastando um pouco durante a Esfera777 (50% - 85.7%) */
   70%, 85.7% { 
     filter: grayscale(0%) brightness(1.0) contrast(1.0); 
+    transform: translate(var(--push-x, 0px), var(--push-y, 0px));
   }
   
-  /* 6s - 7s: Retorno ao cinza transparente fumê (85.7% - 100%) */
+  /* 6s - 7s: Retorno ao cinza transparente fumê e próximos da esfera (85.7% - 100%) */
   100% { 
     filter: grayscale(100%) brightness(0.55) contrast(0.95); 
+    transform: translate(0, 0);
   }
 }
 
-/* 8 Equal Shards mapping outward from exact Top Center (50% 0%) with subtle, elegant cracks between edges */
+/* 8 Equal Shards hugging the circular contour of the 6vh sphere at (50%, 3.5vh) */
 
 /* Shard 1 - LeviamonT (Rosa) */
 .shard1 {
-  clip-path: polygon(44.6% 0%, 0% 0%, 0% 25%, 22% 16%, 43.5% 4.2%, 45.8% 2.8%);
+  clip-path: polygon(
+    calc(50% - 2.95vh) 0vh,
+    0% 0%,
+    0% 25%,
+    22% 16%,
+    calc(50% - 2.95vh) 4.6vh,
+    calc(50% - 3.25vh) 3.8vh,
+    calc(50% - 3.05vh) 2.8vh,
+    calc(50% - 3.25vh) 1.8vh
+  );
   background: linear-gradient(135deg, rgba(255, 105, 180, 0.28), rgba(255, 105, 180, 0.06), transparent);
   --crack-x: -12px; --crack-y: 6px;
   --crack-angle: 12deg; --crack-scale: 1;
   --shard-accent: #ff69b4;
+  --push-x: -1.1vh;
+  --push-y: 0.3vh;
 }
 .shard1 .reflectionWrapper { left: 10%; top: 20%; }
 .shard1 .shardReflection { filter: none; }
 
 /* Shard 2 - LilithmonT (Roxo) */
 .shard2 {
-  clip-path: polygon(46.2% 4.8%, 22% 16%, 0% 25%, 0% 55%, 28% 30%, 45.2% 8.5%, 44.0% 6.4%);
+  clip-path: polygon(
+    calc(50% - 2.95vh) 4.6vh,
+    22% 16%,
+    0% 25%,
+    0% 55%,
+    28% 30%,
+    calc(50% - 2.35vh) 5.6vh,
+    calc(50% - 2.85vh) 5.25vh,
+    calc(50% - 2.65vh) 4.85vh
+  );
   background: linear-gradient(145deg, rgba(147, 112, 219, 0.28), rgba(147, 112, 219, 0.06), transparent);
   --crack-x: -8px; --crack-y: 10px;
   --crack-angle: -25deg; --crack-scale: 1.1;
   --shard-accent: #9370db;
+  --push-x: -1.0vh;
+  --push-y: 0.6vh;
 }
 .shard2 .reflectionWrapper { left: 15%; top: 35%; }
 .shard2 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 3 - BarbamonT (Vermelho) */
 .shard3 {
-  clip-path: polygon(45.6% 8.8%, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%, 47.8% 11.8%, 46.4% 10.2%);
+  clip-path: polygon(
+    calc(50% - 2.35vh) 5.6vh,
+    28% 30%,
+    0% 55%,
+    0% 100%,
+    12% 100%,
+    27% 55%,
+    calc(50% - 1.35vh) 6.3vh,
+    calc(50% - 1.95vh) 6.15vh,
+    calc(50% - 1.85vh) 5.85vh
+  );
   background: linear-gradient(160deg, rgba(255, 0, 0, 0.26), rgba(255, 0, 0, 0.06), transparent);
   --crack-x: -3px; --crack-y: 12px;
   --crack-angle: 50deg; --crack-scale: 0.9;
   --shard-accent: #ff0000;
+  --push-x: -0.7vh;
+  --push-y: 0.9vh;
 }
 .shard3 .reflectionWrapper { left: 20%; top: 60%; }
 .shard3 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 4 - BeelzemonT (Laranja) */
 .shard4 {
-  clip-path: polygon(48.0% 12.0%, 27% 55%, 12% 100%, 50% 100%, 50% 55%, 49.8% 12.6%, 48.9% 10.8%);
+  clip-path: polygon(
+    calc(50% - 1.35vh) 6.3vh,
+    27% 55%,
+    12% 100%,
+    50% 100%,
+    50% 55%,
+    50% 6.55vh,
+    calc(50% - 0.55vh) 6.75vh,
+    calc(50% - 0.85vh) 6.45vh
+  );
   background: linear-gradient(180deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.06), transparent);
   --crack-x: 0px; --crack-y: 15px;
   --crack-angle: -10deg; --crack-scale: 1.2;
   --shard-accent: #ff8c00;
+  --push-x: -0.3vh;
+  --push-y: 1.1vh;
 }
 .shard4 .reflectionWrapper { left: 35%; top: 75%; }
 .shard4 .shardReflection { filter: none; }
 
 /* Shard 5 - LucemonF / LucemonT (Amarelo) */
 .shard5 {
-  clip-path: polygon(50.2% 12.5%, 50% 55%, 50% 100%, 88% 100%, 73% 55%, 52.0% 11.9%, 51.1% 10.6%);
+  clip-path: polygon(
+    50% 6.55vh,
+    50% 55%,
+    50% 100%,
+    88% 100%,
+    73% 55%,
+    calc(50% + 1.35vh) 6.3vh,
+    calc(50% + 0.85vh) 6.45vh,
+    calc(50% + 0.55vh) 6.75vh
+  );
   background: linear-gradient(200deg, rgba(255, 255, 0, 0.26), rgba(255, 255, 0, 0.06), transparent);
   --crack-x: 3px; --crack-y: 12px;
   --crack-angle: 85deg; --crack-scale: 0.8;
   --shard-accent: #ffff00;
+  --push-x: 0.3vh;
+  --push-y: 1.1vh;
 }
 .shard5 .reflectionWrapper { left: 65%; top: 75%; }
 .shard5 .shardReflection { filter: none; }
 
 /* Shard 6 - BelphemonT (Verde) */
 .shard6 {
-  clip-path: polygon(52.3% 11.6%, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%, 54.4% 8.7%, 53.5% 10.4%);
+  clip-path: polygon(
+    calc(50% + 1.35vh) 6.3vh,
+    73% 55%,
+    88% 100%,
+    100% 100%,
+    100% 55%,
+    72% 30%,
+    calc(50% + 2.35vh) 5.6vh,
+    calc(50% + 1.85vh) 5.85vh,
+    calc(50% + 1.95vh) 6.15vh
+  );
   background: linear-gradient(220deg, rgba(0, 255, 0, 0.25), rgba(0, 255, 0, 0.06), transparent);
   --crack-x: 8px; --crack-y: 10px;
   --crack-angle: -40deg; --crack-scale: 1.1;
   --shard-accent: #00ff00;
+  --push-x: 0.7vh;
+  --push-y: 0.9vh;
 }
 .shard6 .reflectionWrapper { left: 80%; top: 60%; }
 .shard6 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 7 - DaemonT (Azul) */
 .shard7 {
-  clip-path: polygon(54.8% 8.4%, 72% 30%, 100% 55%, 100% 25%, 78% 16%, 55.8% 4.9%, 54.0% 6.5%);
+  clip-path: polygon(
+    calc(50% + 2.35vh) 5.6vh,
+    72% 30%,
+    100% 55%,
+    100% 25%,
+    78% 16%,
+    calc(50% + 2.95vh) 4.6vh,
+    calc(50% + 2.65vh) 4.85vh,
+    calc(50% + 2.85vh) 5.25vh
+  );
   background: linear-gradient(250deg, rgba(0, 120, 255, 0.28), rgba(0, 120, 255, 0.06), transparent);
   --crack-x: 12px; --crack-y: 6px;
   --crack-angle: -15deg; --crack-scale: 1;
   --shard-accent: #0078ff;
+  --push-x: 1.0vh;
+  --push-y: 0.6vh;
 }
 .shard7 .reflectionWrapper { left: 85%; top: 35%; }
 .shard7 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 8 - IlusiomonsT (Branco) */
 .shard8 {
-  clip-path: polygon(56.5% 4.1%, 78% 16%, 100% 25%, 100% 0%, 55.4% 0%, 54.2% 2.7%);
+  clip-path: polygon(
+    calc(50% + 2.95vh) 4.6vh,
+    78% 16%,
+    100% 25%,
+    100% 0%,
+    calc(50% + 2.95vh) 0vh,
+    calc(50% + 3.25vh) 1.8vh,
+    calc(50% + 3.05vh) 2.8vh,
+    calc(50% + 3.25vh) 3.8vh
+  );
   background: linear-gradient(270deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.07), transparent);
   --crack-x: 15px; --crack-y: 2px;
   --crack-angle: -5deg; --crack-scale: 0.9;
   --shard-accent: #ffffff;
+  --push-x: 1.1vh;
+  --push-y: 0.3vh;
 }
 .shard8 .reflectionWrapper { left: 90%; top: 22%; }
 .shard8 .shardReflection { filter: none; }
