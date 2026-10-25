@@ -45,6 +45,7 @@ export default function AuthPage() {
       manifestExistence: 'Manifestar Existência',
       materialize: 'MATERIALIZAR',
       dissolve: 'DISSOLVER',
+      enterEmailPassword: 'Digite seu email e senha',
       quote: '"E se todas as suas verdades fossem apagadas, o que você escolheria acreditar?"',
     },
     en: {
@@ -69,6 +70,7 @@ export default function AuthPage() {
       manifestExistence: 'Manifest Existence',
       materialize: 'MATERIALIZE',
       dissolve: 'DISSOLVE',
+      enterEmailPassword: 'Enter your email and password',
       quote: '"And if all your truths were erased, what would you choose to believe?"',
     },
   }[lang];
@@ -208,7 +210,15 @@ export default function AuthPage() {
       </div>
 
       {/* Left side announcement */}
-      <div className={`${styles.sidePanel} ${styles.sidePanelLeft}`}>
+      <div 
+        className={`${styles.sidePanel} ${styles.sidePanelLeft}`}
+        style={{
+          opacity: !isLogin ? 0 : 1,
+          visibility: !isLogin ? 'hidden' : 'visible',
+          pointerEvents: !isLogin ? 'none' : 'auto',
+          transition: 'opacity 0.4s ease, visibility 0.4s ease'
+        }}
+      >
         <div className={styles.binaryCode} style={{ marginBottom: '1.5rem', opacity: 0.4 }}>
           {binaryLeft}
         </div>
@@ -382,10 +392,23 @@ export default function AuthPage() {
           </button>
         )}
       </div>
+      {(!isLogin || loading) && (
+        <div className={styles.registerPrompt}>
+          {t.enterEmailPassword}
+        </div>
+      )}
       </div>
 
       {/* Right side announcement */}
-      <div className={`${styles.sidePanel} ${styles.sidePanelRight}`}>
+      <div 
+        className={`${styles.sidePanel} ${styles.sidePanelRight}`}
+        style={{
+          opacity: !isLogin ? 0 : 1,
+          visibility: !isLogin ? 'hidden' : 'visible',
+          pointerEvents: !isLogin ? 'none' : 'auto',
+          transition: 'opacity 0.4s ease, visibility 0.4s ease'
+        }}
+      >
         <div className={styles.binaryCode} style={{ marginBottom: '1.5rem', opacity: 0.4 }}>
           {binaryRight}
         </div>
@@ -405,7 +428,14 @@ export default function AuthPage() {
         </div>
       </div>
 
-      <div className={styles.glitchQuote}>
+      <div 
+        className={styles.glitchQuote}
+        style={{
+          opacity: !isLogin ? 0 : 1,
+          visibility: !isLogin ? 'hidden' : 'visible',
+          transition: 'opacity 0.4s ease, visibility 0.4s ease'
+        }}
+      >
         {t.quote}
       </div>
 

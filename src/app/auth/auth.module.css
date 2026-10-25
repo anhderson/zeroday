@@ -56,7 +56,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.4em;
-  color: var(--design-neon, #00ffaa);
+  color: #8e8e96;
   opacity: 1;
   padding: 0.2rem 1rem;
 }
@@ -67,8 +67,8 @@
 }
 
 .sideIcon {
-  color: var(--design-neon, #00ffaa);
-  opacity: 0.8;
+  color: #8e8e96;
+  opacity: 0.85;
   margin-top: 1vh;
   margin-bottom: 1rem;
 }
@@ -79,7 +79,7 @@
   font-weight: 700;
   letter-spacing: 0.05em;
   margin-bottom: 1rem;
-  color: var(--design-neon, #00ffaa);
+  color: #8e8e96;
   line-height: 1.2;
 }
 
@@ -343,7 +343,7 @@
 .logoInner {
   width: 100%;
   height: 100%;
-  background: #050508;
+  background: rgba(5, 5, 8, 0.65);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -355,6 +355,12 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  opacity: 0.72;
+  transition: opacity 0.3s ease;
+}
+
+.logoBtn:hover .appLogo {
+  opacity: 0.92;
 }
 
 /* --- SVG CIRCULAR TEXT (Radar HUD) --- */
@@ -608,6 +614,41 @@
   transition: all 0.2s ease;
   pointer-events: auto;
   outline: none;
+  animation: dotsInnerBlink 3s infinite ease-in-out;
+}
+
+@keyframes dotsInnerBlink {
+  0%, 66%, 100% {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.4);
+    box-shadow: none;
+  }
+  80%, 88% {
+    background: rgba(255, 255, 255, 0.45);
+    border-color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
+    box-shadow: 
+      inset 0 0 14px rgba(255, 255, 255, 1),
+      inset 0 0 6px #ffffff,
+      0 0 14px rgba(255, 255, 255, 0.55);
+  }
+}
+
+.registerPrompt {
+  position: absolute;
+  bottom: -58px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #b0b0b8;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  z-index: 30;
 }
 
 .dotsBtn::before {
@@ -882,11 +923,11 @@
   border-radius: 50%;
   pointer-events: none;
   z-index: 1;
-  /* Borda de sombra circular e moldura técnica */
-  border: 1.5px solid var(--shard-accent, rgba(255, 255, 255, 0.3));
+  /* Borda de sombra circular e moldura técnica sem efeito de cor */
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   box-shadow: 
     inset 0 0 80px rgba(0, 0, 0, 0.95), 
-    0 0 20px var(--shard-accent, rgba(255, 255, 255, 0.1)),
+    0 0 20px rgba(255, 255, 255, 0.08),
     0 0 40px rgba(0, 0, 0, 0.7);
   background: #000; /* Esfera negra base */
   overflow: hidden;
@@ -895,7 +936,7 @@
   justify-content: center;
   transition: all 0.5s ease;
   
-  /* Sincronizado: 3.5s pequena / 2.5s crescendo (com cor) / 1s voltando = 7s total */
+  /* Sincronizado: 3.5s pequena / 2.5s crescendo / 1s voltando = 7s total */
   animation: sphereProtocol 7s infinite ease-in-out;
 }
 
@@ -912,7 +953,7 @@
     background: #000;
   }
   
-  /* 3.5s - 6s: Crescendo devagar e ILUMINANDO (50% - 85.7%) */
+  /* 3.5s - 6s: Crescendo devagar e revelando a imagem natural sem efeito de cor (50% - 85.7%) */
   85.7% { 
     transform: translate(-50%, -50%) scale(1); 
     filter: brightness(1); 
@@ -932,8 +973,8 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  opacity: 0.85;
-  mix-blend-mode: screen;
+  opacity: 0.9;
+  filter: none;
   pointer-events: none;
   border-radius: 50%;
 }
@@ -949,9 +990,9 @@
     filter: grayscale(100%) brightness(0.55) contrast(0.95); 
   }
   
-  /* 3.5s - 6s: Vidros levemente coloridos quando as esferas crescem e viram a imagem (50% - 85.7%) */
+  /* 3.5s - 6s: Vidros levemente coloridos quando as esferas crescem e viram a imagem natural (50% - 85.7%) */
   70%, 85.7% { 
-    filter: grayscale(30%) brightness(1.0) contrast(1.05); 
+    filter: grayscale(0%) brightness(1.0) contrast(1.0); 
   }
   
   /* 6s - 7s: Retorno ao cinza transparente fumê (85.7% - 100%) */
@@ -971,7 +1012,7 @@
   --shard-accent: #add8e6;
 }
 .shard1 .reflectionWrapper { left: 10%; top: 20%; }
-.shard1 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(160deg) contrast(150%); }
+.shard1 .shardReflection { filter: none; }
 
 /* Shard 2 */
 .shard2 {
@@ -982,7 +1023,7 @@
   --shard-accent: #00ff00;
 }
 .shard2 .reflectionWrapper { left: 15%; top: 35%; }
-.shard2 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(80deg) contrast(150%); object-position: center 30%; }
+.shard2 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 3 */
 .shard3 {
@@ -993,7 +1034,7 @@
   --shard-accent: #00008b;
 }
 .shard3 .reflectionWrapper { left: 20%; top: 60%; }
-.shard3 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(190deg) contrast(150%); object-position: center 30%; }
+.shard3 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 4 */
 .shard4 {
@@ -1004,7 +1045,7 @@
   --shard-accent: #ffffff;
 }
 .shard4 .reflectionWrapper { left: 35%; top: 75%; }
-.shard4 .shardReflection { filter: grayscale(100%) brightness(1.8) contrast(150%); }
+.shard4 .shardReflection { filter: none; }
 
 /* Shard 5 */
 .shard5 {
@@ -1015,7 +1056,7 @@
   --shard-accent: #ffff00;
 }
 .shard5 .reflectionWrapper { left: 65%; top: 75%; }
-.shard5 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(10deg) contrast(150%); }
+.shard5 .shardReflection { filter: none; }
 
 /* Shard 6 */
 .shard6 {
@@ -1026,7 +1067,7 @@
   --shard-accent: #9370db;
 }
 .shard6 .reflectionWrapper { left: 80%; top: 60%; }
-.shard6 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(240deg) contrast(150%); object-position: center 30%; }
+.shard6 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 7 */
 .shard7 {
@@ -1037,7 +1078,7 @@
   --shard-accent: #ff0000;
 }
 .shard7 .reflectionWrapper { left: 85%; top: 35%; }
-.shard7 .shardReflection { filter: sepia(1) saturate(10) hue-rotate(320deg) contrast(150%); object-position: center 30%; }
+.shard7 .shardReflection { filter: none; object-position: center 30%; }
 
 /* Shard 8 */
 .shard8 {
@@ -1048,7 +1089,7 @@
   --shard-accent: #ff8c00;
 }
 .shard8 .reflectionWrapper { left: 90%; top: 22%; }
-.shard8 .shardReflection { filter: sepia(1) saturate(5) hue-rotate(0deg) contrast(150%); }
+.shard8 .shardReflection { filter: none; }
 
 /* Responsividade básica para o layout místico */
 @media (max-width: 1024px) {
