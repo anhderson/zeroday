@@ -701,7 +701,7 @@
 
 .statusHeader {
   position: absolute;
-  top: -55px; /* Movido para cima do botão de sincronizar frequência de cor */
+  top: calc(-55px - 3vh); /* Movido 3% da tela para cima */
   left: 0;
   width: 100%;
   display: flex;
