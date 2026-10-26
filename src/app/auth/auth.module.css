@@ -1104,7 +1104,7 @@
 
 /* 8 Equal Shards repaired and glued to the sphere (cracking outward from sphere edge) */
 
-/* Shard 1 - LeviamonT (Rosa) */
+/* Shard 1 - Invidrax (Rosa) */
 .shard1 {
   clip-path: polygon(0% 0%, 50% 0%, 50% 3.5vh, 22% 16%, 0% 25%);
   background: linear-gradient(135deg, rgba(255, 105, 180, 0.28), rgba(255, 105, 180, 0.06), transparent);
@@ -1117,7 +1117,7 @@
 .shard1 .reflectionWrapper { left: 10%; top: 20%; }
 .shard1 .shardReflection { filter: none; }
 
-/* Shard 2 - LilithmonT (Roxo) */
+/* Shard 2 - Luxarys (Roxo) */
 .shard2 {
   clip-path: polygon(50% 3.5vh, 22% 16%, 0% 25%, 0% 55%, 28% 30%);
   background: linear-gradient(145deg, rgba(147, 112, 219, 0.28), rgba(147, 112, 219, 0.06), transparent);
@@ -1130,7 +1130,7 @@
 .shard2 .reflectionWrapper { left: 15%; top: 35%; }
 .shard2 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 3 - BarbamonT (Vermelho) */
+/* Shard 3 - Avarok (Vermelho) */
 .shard3 {
   clip-path: polygon(50% 3.5vh, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%);
   background: linear-gradient(160deg, rgba(255, 0, 0, 0.26), rgba(255, 0, 0, 0.06), transparent);
@@ -1143,7 +1143,7 @@
 .shard3 .reflectionWrapper { left: 20%; top: 60%; }
 .shard3 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 4 - BeelzemonT (Laranja) */
+/* Shard 4 - Vorath (Laranja) */
 .shard4 {
   clip-path: polygon(50% 3.5vh, 27% 55%, 12% 100%, 50% 100%, 50% 55%);
   background: linear-gradient(180deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.06), transparent);
@@ -1156,7 +1156,7 @@
 .shard4 .reflectionWrapper { left: 35%; top: 75%; }
 .shard4 .shardReflection { filter: none; }
 
-/* Shard 5 - LucemonF / LucemonT (Amarelo) */
+/* Shard 5 - Soberath (Amarelo) */
 .shard5 {
   clip-path: polygon(50% 3.5vh, 50% 55%, 50% 100%, 88% 100%, 73% 55%);
   background: linear-gradient(200deg, rgba(255, 255, 0, 0.26), rgba(255, 255, 0, 0.06), transparent);
@@ -1169,7 +1169,7 @@
 .shard5 .reflectionWrapper { left: 65%; top: 75%; }
 .shard5 .shardReflection { filter: none; }
 
-/* Shard 6 - BelphemonT (Verde) */
+/* Shard 6 - Acedrion (Verde) */
 .shard6 {
   clip-path: polygon(50% 3.5vh, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%);
   background: linear-gradient(220deg, rgba(0, 255, 0, 0.25), rgba(0, 255, 0, 0.06), transparent);
@@ -1182,7 +1182,7 @@
 .shard6 .reflectionWrapper { left: 80%; top: 60%; }
 .shard6 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 7 - DaemonT (Azul) */
+/* Shard 7 - Irázor (Azul) */
 .shard7 {
   clip-path: polygon(50% 3.5vh, 72% 30%, 100% 55%, 100% 25%, 78% 16%);
   background: linear-gradient(250deg, rgba(0, 120, 255, 0.28), rgba(0, 120, 255, 0.06), transparent);
@@ -1195,7 +1195,7 @@
 .shard7 .reflectionWrapper { left: 85%; top: 35%; }
 .shard7 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 8 - IlusiomonsT (Branco) */
+/* Shard 8 - Lumíar (Branco) */
 .shard8 {
   clip-path: polygon(50% 3.5vh, 50% 0%, 100% 0%, 100% 25%, 78% 16%);
   background: linear-gradient(270deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.07), transparent);

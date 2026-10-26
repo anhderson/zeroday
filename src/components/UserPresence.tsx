@@ -184,9 +184,9 @@ export default function UserPresence({
   ];
 
   const ARQUETIPOS = [
-    "😈 LUCEMON (Orgulho)", "👿 BARBAMON (Ganância)", "💋 LILITHMON (Luxúria)", 
-    "🔥 BEELZEMON (Inveja)", "🌑 BELPHEMON (Gula)", "👹 DAEMON (Raiva)", 
-    "🐍 LEVIAMON (Apatia)", "👁️ ILUSSIONMON (Matrix)"
+    "😈 SOBERATH (Soberba)", "👿 AVAROK (Avareza)", "💋 LUXARYS (Luxúria)", 
+    "🌊 INVIDRAX (Inveja)", "🌑 VORATH (Gula)", "👹 IRÁZOR (Ira)", 
+    "💤 ACEDRION (Preguiça)", "✨ LUMÍAR (União dos Sete Pecados)"
   ];
 
   const totalManifestations = targetManifestations.length;
@@ -604,7 +604,7 @@ export default function UserPresence({
             <p className={styles.realName}>@{profile?.username || "frequencia_zero"}</p>
             
             {profile && (() => {
-              const BOTS = ["lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
+              const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
               const LARES = [
                 "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter", 
                 "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"

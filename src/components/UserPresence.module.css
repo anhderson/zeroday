@@ -207,7 +207,7 @@
 
 /* --- 12 MOLDURAS EVOLUTIVAS --- */
 
-/* 0. LUCEMON (Orgulho) - Divindade Caída */
+/* 0. SOBERATH (Soberba) - Divindade Caída */
 .archetype_0::before, .archetype_0::after {
   content: ''; position: absolute; inset: -4px; border-radius: 50%;
   border: 1.5px solid #fff; box-shadow: 0 0 15px #fff, 0 0 5px #ffd700; 
@@ -215,14 +215,14 @@
 }
 @keyframes wings-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(1.3); } }
 
-/* 1. BARBAMON (Ganância) - Tesouro do Vazio */
+/* 1. AVAROK (Avareza) - Tesouro do Vazio */
 .archetype_1::before {
   content: ''; position: absolute; inset: -5px; border: 2px solid #ffd700; border-radius: 50%;
   box-shadow: inset 0 0 10px #ffd700, 0 0 20px rgba(255, 215, 0, 0.4);
   animation: rotate-slow 8s linear infinite;
 }
 
-/* 2. LILITHMON (Luxúria) - Sedução Etérea */
+/* 2. LUXARYS (Luxúria) - Sedução Etérea */
 .archetype_2::after {
   content: ''; position: absolute; inset: -4px; border-radius: 50%;
   border: 1.5px solid #ff00ff; box-shadow: 0 0 15px #ff00ff, 0 0 30px rgba(255, 0, 255, 0.2);
@@ -233,7 +233,7 @@
   50% { border-radius: 55% 45% 55% 45%; transform: rotate(180deg); } 
 }
 
-/* 3. BEELZEMON (Inveja) - Olhar do Predador */
+/* 3. INVIDRAX (Inveja) - Olhar do Predador */
 .archetype_3::before {
   content: ''; position: absolute; inset: -5px; border-radius: 50%;
   border: 2px solid #00ff44; opacity: 0.7; animation: envy-pulse 2s infinite;
@@ -241,7 +241,7 @@
 }
 @keyframes envy-pulse { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.15); opacity: 1; } }
 
-/* 4. BELPHEMON (Gula) - Fome Consumidora */
+/* 4. VORATH (Gula) - Fome Consumidora */
 .archetype_4::after {
   content: ''; position: absolute; inset: -2px; border-radius: 50%;
   background: radial-gradient(circle, transparent 60%, #ff6600 100%); 
@@ -249,7 +249,7 @@
   box-shadow: 0 0 20px #ff6600;
 }
 
-/* 5. DAEMON (Raiva) - Fúria Incandescente */
+/* 5. IRÁZOR (Ira) - Fúria Incandescente */
 .archetype_5::before {
   content: ''; position: absolute; inset: -6px; border-radius: 50%;
   border: 2px solid #ff0000; filter: blur(1px); box-shadow: 0 -8px 15px #ff0000;
@@ -257,7 +257,7 @@
 }
 @keyframes wrath-flame { from { transform: translateY(0) scale(1); } to { transform: translateY(-4px) scale(1.05); } }
 
-/* 6. LEVIAMON (Apatia) - Sono do Abismo */
+/* 6. ACEDRION (Preguiça) - Sono do Abismo */
 .archetype_6::after {
   content: ''; position: absolute; inset: -3px; border-radius: 50%;
   border: 2px solid #5555ff; opacity: 0.5; filter: grayscale(0.5);
@@ -265,7 +265,7 @@
 }
 @keyframes apathy-drift { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.95); opacity: 0.3; } }
 
-/* 7. ILUSSIONMON (Matrix) - O Véu Digital */
+/* 7. LUMÍAR (União dos Sete Pecados) - O Véu Digital */
 .archetype_7::before {
   content: ''; position: absolute; inset: -6px; border: 1px solid #00ff41;
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);

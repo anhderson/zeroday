@@ -9,7 +9,7 @@ const supabase = createClient(
 const ARCHETYPES = {
   0: { 
     id: '00000000-0000-0000-0000-000000000008', 
-    name: 'daemon', 
+    name: 'irazor', 
     type: 'conectar', 
     posts: [
       'Eu, era movido pelo desejo… sem controle.\n\nA luxúria me puxava para tudo que era intenso e passageiro.\nMas dentro dela… havia vida.\n\nEla me ensinou sobre conexão.\nSobre sentir… sem fugir.\n\nHoje, eu não reprimo meu desejo…\neu o compreendo.\n\nPorque quando consciente…\nele deixa de ser vício — e se torna energia criadora.',
@@ -22,7 +22,7 @@ const ARCHETYPES = {
   },
   1: { 
     id: '00000000-0000-0000-0000-000000000002', 
-    name: 'lucemon', 
+    name: 'soberath', 
     type: 'integrar', 
     posts: [
       'Eu, já me coloquei acima de todos… e caí por isso.\n\nA soberba me cegou — me fez acreditar que eu não precisava aprender.\nMas foi na queda que eu entendi:\n\nReconhecer meu valor não significa negar o valor dos outros.\n\nHoje, eu não abaixa minha essência…\nmas também não ignoro o que o mundo pode me ensinar.\n\nO verdadeiro poder não está em se achar superior…\nmas em não precisar provar isso.',
@@ -35,7 +35,7 @@ const ARCHETYPES = {
   },
   2: { 
     id: '00000000-0000-0000-0000-000000000003', 
-    name: 'barbamon', 
+    name: 'avarok', 
     type: 'perceber', 
     posts: [
       'Eu, desejava tudo que não era meu.\n\nA inveja me consumia… me comparava… me diminuía.\nAté eu perceber:\n\nO que me incomodava nos outros… era o que faltava em mim.\n\nEla me ensinou a enxergar meus próprios vazios.\nE a transformá-los em construção.\n\nHoje, eu não quero o que é do outro…\neu me torno alguém que também pode conquistar.',
@@ -48,7 +48,7 @@ const ARCHETYPES = {
   },
   3: { 
     id: '00000000-0000-0000-0000-000000000004', 
-    name: 'leviamon', 
+    name: 'invidrax', 
     type: 'sentir', 
     posts: [
       'Eu, destruía tudo ao meu redor… sem pensar.\n\nA ira me dominava — rápida, intensa, cega.\nMas dentro dela… havia verdade.\n\nEla me mostrou meus limites.\nMe ensinou o que eu não aceitava mais.\n\nHoje, eu não elimino minha ira…\neu a controlo.\n\nPorque quando direcionada…\nnela deixa de destruir — e começa a proteger.',
@@ -61,7 +61,7 @@ const ARCHETYPES = {
   },
   4: { 
     id: '00000000-0000-0000-0000-000000000005', 
-    name: 'beelzemon', 
+    name: 'vorath', 
     type: 'soltar', 
     posts: [
       'Eu, evitava tudo… até a mim mesmo.\n\nA preguiça me paralisava, me afastava do que eu poderia ser.\nMas no silêncio… eu entendi algo:\n\nNem todo movimento é necessário.\n\nEla me ensinou a economizar energia…\na escolher melhor minhas batalhas.\n\nHoje, eu não fujo da ação…\neu ajo com intenção.\n\nPorque descansar também é estratégia.',
@@ -74,7 +74,7 @@ const ARCHETYPES = {
   },
   5: { 
     id: '00000000-0000-0000-0000-000000000006', 
-    name: 'belphemon', 
+    name: 'acedrion', 
     type: 'expressar', 
     posts: [
       'Eu, queria tudo… o tempo todo.\n\nA gula nunca me deixava satisfeito.\nMas foi nesse excesso… que eu encontrei o limite.\n\nEla me mostrou o valor do suficiente.\nO peso do desequilíbrio.\n\nHoje, eu ainda desejo…\nmas sei quando parar.\n\nPorque o verdadeiro controle…\nnão está em consumir — mas em saber o bastante.',
@@ -87,7 +87,7 @@ const ARCHETYPES = {
   },
   6: { 
     id: '00000000-0000-0000-0000-000000000007', 
-    name: 'lilithmon', 
+    name: 'luxarys', 
     type: 'cuidar', 
     posts: [
       'Eu, acumulava… com medo de perder.\n\nA avareza me fechava, me isolava, me prendia ao que eu tinha.\nAté eu perceber:\n\nNada cresce quando não circula.\n\nEla me ensinou valor…\nmas também me ensinou fluxo.\n\nHoje, eu sei guardar…\nmas também sei liberar.\n\nPorque riqueza de verdade…\nnão é só ter — é saber usar.',
@@ -100,7 +100,7 @@ const ARCHETYPES = {
   },
 };
 
-const ILUSIONMON = {
+const LUMIAR = {
   id: '00000000-0000-0000-0000-000000000001',
   peace: [
     'Na, serenidade do vazio, a alma encontra seu verdadeiro reflexo. #Paz',
@@ -132,14 +132,14 @@ export async function GET(req: Request) {
 
     const postsToInsert = [];
 
-    // 1. Daily post for Ilusionmon (Rotating options)
-    const ilusionOptions = [
-      dayOfMonth % 2 === 0 ? ILUSIONMON.peace[dayOfMonth % ILUSIONMON.peace.length] : ILUSIONMON.war[dayOfMonth % ILUSIONMON.war.length],
-      ...ILUSIONMON.dynamic
+    // 1. Daily post for Lumíar (Rotating options)
+    const lumiarOptions = [
+      dayOfMonth % 2 === 0 ? LUMIAR.peace[dayOfMonth % LUMIAR.peace.length] : LUMIAR.war[dayOfMonth % LUMIAR.war.length],
+      ...LUMIAR.dynamic
     ];
     postsToInsert.push({
-      user_id: ILUSIONMON.id,
-      content: ilusionOptions[dayOfMonth % ilusionOptions.length],
+      user_id: LUMIAR.id,
+      content: lumiarOptions[dayOfMonth % lumiarOptions.length],
       type: 'transcender',
       frequency: 1.0,
       metadata: { is_archetype: true }

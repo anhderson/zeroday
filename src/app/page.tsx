@@ -109,12 +109,12 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   type: string,
   phrases: Record<string, string> 
 }> = {
-  // 0: Domingo - Lucemon
+  // 0: Domingo - Soberath
   0: {
     id: '00000000-0000-0000-0000-000000000002',
-    name: 'Lucemon',
-    avatar: '/personagens/LucemonF.png',
-    title: 'Pecado do Orgulho',
+    name: 'Soberath',
+    avatar: '/personagens/Soberath.png',
+    title: 'Soberba — Superioridade e Domínio',
     aura: 'var(--aura-express)',
     type: 'expressar',
     phrases: {
@@ -132,12 +132,12 @@ const DAILY_JUDGE_CONFIG: Record<number, {
       'transcender': "Eu te faço acreditar que você já chegou no topo… cuidado comigo.",
     }
   },
-  // 1: Segunda - Barbamon
+  // 1: Segunda - Avarok
   1: {
     id: '00000000-0000-0000-0000-000000000003',
-    name: 'Barbamon',
-    avatar: '/personagens/BarbamonT.png',
-    title: 'Pecado da Ganância',
+    name: 'Avarok',
+    avatar: '/personagens/Avarok.png',
+    title: 'Avareza — Posse e Ambição Insaciável',
     aura: 'var(--aura-seek)',
     type: 'buscar',
     phrases: {
@@ -155,37 +155,14 @@ const DAILY_JUDGE_CONFIG: Record<number, {
       'transcender': "Eu te prometo segurança… mas te prendo na escassez.",
     }
   },
-  // 2: Terça - Leviamon
+  // 2: Terça - Invidrax
   2: {
     id: '00000000-0000-0000-0000-000000000004',
-    name: 'Leviamon',
-    avatar: '/personagens/LeviamonT.png',
-    title: 'Pecado da Apatia',
+    name: 'Invidrax',
+    avatar: '/personagens/Invidrax.png',
+    title: 'Inveja — Cobiça pela Existência Alheia',
     aura: 'var(--aura-feel)',
     type: 'sentir',
-    phrases: {
-      'cuidar': "Eu te faço confortável… enquanto sua vida para.",
-      'sentir': "Eu te faço confortável… enquanto sua vida para.",
-      'buscar': "Eu te faço confortável… enquanto sua vida para.",
-      'conectar': "Eu te faço confortável… enquanto sua vida para.",
-      'expressar': "Eu te faço confortável… enquanto sua vida para.",
-      'perceber': "Eu te faço confortável… enquanto sua vida para.",
-      'servir': "Eu te faço confortável… enquanto sua vida para.",
-      'observar': "Eu te faço confortável… enquanto sua vida para.",
-      'soltar': "Eu te faço confortável… enquanto sua vida para.",
-      'integrar': "Eu te faço confortável… enquanto sua vida para.",
-      'criar': "Eu te faço confortável… enquanto sua vida para.",
-      'transcender': "Eu te faço confortável… enquanto sua vida para.",
-    }
-  },
-  // 3: Quarta - Beelzemon
-  3: {
-    id: '00000000-0000-0000-0000-000000000005',
-    name: 'Beelzemon',
-    avatar: '/personagens/BeelzemonT.png',
-    title: 'Pecado da Inveja',
-    aura: 'var(--aura-care)',
-    type: 'cuidar',
     phrases: {
       'cuidar': "Eu te faço olhar para o outro… e esquecer de si.",
       'sentir': "Eu te faço olhar para o outro… e esquecer de si.",
@@ -201,14 +178,14 @@ const DAILY_JUDGE_CONFIG: Record<number, {
       'transcender': "Eu te faço olhar para o outro… e esquecer de si.",
     }
   },
-  // 4: Quinta - Belphemon
-  4: {
-    id: '00000000-0000-0000-0000-000000000007',
-    name: 'Belphemon',
-    avatar: '/personagens/BelphemonT.png',
-    title: 'Pecado da Gula',
-    aura: 'var(--aura-service)',
-    type: 'servir',
+  // 3: Quarta - Vorath
+  3: {
+    id: '00000000-0000-0000-0000-000000000005',
+    name: 'Vorath',
+    avatar: '/personagens/Vorath.png',
+    title: 'Gula — Fome que Nada Consegue Saciar',
+    aura: 'var(--aura-care)',
+    type: 'cuidar',
     phrases: {
       'cuidar': "Eu nunca estou satisfeito… e ensino você a nunca estar também.",
       'sentir': "Eu nunca estou satisfeito… e ensino você a nunca estar também.",
@@ -224,12 +201,35 @@ const DAILY_JUDGE_CONFIG: Record<number, {
       'transcender': "Eu nunca estou satisfeito… e ensino você a nunca estar também.",
     }
   },
-  // 5: Sexta - Lilithmon
+  // 4: Quinta - Acedrion
+  4: {
+    id: '00000000-0000-0000-0000-000000000007',
+    name: 'Acedrion',
+    avatar: '/personagens/Acedrion.png',
+    title: 'Preguiça — Inércia e Sono Profundo',
+    aura: 'var(--aura-service)',
+    type: 'servir',
+    phrases: {
+      'cuidar': "Eu te faço confortável… enquanto sua vida para.",
+      'sentir': "Eu te faço confortável… enquanto sua vida para.",
+      'buscar': "Eu te faço confortável… enquanto sua vida para.",
+      'conectar': "Eu te faço confortável… enquanto sua vida para.",
+      'expressar': "Eu te faço confortável… enquanto sua vida para.",
+      'perceber': "Eu te faço confortável… enquanto sua vida para.",
+      'servir': "Eu te faço confortável… enquanto sua vida para.",
+      'observar': "Eu te faço confortável… enquanto sua vida para.",
+      'soltar': "Eu te faço confortável… enquanto sua vida para.",
+      'integrar': "Eu te faço confortável… enquanto sua vida para.",
+      'criar': "Eu te faço confortável… enquanto sua vida para.",
+      'transcender': "Eu te faço confortável… enquanto sua vida para.",
+    }
+  },
+  // 5: Sexta - Luxarys
   5: {
     id: '00000000-0000-0000-0000-000000000006',
-    name: 'Lilithmon',
-    avatar: '/personagens/LilithmonT.png',
-    title: 'Pecado da Luxúria',
+    name: 'Luxarys',
+    avatar: '/personagens/Luxarys.png',
+    title: 'Luxúria — Desejo e Sedução',
     aura: 'var(--aura-connect)',
     type: 'conectar',
     phrases: {
@@ -247,12 +247,12 @@ const DAILY_JUDGE_CONFIG: Record<number, {
       'transcender': "Eu te confundo com prazer… mas te esvazio por dentro.",
     }
   },
-  // 6: Sábado - Daemon
+  // 6: Sábado - Irázor
   6: {
     id: '00000000-0000-0000-0000-000000000008',
-    name: 'Daemon',
-    avatar: '/personagens/DaemonT.png',
-    title: 'Pecado da Raiva',
+    name: 'Irázor',
+    avatar: '/personagens/Irazor.png',
+    title: 'Ira — Fúria e Destruição',
     aura: 'var(--aura-observe)',
     type: 'observar',
     phrases: {
@@ -273,29 +273,29 @@ const DAILY_JUDGE_CONFIG: Record<number, {
 };
 
 const MON_MAPPING: Record<string, { name: string; image: string; label: string; phrase: string }> = {
-  'cuidar': { name: 'Beelzemon', image: '/personagens/BeelzemonT.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  'sentir': { name: 'Leviamon', image: '/personagens/LeviamonT.png', label: 'Apatia', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  'buscar': { name: 'Barbamon', image: '/personagens/BarbamonT.png', label: 'Ganância', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
-  'conectar': { name: 'Lilithmon', image: '/personagens/LilithmonT.png', label: 'Luxúria', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  'expressar': { name: 'Lucemon', image: '/personagens/LucemonF.png', label: 'Orgulho', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  'perceber': { name: 'Ilusionmon', image: '/personagens/IlusiomonsT.png', label: 'Matrix', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  'servir': { name: 'Belphemon', image: '/personagens/BelphemonT.png', label: 'Gula', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  'observar': { name: 'Daemon', image: '/personagens/DaemonT.png', label: 'Raiva', phrase: "Eu te dou força… mas tiro seu controle." },
-  'soltar': { name: 'Leviamon', image: '/personagens/LeviamonT.png', label: 'Apatia', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  'integrar': { name: 'Lucemon', image: '/personagens/LucemonF.png', label: 'Orgulho', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  'criar': { name: 'Ilusionmon', image: '/personagens/IlusiomonsT.png', label: 'Matrix', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  'transcender': { name: 'Lucemon', image: '/personagens/LucemonF.png', label: 'Orgulho', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'cuidar': { name: 'Vorath', image: '/personagens/Vorath.png', label: 'Gula', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
+  'sentir': { name: 'Invidrax', image: '/personagens/Invidrax.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  'buscar': { name: 'Avarok', image: '/personagens/Avarok.png', label: 'Avareza', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
+  'conectar': { name: 'Luxarys', image: '/personagens/Luxarys.png', label: 'Luxúria', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
+  'expressar': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'perceber': { name: 'Lumíar', image: '/personagens/Lumiar.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  'servir': { name: 'Acedrion', image: '/personagens/Acedrion.png', label: 'Preguiça', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  'observar': { name: 'Irázor', image: '/personagens/Irazor.png', label: 'Ira', phrase: "Eu te dou força… mas tiro seu controle." },
+  'soltar': { name: 'Invidrax', image: '/personagens/Invidrax.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  'integrar': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'criar': { name: 'Lumíar', image: '/personagens/Lumiar.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  'transcender': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
 };
 
 const SIMULATED_ACCOUNTS: Record<string, { name: string; avatar: string; phrase: string }> = {
-  '00000000-0000-0000-0000-000000000001': { name: 'Ilusionmon', avatar: '/personagens/IlusiomonsT.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  '00000000-0000-0000-0000-000000000002': { name: 'Lucemon', avatar: '/personagens/LucemonF.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  '00000000-0000-0000-0000-000000000003': { name: 'Barbamon', avatar: '/personagens/BarbamonT.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
-  '00000000-0000-0000-0000-000000000004': { name: 'Leviamon', avatar: '/personagens/LeviamonT.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  '00000000-0000-0000-0000-000000000005': { name: 'Beelzemon', avatar: '/personagens/BeelzemonT.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  '00000000-0000-0000-0000-000000000006': { name: 'Lilithmon', avatar: '/personagens/LilithmonT.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  '00000000-0000-0000-0000-000000000007': { name: 'Belphemon', avatar: '/personagens/BelphemonT.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  '00000000-0000-0000-0000-000000000008': { name: 'Daemon', avatar: '/personagens/DaemonT.png', phrase: "Eu te dou força… mas tiro seu controle." },
+  '00000000-0000-0000-0000-000000000001': { name: 'Lumíar', avatar: '/personagens/Lumiar.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  '00000000-0000-0000-0000-000000000002': { name: 'Soberath', avatar: '/personagens/Soberath.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  '00000000-0000-0000-0000-000000000003': { name: 'Avarok', avatar: '/personagens/Avarok.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
+  '00000000-0000-0000-0000-000000000004': { name: 'Invidrax', avatar: '/personagens/Invidrax.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  '00000000-0000-0000-0000-000000000005': { name: 'Vorath', avatar: '/personagens/Vorath.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
+  '00000000-0000-0000-0000-000000000006': { name: 'Luxarys', avatar: '/personagens/Luxarys.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
+  '00000000-0000-0000-0000-000000000007': { name: 'Acedrion', avatar: '/personagens/Acedrion.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  '00000000-0000-0000-0000-000000000008': { name: 'Irázor', avatar: '/personagens/Irazor.png', phrase: "Eu te dou força… mas tiro seu controle." },
 };
 
 const VIRTUES = [
@@ -1713,7 +1713,7 @@ function HomeContent() {
         <div className={styles.headerRight}>
           <button 
             className={`${styles.profileBtn} ${profileGlitchActive ? styles.profileGlitchActive : ''}`} 
-            onClick={() => setShowPresence(true)} 
+            onClick={() => setShowPresence(prev => !prev)} 
             title="Sua Presença"
             style={{ position: 'relative' }}
           >
@@ -1808,10 +1808,10 @@ function HomeContent() {
                 {!showRealStories ? (
                   <motion.div key="bots-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
-                      { id: '00000000-0000-0000-0000-000000000001', username: 'Ilusionmon', label: 'Miragem ✨', image: '/personagens/IlusiomonsT.png' },
-                      { id: '00000000-0000-0000-0000-000000000002', username: 'Lucemon', label: 'Orgulho ⚡', image: '/personagens/LucemonF.png' },
-                      { id: '00000000-0000-0000-0000-000000000003', username: 'Barbamon', label: 'Ganância 💰', image: '/personagens/BarbamonT.png' },
-                      { id: '00000000-0000-0000-0000-000000000004', username: 'Leviamon', label: 'Inveja 🌊', image: '/personagens/LeviamonT.png' },
+                      { id: '00000000-0000-0000-0000-000000000001', username: 'Lumíar', label: 'União dos Sete Pecados ✨', image: '/personagens/Lumiar.png' },
+                      { id: '00000000-0000-0000-0000-000000000002', username: 'Soberath', label: 'Soberba ⚡', image: '/personagens/Soberath.png' },
+                      { id: '00000000-0000-0000-0000-000000000003', username: 'Avarok', label: 'Avareza 💰', image: '/personagens/Avarok.png' },
+                      { id: '00000000-0000-0000-0000-000000000004', username: 'Invidrax', label: 'Inveja 🌊', image: '/personagens/Invidrax.png' },
                     ].map((s, i) => (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i} onClick={() => router.push(`/profile/${s.id}`)}>
                         <div className={styles.sideStoryRing}>
@@ -1918,10 +1918,10 @@ function HomeContent() {
                 {!showRealStories ? (
                   <motion.div key="bots-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
-                      { id: '00000000-0000-0000-0000-000000000005', username: 'Beelzemon', label: 'Gula 🔥', image: '/personagens/BeelzemonT.png' },
-                      { id: '00000000-0000-0000-0000-000000000007', username: 'Belphemon', label: 'Preguiça 💤', image: '/personagens/BelphemonT.png' },
-                      { id: '00000000-0000-0000-0000-000000000006', username: 'Lilithmon', label: 'Luxúria 💋', image: '/personagens/LilithmonT.png' },
-                      { id: '00000000-0000-0000-0000-000000000008', username: 'Daemon', label: 'Ira 💢', image: '/personagens/DaemonT.png' },
+                      { id: '00000000-0000-0000-0000-000000000005', username: 'Vorath', label: 'Gula 🔥', image: '/personagens/Vorath.png' },
+                      { id: '00000000-0000-0000-0000-000000000007', username: 'Acedrion', label: 'Preguiça 💤', image: '/personagens/Acedrion.png' },
+                      { id: '00000000-0000-0000-0000-000000000006', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
+                      { id: '00000000-0000-0000-0000-000000000008', username: 'Irázor', label: 'Ira 💢', image: '/personagens/Irazor.png' },
                     ].map((s, i) => (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4} onClick={() => router.push(`/profile/${s.id}`)}>
                         <div className={styles.sideStoryRing}>
@@ -2801,17 +2801,17 @@ function HomeContent() {
             exit={{ opacity: 0, scale: 0.5, y: 50 }}
             transition={{ type: "spring", damping: 20 }}
             style={{ 
-              boxShadow: `0 0 60px ${activeBot.name === 'Lilithmon' ? 'rgba(255, 0, 204, 0.2)' : activeBot.name === 'Beelzemon' ? 'rgba(255, 100, 0, 0.2)' : 'rgba(255, 255, 255, 0.1)'}` 
+              boxShadow: `0 0 60px ${activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? 'rgba(255, 0, 204, 0.2)' : activeBot.name === 'Vorath' || activeBot.name === 'Beelzemon' ? 'rgba(255, 100, 0, 0.2)' : 'rgba(255, 255, 255, 0.1)'}` 
             }}
           >
             <div className={styles.lucemonJudgmentAvatar} style={{ 
-              borderColor: activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Lucemon' ? '#fff' : activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255,255,255,0.5)' 
+              borderColor: activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Soberath' || activeBot.name === 'Lucemon' ? '#fff' : activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255,255,255,0.5)' 
             }}>
               <img src={activeBot.avatar} alt={activeBot.name} />
             </div>
             <div className={styles.lucemonJudgmentBox}>
               <div className={styles.lucemonJudgmentHeader} style={{ 
-                color: activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255, 255, 255, 0.4)' 
+                color: activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255, 255, 255, 0.4)' 
               }}>
                 {activeBot.title}
               </div>

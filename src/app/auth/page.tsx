@@ -82,14 +82,14 @@ export default function AuthPage() {
   }[lang];
 
   const radarColors = [
-    'rgba(255, 105, 180, 0.8)', // Shard 1 - LeviamonT (Rosa)
-    'rgba(147, 112, 219, 0.8)', // Shard 2 - LilithmonT (Roxo)
-    'rgba(255, 0, 0, 0.8)',     // Shard 3 - BarbamonT (Vermelho)
-    'rgba(255, 140, 0, 0.8)',   // Shard 4 - BeelzemonT (Laranja)
-    'rgba(255, 255, 0, 0.8)',   // Shard 5 - LucemonF (Amarelo)
-    'rgba(0, 255, 0, 0.8)',     // Shard 6 - BelphemonT (Verde)
-    'rgba(0, 120, 255, 0.8)',   // Shard 7 - DaemonT (Azul)
-    'rgba(255, 255, 255, 0.8)'  // Shard 8 - IlusiomonsT (Branco)
+    'rgba(255, 105, 180, 0.8)', // Shard 1 - Invidrax (Rosa)
+    'rgba(147, 112, 219, 0.8)', // Shard 2 - Luxarys (Roxo)
+    'rgba(255, 0, 0, 0.8)',     // Shard 3 - Avarok (Vermelho)
+    'rgba(255, 140, 0, 0.8)',   // Shard 4 - Vorath (Laranja)
+    'rgba(255, 255, 0, 0.8)',   // Shard 5 - Soberath (Amarelo)
+    'rgba(0, 255, 0, 0.8)',     // Shard 6 - Acedrion (Verde)
+    'rgba(0, 120, 255, 0.8)',   // Shard 7 - Irázor (Azul)
+    'rgba(255, 255, 255, 0.8)'  // Shard 8 - Lumíar (Branco)
   ];
 
   useEffect(() => {
@@ -105,14 +105,14 @@ export default function AuthPage() {
     // Inject registered characters into the crystal shards
     const fetchAvatars = async () => {
       const registeredCharacters = [
-        '/personagens/LeviamonT.png?v=6',
-        '/personagens/LilithmonT.png?v=6',
-        '/personagens/BarbamonT.png?v=6',
-        '/personagens/BeelzemonT.png?v=6',
-        '/personagens/LucemonF.png?v=6',
-        '/personagens/BelphemonT.png?v=6',
-        '/personagens/DaemonT.png?v=6',
-        '/personagens/IlusiomonsT.png?v=6'
+        '/personagens/Invidrax.png?v=8',
+        '/personagens/Luxarys.png?v=8',
+        '/personagens/Avarok.png?v=8',
+        '/personagens/Vorath.png?v=8',
+        '/personagens/Soberath.png?v=8',
+        '/personagens/Acedrion.png?v=8',
+        '/personagens/Irazor.png?v=8',
+        '/personagens/Lumiar.png?v=8'
       ];
       setCrystalAvatars(registeredCharacters);
     };

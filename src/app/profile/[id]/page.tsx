@@ -119,14 +119,14 @@ const SEARCH_ACTIONS = [
 ];
 
 const SIMULATED_ACCOUNTS: Record<string, { name: string; avatar: string; phrase: string }> = {
-  '00000000-0000-0000-0000-000000000001': { name: 'Ilusionmon', avatar: '/personagens/IlusiomonsT.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  '00000000-0000-0000-0000-000000000002': { name: 'Lucemon', avatar: '/personagens/LucemonF.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  '00000000-0000-0000-0000-000000000003': { name: 'Barbamon', avatar: '/personagens/BarbamonT.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
-  '00000000-0000-0000-0000-000000000004': { name: 'Leviamon', avatar: '/personagens/LeviamonT.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  '00000000-0000-0000-0000-000000000005': { name: 'Beelzemon', avatar: '/personagens/BeelzemonT.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  '00000000-0000-0000-0000-000000000006': { name: 'Lilithmon', avatar: '/personagens/LilithmonT.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  '00000000-0000-0000-0000-000000000007': { name: 'Belphemon', avatar: '/personagens/BelphemonT.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  '00000000-0000-0000-0000-000000000008': { name: 'Daemon', avatar: '/personagens/DaemonT.png', phrase: "Eu te dou força… mas tiro seu controle." },
+  '00000000-0000-0000-0000-000000000001': { name: 'Lumíar', avatar: '/personagens/Lumiar.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  '00000000-0000-0000-0000-000000000002': { name: 'Soberath', avatar: '/personagens/Soberath.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  '00000000-0000-0000-0000-000000000003': { name: 'Avarok', avatar: '/personagens/Avarok.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
+  '00000000-0000-0000-0000-000000000004': { name: 'Invidrax', avatar: '/personagens/Invidrax.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  '00000000-0000-0000-0000-000000000005': { name: 'Vorath', avatar: '/personagens/Vorath.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
+  '00000000-0000-0000-0000-000000000006': { name: 'Luxarys', avatar: '/personagens/Luxarys.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
+  '00000000-0000-0000-0000-000000000007': { name: 'Acedrion', avatar: '/personagens/Acedrion.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  '00000000-0000-0000-0000-000000000008': { name: 'Irázor', avatar: '/personagens/Irazor.png', phrase: "Eu te dou força… mas tiro seu controle." },
 };
 
 const VIRTUES = [
@@ -7365,7 +7365,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
               </div>
 
             {(() => {
-              const BOTS = ["lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
+              const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
               const LARES = [
                 "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter",
                 "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"
