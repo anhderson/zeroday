@@ -1190,8 +1190,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
     try {
       const current = profile.selected_pedra || 1;
       let next = current + direction;
-      if (next > 12) next = 1;
-      if (next < 1) next = 12;
+      if (next > 42) next = 1;
+      if (next < 1) next = 42;
 
       const newHistory = addToHistory('pedra', current, profile.stone_history || []);
 
@@ -2376,7 +2376,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                               AGE: {currentUserProfile?.age || '--'}
                             </text>
                             <text x="40" y="122" fontSize="8" fill="currentColor" fillOpacity="0.9" style={{ fontFamily: 'monospace' }}>
-                              LVL: {currentUserProfile?.level || '1'}
+                              LVL: {currentUserProfile?.level ?? currentLevel ?? 0}
                             </text>
                             <text x="40" y="134" fontSize="8" fill="currentColor" fillOpacity="0.9" style={{ fontFamily: 'monospace' }}>
                               HEX: {currentUserProfile?.nexo_color || '#00F3FF'}
@@ -2514,7 +2514,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                             <g style={{ fontFamily: 'monospace', fontSize: '7px', pointerEvents: 'none' }} fill="currentColor" fillOpacity="0.9">
                               <text x="100" y="135" textAnchor="middle" fontSize="8" fontWeight="bold">{currentUserProfile?.username?.toUpperCase() || 'OFFLINE'}</text>
                               <text x="75" y="150" textAnchor="start">AGE:{currentUserProfile?.age || '??'}</text>
-                              <text x="75" y="160" textAnchor="start">LVL:{currentUserProfile?.level || '0'}</text>
+                              <text x="75" y="160" textAnchor="start">LVL:{currentUserProfile?.level ?? currentLevel ?? 0}</text>
                               <text x="75" y="170" textAnchor="start">NEX:{currentUserProfile?.nexo_color?.slice(0,7) || 'NONE'}</text>
                             </g>
                           </motion.g>
@@ -8115,20 +8115,39 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
 
       <AnimatePresence mode="wait">
         {showPresence && (
-          <UserPresence 
-            key="presence-modal"
-            manifestations={manifestations} 
-            selectedColor={profile?.nexo_color || undefined}
-            targetId={targetProfileId || undefined}
-            onClose={() => {
-              setShowPresence(false);
-              setTargetProfileId(null);
-            }} 
-            onOpenSettings={() => {
-              setShowPresence(false);
-              setIsEditingProfile(true);
-            }}
-          />
+          <>
+            <motion.div 
+              key="presence-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setShowPresence(false);
+                setTargetProfileId(null);
+              }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.65)',
+                backdropFilter: 'blur(5px)',
+                zIndex: 9999999998
+              }}
+            />
+            <UserPresence 
+              key="presence-modal"
+              manifestations={manifestations} 
+              selectedColor={profile?.nexo_color || undefined}
+              targetId={targetProfileId || undefined}
+              onClose={() => {
+                setShowPresence(false);
+                setTargetProfileId(null);
+              }} 
+              onOpenSettings={() => {
+                setShowPresence(false);
+                setIsEditingProfile(true);
+              }}
+            />
+          </>
         )}
       </AnimatePresence>
 
@@ -8244,7 +8263,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
 
       <AnimatePresence>
         {isEditingProfile && (
-          <div className={styles.settingsOverlay}>
+          <div className={styles.settingsOverlay} onClick={(e) => { if (e.target === e.currentTarget) setIsEditingProfile(false); }}>
             <ProfileSettings 
               onClose={() => setIsEditingProfile(false)} 
               onProfileUpdate={(updated) => {

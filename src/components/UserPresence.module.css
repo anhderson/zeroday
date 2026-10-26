@@ -1,11 +1,12 @@
 .container {
   position: fixed;
-  top: 7vh;
+  top: 0;
   right: 0;
   width: 100%;
   max-width: 500px;
-  height: calc(100vh - 7vh);
-  z-index: 999999999;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 9999999999;
   padding: 2.5rem;
   display: flex;
   flex-direction: column;

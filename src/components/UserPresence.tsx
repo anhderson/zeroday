@@ -42,7 +42,7 @@ export default function UserPresence({
       setProfile(propProfile);
     }
   }, [propProfile]);
-  const [targetManifestations, setTargetManifestations] = useState<any[]>(manifestations);
+  const [targetManifestations, setTargetManifestations] = useState<any[]>(propProfile && manifestations ? manifestations : []);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [isMinimized, setIsMinimized] = useState(initiallyMinimized);
   const router = useRouter();
@@ -50,11 +50,9 @@ export default function UserPresence({
   useEffect(() => {
     fetchProfileAndData();
     if (!targetId) fetchPendingRequests();
-  }, [manifestations, targetId]);
+  }, [targetId, propProfile]);
 
   const fetchProfileAndData = async () => {
-    if (propProfile) return;
-    
     let uid = targetId;
     if (!uid) {
       const { data: { user } } = await supabase.auth.getUser();
@@ -62,23 +60,25 @@ export default function UserPresence({
     }
 
     if (uid) {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', uid)
-        .single();
-      setProfile(profileData);
-
-      // If we are looking at someone else, we need their specific manifestations
-      if (targetId) {
-        const { data: nodes } = await supabase
-          .from('consciousness_nodes')
+      if (!propProfile) {
+        const { data: profileData } = await supabase
+          .from('profiles')
           .select('*')
-          .eq('user_id', uid)
-          .order('created_at', { ascending: false });
-        if (nodes) setTargetManifestations(nodes);
+          .eq('id', uid)
+          .single();
+        if (profileData) setProfile(profileData);
+      }
+
+      // Buscar manifestações específicas desta consciência para cálculo do nível individual
+      const { data: nodes } = await supabase
+        .from('consciousness_nodes')
+        .select('*')
+        .eq('user_id', uid)
+        .order('created_at', { ascending: false });
+      if (nodes) {
+        setTargetManifestations(nodes);
       } else {
-        setTargetManifestations(manifestations);
+        setTargetManifestations([]);
       }
     }
   };

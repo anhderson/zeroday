@@ -2717,26 +2717,61 @@ function HomeContent() {
           />
         )}
         {showPresence && (
-          <UserPresence 
-            key="presence-modal"
-            manifestations={manifestations} 
-            selectedColor={selectedDesignColor}
-            targetId={targetProfileId || undefined}
-            onClose={() => {
-              setShowPresence(false);
-              setTargetProfileId(null);
-            }} 
-            onOpenSettings={() => {
-              setShowPresence(false);
-              setShowSettings(true);
-            }}
-          />
+          <>
+            <motion.div 
+              key="presence-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => {
+                setShowPresence(false);
+                setTargetProfileId(null);
+              }}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.65)',
+                backdropFilter: 'blur(5px)',
+                zIndex: 9999999998
+              }}
+            />
+            <UserPresence 
+              key="presence-modal"
+              manifestations={[]} 
+              selectedColor={selectedDesignColor}
+              targetId={targetProfileId || undefined}
+              onClose={() => {
+                setShowPresence(false);
+                setTargetProfileId(null);
+              }} 
+              onOpenSettings={() => {
+                setShowPresence(false);
+                setShowSettings(true);
+              }}
+            />
+          </>
         )}
         {showSettings && (
-          <ProfileSettings 
-            key="settings-modal"
-            onClose={() => setShowSettings(false)} 
-          />
+          <>
+            <motion.div 
+              key="settings-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSettings(false)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(8px)',
+                zIndex: 1000000004
+              }}
+            />
+            <ProfileSettings 
+              key="settings-modal"
+              onClose={() => setShowSettings(false)} 
+            />
+          </>
         )}
 
         {showSplash && activeMon && (

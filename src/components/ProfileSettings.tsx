@@ -298,7 +298,7 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className={`${styles.container} glass`}
+      className={styles.container}
     >
       <div className={styles.header}>
         <div className={styles.headerTitle}>
@@ -460,13 +460,14 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
           </div>
 
           <div className={styles.assetSelector}>
-            <label className={styles.label}>Token: Pedra Sagrada</label>
+            <label className={styles.label}>Token: Pedra Sagrada (1 a 42)</label>
             <div className={styles.assetGrid}>
-              {[...Array(12)].map((_, i) => (
+              {[...Array(42)].map((_, i) => (
                 <div 
                   key={`stone-${i+1}`}
                   className={`${styles.assetItem} ${profile.selected_pedra === i + 1 ? styles.assetActive : ''}`}
                   onClick={() => setProfile(p => ({ ...p, selected_pedra: i + 1 }))}
+                  title={`Pedra Sagrada #${i+1}`}
                 >
                   <img src={`/pedras/${i+1}.png`} alt={`Pedra ${i+1}`} />
                 </div>
@@ -474,6 +475,7 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
               <div 
                 className={`${styles.assetItem} ${profile.selected_pedra === 0 ? styles.assetActive : ''}`}
                 onClick={() => setProfile(p => ({ ...p, selected_pedra: 0 }))}
+                title="Sem Pedra Sagrada"
               >
                 <span>Nenhuma</span>
               </div>
