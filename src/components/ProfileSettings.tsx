@@ -460,9 +460,9 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
           </div>
 
           <div className={styles.assetSelector}>
-            <label className={styles.label}>Token: Pedra Sagrada (1 a 42)</label>
+            <label className={styles.label}>Token: Pedra Sagrada (1 a 43)</label>
             <div className={styles.assetGrid}>
-              {[...Array(42)].map((_, i) => (
+              {[...Array(43)].map((_, i) => (
                 <div 
                   key={`stone-${i+1}`}
                   className={`${styles.assetItem} ${profile.selected_pedra === i + 1 ? styles.assetActive : ''}`}

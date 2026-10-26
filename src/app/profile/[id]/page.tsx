@@ -1190,8 +1190,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
     try {
       const current = profile.selected_pedra || 1;
       let next = current + direction;
-      if (next > 42) next = 1;
-      if (next < 1) next = 42;
+      if (next > 43) next = 1;
+      if (next < 1) next = 43;
 
       const newHistory = addToHistory('pedra', current, profile.stone_history || []);
 
@@ -7498,7 +7498,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
           </div>
 
 
-          <div className={`${styles.floatingFluxoWrapper} ${!isOwnProfile ? styles.guestView : ''}`}>
+          <div className={`${styles.floatingFluxoWrapper} ${!isOwnProfile ? styles.guestView : ''} ${manifestations.length === 0 ? styles.emptyFluxo : ''}`}>
             <div className={styles.floatingFluxo}>
                 {/* Center — title + sparks + pulse */}
                 <div className={styles.feedHeaderCenter}>
