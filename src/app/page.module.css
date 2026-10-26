@@ -1148,22 +1148,29 @@
 }
 
 .feedMedia {
-  width: calc(100% + 3rem);
-  margin-left: -1.5rem;
-  margin-top: -1rem;
-  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.75rem auto 1.25rem;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transform: translateX(0.7vw);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 
 .feedMedia img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
-  max-height: 50vh;
+  max-height: 55vh;
   object-fit: contain;
-  background: rgba(0, 0, 0, 0.2);
   display: block;
+  margin: 0 auto;
+  border-radius: 14px;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 /* --- FULLSCREEN IMAGE VIEWER --- */
