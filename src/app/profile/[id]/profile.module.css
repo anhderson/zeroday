@@ -2905,19 +2905,19 @@
 
 /* Quando nÃ£o hÃ¡ mensagens no Fluxo Universal de Meu Mundo: janela reduzida e compacta */
 .floatingFluxoWrapper.emptyFluxo {
-  min-height: 380px !important;
+  min-height: 420px !important;
 }
 
 .floatingFluxoWrapper.guestView.emptyFluxo {
-  min-height: 250px !important;
+  min-height: 280px !important;
 }
 
 .floatingFluxoWrapper.emptyFluxo .floatingFluxo {
-  min-height: 374px !important;
+  min-height: 414px !important;
 }
 
 .floatingFluxoWrapper.guestView.emptyFluxo .floatingFluxo {
-  min-height: 244px !important;
+  min-height: 274px !important;
   padding-top: 2rem !important;
   padding-bottom: 1.5rem !important;
 }
@@ -3704,7 +3704,7 @@
 }
 
 .upwardShift {
-  transform: translateY(-13vh);
+  transform: translateY(-8vh);
   transition: transform 0.5s ease;
 }
 .pulseShiftDown {
