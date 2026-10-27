@@ -10,6 +10,7 @@ import {
   Sparkles, Palette
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { getCleanUsername, getCleanAvatar, resolveArchetype } from "@/lib/archetypes";
 import styles from "./UserPresence.module.css";
 
 interface UserPresenceProps {
@@ -66,7 +67,19 @@ export default function UserPresence({
           .select('*')
           .eq('id', uid)
           .single();
-        if (profileData) setProfile(profileData);
+        if (profileData) {
+          const arc = resolveArchetype(profileData.id, profileData.username);
+          if (arc) {
+            setProfile({
+              ...profileData,
+              username: arc.name,
+              full_name: arc.name,
+              avatar_url: arc.avatar
+            });
+          } else {
+            setProfile(profileData);
+          }
+        }
       }
 
       // Buscar manifestações específicas desta consciência para cálculo do nível individual
@@ -594,14 +607,14 @@ export default function UserPresence({
             )}
 
             {profile?.avatar_url ? (
-              <img key={profile.avatar_url} src={profile.avatar_url} alt="Avatar" />
+              <img key={profile.avatar_url} src={getCleanAvatar(profile.id, profile.username, profile.avatar_url) || profile.avatar_url} alt="Avatar" />
             ) : (
               <User size={32} />
             )}
           </div>
           <div className={styles.userInfo}>
-            <h3 className={styles.title}>{profile?.full_name || "Consciência"}</h3>
-            <p className={styles.realName}>@{profile?.username || "frequencia_zero"}</p>
+            <h3 className={styles.title}>{getCleanUsername(profile?.id, profile?.full_name, "Consciência")}</h3>
+            <p className={styles.realName}>@{getCleanUsername(profile?.id, profile?.username, "frequencia_zero")}</p>
             
             {profile && (() => {
               const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];

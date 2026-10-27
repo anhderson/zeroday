@@ -25,6 +25,7 @@ import LuaProjetada from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
 import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
+import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES } from "@/lib/archetypes";
 import styles from "./page.module.css";
 
 export const TRANSCEND_ACTION_COLORS: Record<string, string> = {
@@ -249,7 +250,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   },
   // 4: Quinta - Acedrion
   4: {
-    id: '00000000-0000-0000-0000-000000000007',
+    id: '00000000-0000-0000-0000-000000000006',
     name: 'Acedrion',
     avatar: '/personagens/Acedrion.png',
     title: 'Preguiça — Inércia e Sono Profundo',
@@ -272,7 +273,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   },
   // 5: Sexta - Luxarys
   5: {
-    id: '00000000-0000-0000-0000-000000000006',
+    id: '00000000-0000-0000-0000-000000000007',
     name: 'Luxarys',
     avatar: '/personagens/Luxarys.png',
     title: 'Luxúria — Desejo e Sedução',
@@ -339,8 +340,8 @@ const SIMULATED_ACCOUNTS: Record<string, { name: string; avatar: string; phrase:
   '00000000-0000-0000-0000-000000000003': { name: 'Avarok', avatar: '/personagens/Avarok.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
   '00000000-0000-0000-0000-000000000004': { name: 'Invidrax', avatar: '/personagens/Invidrax.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
   '00000000-0000-0000-0000-000000000005': { name: 'Vorath', avatar: '/personagens/Vorath.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  '00000000-0000-0000-0000-000000000006': { name: 'Luxarys', avatar: '/personagens/Luxarys.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  '00000000-0000-0000-0000-000000000007': { name: 'Acedrion', avatar: '/personagens/Acedrion.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  '00000000-0000-0000-0000-000000000006': { name: 'Acedrion', avatar: '/personagens/Acedrion.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  '00000000-0000-0000-0000-000000000007': { name: 'Luxarys', avatar: '/personagens/Luxarys.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
   '00000000-0000-0000-0000-000000000008': { name: 'Irázor', avatar: '/personagens/Irazor.png', phrase: "Eu te dou força… mas tiro seu controle." },
 };
 
@@ -632,6 +633,7 @@ function HomeContent() {
       fetchFollowedUsers(_user.id);
       setLoading(false);
       fetchManifestations(searchTag || undefined);
+      fetch('/api/sync-bot-profiles').catch(() => {});
       
       if (!profile || !profile.username) {
         setShowSettings(true);
@@ -658,10 +660,17 @@ function HomeContent() {
       const usedIds = new Set();
       
       for (const node of (data || [])) {
-        const user = (node as any).profiles;
-        if (user && !usedIds.has(user.id)) {
-          uniqueUsers.push(user);
-          usedIds.add(user.id);
+        const norm = normalizeNodeProfiles(node as any);
+        const user = norm.profiles;
+        const uid = (norm as any).user_id || user?.id;
+        if (user && uid && !usedIds.has(uid)) {
+          uniqueUsers.push({
+            ...user,
+            id: uid,
+            username: getCleanUsername(uid, user.username),
+            avatar_url: getCleanAvatar(uid, user.username, user.avatar_url)
+          });
+          usedIds.add(uid);
         }
         if (uniqueUsers.length === 8) break;
       }
@@ -707,29 +716,27 @@ function HomeContent() {
           const isReply = meta?.reply_to;
           if (isReply || newNode.type === 'perceber' || newNode.type === 'observar') return;
 
-          // Se o post for de um bot (conta simulada), pegar os dados locais
-          const bot = SIMULATED_ACCOUNTS[newNode.user_id];
-          if (bot) {
-            newNode.profiles = {
-              username: bot.name,
-              avatar_url: bot.avatar
-            };
-          } else {
+          // Se o post for de um bot (conta simulada) ou tiver correspondente canônico
+          const normNode = normalizeNodeProfiles(newNode);
+          if (!normNode.profiles?.username) {
             // Senão, buscar o perfil no banco para exibir corretamente
             const { data: profileData } = await supabase
               .from('profiles')
               .select('username, avatar_url')
-              .eq('id', newNode.user_id)
+              .eq('id', normNode.user_id)
               .single();
             
             if (profileData) {
-              newNode.profiles = profileData;
+              normNode.profiles = {
+                username: getCleanUsername(normNode.user_id, profileData.username),
+                avatar_url: getCleanAvatar(normNode.user_id, profileData.username, profileData.avatar_url)
+              };
             }
           }
 
           setManifestations(prev => {
-            if (prev.find(m => m.id === newNode.id)) return prev;
-            return [newNode, ...prev];
+            if (prev.find(m => m.id === normNode.id)) return prev;
+            return [normNode, ...prev];
           });
         }
       )
@@ -801,10 +808,11 @@ function HomeContent() {
       if (error) throw error;
 
       if (data) {
+        const normalizedData = data.map(normalizeNodeProfiles);
         if (append) {
-          setManifestations(prev => [...prev, ...data]);
+          setManifestations(prev => [...prev, ...normalizedData]);
         } else {
-          setManifestations(data);
+          setManifestations(normalizedData);
         }
         
         if (data.length < PAGE_SIZE) {
@@ -1088,7 +1096,7 @@ function HomeContent() {
       case 'expressar': {
         setRepostTarget({
           id: manifest.id,
-          author: manifest.profiles?.username || 'consciencia',
+          author: getCleanUsername(manifest.user_id, manifest.profiles?.username),
           content: manifest.content,
           image: manifest.metadata?.image_url
         });
@@ -1119,7 +1127,7 @@ function HomeContent() {
             .order('created_at', { ascending: true });
             
           if (!error && data) {
-            setPostComments(prev => ({ ...prev, [manifest.id]: data }));
+            setPostComments(prev => ({ ...prev, [manifest.id]: data.map(normalizeNodeProfiles) }));
           } else if (error) {
             console.error("Erro ao buscar percepções:", error);
           }
@@ -1168,7 +1176,7 @@ function HomeContent() {
       // 🎨 CRIAR → repostar (remix)
       case 'criar': {
         const originalContent = manifest.content || '';
-        const originalAuthor = manifest.profiles?.username || `presenca_${manifest.id.slice(0,4)}`;
+        const originalAuthor = getCleanUsername(manifest.user_id, manifest.profiles?.username, `presenca_${manifest.id.slice(0,4)}`);
         setChatMessage(`🔮 @${originalAuthor}: "${originalContent.slice(0, 80)}${originalContent.length > 80 ? '...' : ''}"\n\n`);
         setChatAction(ACTIONS.find(a => a.id === 'criar')!);
         break;
@@ -1983,8 +1991,8 @@ function HomeContent() {
                   <motion.div key="bots-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
                       { id: '00000000-0000-0000-0000-000000000005', username: 'Vorath', label: 'Gula 🔥', image: '/personagens/Vorath.png' },
-                      { id: '00000000-0000-0000-0000-000000000007', username: 'Acedrion', label: 'Preguiça 💤', image: '/personagens/Acedrion.png' },
-                      { id: '00000000-0000-0000-0000-000000000006', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
+                      { id: '00000000-0000-0000-0000-000000000006', username: 'Acedrion', label: 'Preguiça 💤', image: '/personagens/Acedrion.png' },
+                      { id: '00000000-0000-0000-0000-000000000007', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
                       { id: '00000000-0000-0000-0000-000000000008', username: 'Irázor', label: 'Ira 💢', image: '/personagens/Irazor.png' },
                     ].map((s, i) => (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4} onClick={() => router.push(`/profile/${s.id}`)}>
@@ -2090,7 +2098,7 @@ function HomeContent() {
                 <div className={styles.manifestHeader}>
                   <div className={styles.headerColumn}>
                     <span className={styles.username}>
-                      @{manifest.profiles?.username || `presenca_${manifest.id.slice(0, 4)}`}
+                      @{getCleanUsername(manifest.user_id, manifest.profiles?.username, `presenca_${manifest.id.slice(0, 4)}`)}
                     </span>
                     <span className={styles.timestamp}>
                       <Clock size={10} style={{ marginRight: 4, opacity: 0.5 }} />
@@ -2612,7 +2620,7 @@ function HomeContent() {
                     >
                       <div className={styles.repostHeader}>
                         <Compass size={12} className={styles.repostIcon} />
-                        <span>Manifestação de @{manifest.metadata.repost_snapshot.author}</span>
+                        <span>Manifestação de @{getCleanUsername(null, manifest.metadata.repost_snapshot.author)}</span>
                       </div>
                       <div className={styles.repostContent}>
                         {manifest.metadata.repost_snapshot.image && (
@@ -2682,7 +2690,7 @@ function HomeContent() {
                       </div>
                       {(postComments[manifest.id] || []).map((c: any) => (
                         <div key={c.id} className={styles.commentItem}>
-                          <span className={styles.commentAuthor}>@{c.profiles?.username || 'voz'}</span>
+                          <span className={styles.commentAuthor}>@{getCleanUsername(c.user_id, c.profiles?.username, 'voz')}</span>
                           <span className={styles.commentContent}>{c.content}</span>
                         </div>
                       ))}

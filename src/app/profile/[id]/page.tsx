@@ -13,6 +13,7 @@ import {
   Heart, Scale, Leaf, Cloud
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { getCleanUsername, getCleanAvatar, resolveArchetype, normalizeNodeProfiles } from "@/lib/archetypes";
 import UserPresence from "@/components/UserPresence";
 import ProfileSettings from "@/components/ProfileSettings";
 import StoryBar from "@/components/StoryBar";
@@ -471,7 +472,15 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
           .select('*')
           .eq('id', user.id)
           .single();
-        setCurrentUserProfile(uprofile);
+        if (uprofile) {
+          const arc = resolveArchetype(uprofile.id, uprofile.username);
+          setCurrentUserProfile(arc ? {
+            ...uprofile,
+            username: arc.name,
+            full_name: arc.name,
+            avatar_url: arc.avatar
+          } : uprofile);
+        }
       }
     };
     checkUser();
@@ -515,7 +524,17 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
         .single();
 
       if (profileError) throw profileError;
-      setProfile(profileData);
+      if (profileData) {
+        const arc = resolveArchetype(profileData.id, profileData.username);
+        setProfile(arc ? {
+          ...profileData,
+          username: arc.name,
+          full_name: arc.name,
+          character_name: profileData.character_name || arc.name,
+          real_name: profileData.real_name || arc.name,
+          avatar_url: arc.avatar
+        } : profileData);
+      }
 
       const { data: manifestationsData, error: manifestationsError } = await supabase
         .from('consciousness_nodes')
@@ -526,7 +545,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
         .order('created_at', { ascending: false });
 
       if (manifestationsError) throw manifestationsError;
-      setManifestations(manifestationsData || []);
+      setManifestations((manifestationsData || []).map(normalizeNodeProfiles));
 
       fetchRecentUsers();
       if (currentUser) fetchFollowedUsers(currentUser.id);
@@ -568,7 +587,12 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       (data as any[])?.forEach(node => {
         const profile = Array.isArray(node.profiles) ? node.profiles[0] : node.profiles;
         if (profile && !uniqueUsers.has(profile.id)) {
-          uniqueUsers.set(profile.id, profile);
+          const arc = resolveArchetype(profile.id, profile.username);
+          uniqueUsers.set(profile.id, {
+            ...profile,
+            username: arc ? arc.name : profile.username,
+            avatar_url: arc ? arc.avatar : profile.avatar_url
+          });
         }
       });
       
@@ -703,10 +727,11 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
     if (!error && data) {
       const grouped: Record<string, any[]> = {};
       data.forEach((c: any) => {
-        const replyTo = c.metadata?.reply_to;
+        const normalized = normalizeNodeProfiles(c);
+        const replyTo = normalized.metadata?.reply_to;
         if (replyTo) {
           if (!grouped[replyTo]) grouped[replyTo] = [];
-          grouped[replyTo].push(c);
+          grouped[replyTo].push(normalized);
         }
       });
       setPostComments(prev => ({ ...prev, ...grouped }));
@@ -739,7 +764,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
         setCommentDraft(prev => ({ ...prev, [nodeId]: '' }));
         setPostComments(prev => ({ 
           ...prev, 
-          [nodeId]: [...(prev[nodeId] || []), data] 
+          [nodeId]: [...(prev[nodeId] || []), normalizeNodeProfiles(data)] 
         }));
       }
     } catch (err: any) {
@@ -881,7 +906,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       case 'expressar': {
         setRepostTarget({
           id: manifest.id,
-          author: manifest.profiles?.username || 'consciencia',
+          author: getCleanUsername(manifest.user_id, manifest.profiles?.username || profile?.username, 'consciencia'),
           content: manifest.content,
           image: manifest.metadata?.image_url
         });
@@ -904,7 +929,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
               .select('*, profiles(username, avatar_url)')
               .eq('metadata->>reply_to', manifest.id)
               .order('created_at', { ascending: true });
-            setPostComments(prev => ({ ...prev, [manifest.id]: data || [] }));
+            setPostComments(prev => ({ ...prev, [manifest.id]: (data || []).map(normalizeNodeProfiles) }));
           }
         }
         break;
@@ -947,7 +972,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       // 🎨 CRIAR → repostar (remix)
       case 'criar': {
         const originalContent = manifest.content || '';
-        const originalAuthor = manifest.profiles?.username || `presenca_${manifest.id.slice(0,4)}`;
+        const originalAuthor = getCleanUsername(manifest.user_id, manifest.profiles?.username || profile?.username, `presenca_${manifest.id.slice(0,4)}`);
         setChatMessage(`🔮 @${originalAuthor}: "${originalContent.slice(0, 80)}${originalContent.length > 80 ? '...' : ''}"\n\n`);
         setChatAction(ACTIONS.find(a => a.id === 'criar')!);
         break;
@@ -7721,7 +7746,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                   <div className={styles.manifestHeader}>
                     <div className={styles.headerColumn}>
                       <span className={styles.username}>
-                        @{manifest.profiles?.username || profile.username || `presenca_${manifest.id.slice(0, 4)}`}
+                        @{getCleanUsername(manifest.user_id, manifest.profiles?.username || profile?.username, `presenca_${manifest.id.slice(0, 4)}`)}
                       </span>
                       <span className={styles.timestamp}>
                         <Clock size={10} style={{ marginRight: 4, opacity: 0.5 }} />
@@ -8045,7 +8070,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                       >
                         <div className={styles.repostHeader}>
                           <Compass size={12} className={styles.repostIcon} />
-                          <span>Manifestação de @{manifest.metadata.repost_snapshot.author}</span>
+                          <span>Manifestação de @{getCleanUsername(null, manifest.metadata.repost_snapshot.author)}</span>
                         </div>
                         <div className={styles.repostContent}>
                           {manifest.metadata.repost_snapshot.image && (
@@ -8074,7 +8099,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                         </div>
                         {(postComments[manifest.id] || []).map((c: any) => (
                           <div key={c.id} className={styles.commentItem}>
-                            <span className={styles.commentAuthor}>@{c.profiles?.username || 'voz'}</span>
+                            <span className={styles.commentAuthor}>@{getCleanUsername(c.user_id, c.profiles?.username, 'voz')}</span>
                             <span className={styles.commentContent}>{c.content}</span>
                           </div>
                         ))}

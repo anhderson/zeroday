@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import { supabase } from "@/lib/supabase";
+import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar } from "@/lib/archetypes";
 import styles from "./StoryBar.module.css";
 
 interface Story {
@@ -54,7 +55,8 @@ export default function StoryBar({ userId }: { userId?: string }) {
       const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
-      setStories(data as any || []);
+      const normalized = (data as any || []).map(normalizeNodeProfiles);
+      setStories(normalized);
     } catch (err) {
       console.error("Error fetching stories:", err);
     } finally {
@@ -69,26 +71,31 @@ export default function StoryBar({ userId }: { userId?: string }) {
       <div className={styles.storyScroll}>
 
 
-        {stories.map((story) => (
-          <motion.div 
-            key={story.id} 
-            className={styles.storyItem}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className={styles.avatarRing}>
-              {story.profiles?.avatar_url ? (
-                <img src={story.profiles.avatar_url} alt={story.profiles.username} className={styles.avatar} />
-              ) : (
-                <div className={styles.avatarInitial}>
-                  {story.profiles?.username?.[0]?.toUpperCase() || '?'}
-                </div>
-              )}
-            </div>
-            <span>{story.profiles?.username}</span>
-          </motion.div>
-        ))}
+        {stories.map((story) => {
+          const authorName = getCleanUsername(story.user_id, story.profiles?.username);
+          const avatarUrl = getCleanAvatar(story.user_id, story.profiles?.username, story.profiles?.avatar_url);
+
+          return (
+            <motion.div 
+              key={story.id} 
+              className={styles.storyItem}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <div className={styles.avatarRing}>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={authorName} className={styles.avatar} />
+                ) : (
+                  <div className={styles.avatarInitial}>
+                    {authorName?.[0]?.toUpperCase() || '?'}
+                  </div>
+                )}
+              </div>
+              <span>{authorName}</span>
+            </motion.div>
+          );
+        })}
       </div>
 
     </div>
