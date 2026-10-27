@@ -156,18 +156,18 @@ export default function ManifestationsGuideModal({ isOpen, onClose }: Props) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.header}>
+            <button className={styles.closeBtn} onClick={onClose} title="Fechar Guia">
+              <X size={20} />
+            </button>
             <div className={styles.headerTitleWrap}>
               <div className={styles.sparkleIcon}>
-                <Sparkles size={20} />
+                <Sparkles size={22} />
               </div>
-              <div>
+              <div className={styles.titleTextBox}>
                 <h2 className={styles.title}>Guia dos 12 Tipos de Manifestação</h2>
                 <p className={styles.subtitle}>Os 12 portais de expressão da consciência e suas cores transcendentais</p>
               </div>
             </div>
-            <button className={styles.closeBtn} onClick={onClose} title="Fechar Guia">
-              <X size={20} />
-            </button>
           </div>
 
           <div className={styles.banner}>
@@ -187,7 +187,7 @@ export default function ManifestationsGuideModal({ isOpen, onClose }: Props) {
                 >
                   <div className={styles.cardHeader}>
                     <div className={styles.iconCircle}>
-                      <Icon size={18} />
+                      <Icon size={20} />
                     </div>
                     <div className={styles.cardTitleBox}>
                       <div className={styles.nameRow}>
