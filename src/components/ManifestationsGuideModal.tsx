@@ -160,9 +160,6 @@ export default function ManifestationsGuideModal({ isOpen, onClose }: Props) {
               <X size={20} />
             </button>
             <div className={styles.headerTitleWrap}>
-              <div className={styles.sparkleIcon}>
-                <Sparkles size={22} />
-              </div>
               <div className={styles.titleTextBox}>
                 <h2 className={styles.title}>Guia dos 12 Tipos de Manifestação</h2>
                 <p className={styles.subtitle}>Os 12 portais de expressão da consciência e suas cores transcendentais</p>
