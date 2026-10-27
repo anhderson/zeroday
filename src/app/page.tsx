@@ -2399,7 +2399,10 @@ function HomeContent() {
                     <button
                       type="button"
                       className={`${styles.miniNexusBtn} ${styles.miniNexusHelpBtn}`}
-                      onClick={() => setShowGuideModal(true)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowGuideModal(true);
+                      }}
                       onMouseEnter={() => setHoveredAction(`${manifest.id}-ajuda`)}
                       onMouseLeave={() => setHoveredAction(null)}
                       title="Guia dos 12 Portais de Manifestação"

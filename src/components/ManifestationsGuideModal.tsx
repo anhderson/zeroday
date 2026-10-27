@@ -184,7 +184,7 @@ export default function ManifestationsGuideModal({ isOpen, onClose }: Props) {
                 >
                   <div className={styles.cardHeader}>
                     <div className={styles.iconCircle}>
-                      <Icon size={20} />
+                      <Icon size={24} />
                     </div>
                     <div className={styles.cardTitleBox}>
                       <div className={styles.nameRow}>
@@ -198,13 +198,15 @@ export default function ManifestationsGuideModal({ isOpen, onClose }: Props) {
                     </div>
                   </div>
 
-                  <div className={styles.summaryBadge}>
-                    <span>{item.summary}</span>
+                  <div className={styles.specificationBox}>
+                    <span className={styles.specificationLabel}>Função da Manifestação:</span>
+                    <p className={styles.specificationText}>{item.summary}</p>
                   </div>
 
-                  <p className={styles.cardDescription}>
-                    {item.description}
-                  </p>
+                  <div className={styles.descriptionBox}>
+                    <span className={styles.descriptionLabel}>Significado e Ação:</span>
+                    <p className={styles.descriptionText}>{item.description}</p>
+                  </div>
                 </div>
               );
             })}
