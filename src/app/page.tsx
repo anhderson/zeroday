@@ -1842,10 +1842,10 @@ function HomeContent() {
                     setShowNexus(false);
                     setShowGuideModal(true);
                   }}
-                  style={{ borderColor: 'rgba(0, 243, 255, 0.4)', color: '#00f3ff' }}
+                  style={{ borderColor: 'rgba(160, 166, 181, 0.4)', color: '#9ca3af' }}
                   title="Guia dos 12 Tipos de Manifestação"
                 >
-                  <HelpCircle size={18} style={{ color: '#00f3ff' }} />
+                  <HelpCircle size={18} style={{ color: '#9ca3af' }} />
                   <span>Guia 12 Portais</span>
                 </button>
               </div>
@@ -2421,22 +2421,22 @@ function HomeContent() {
                         >
                           <div 
                             className={styles.floatingActionTooltipInner}
-                            style={{ borderColor: '#00f3ff' }}
+                            style={{ borderColor: '#9ca3af' }}
                           >
                             <div className={styles.floatingActionTooltipHeader}>
                               <span 
                                 className={styles.floatingActionTooltipName}
-                                style={{ color: '#00f3ff' }}
+                                style={{ color: '#9ca3af' }}
                               >
                                 Ajuda
                               </span>
                               <span 
                                 className={styles.floatingActionTooltipColorPill}
-                                style={{ backgroundColor: 'rgba(0, 243, 255, 0.15)', color: '#00f3ff' }}
+                                style={{ backgroundColor: 'rgba(160, 166, 181, 0.15)', color: '#9ca3af' }}
                               >
                                 <span 
                                   className={styles.floatingActionTooltipDot} 
-                                  style={{ backgroundColor: '#00f3ff' }} 
+                                  style={{ backgroundColor: '#9ca3af' }} 
                                 />
                                 Guia 12 Portais
                               </span>
@@ -2846,7 +2846,7 @@ function HomeContent() {
                               setShowAuraSelector(false);
                               setShowGuideModal(true);
                             }}
-                            style={{ background: 'transparent', border: 'none', color: '#00f3ff', fontSize: '0.72rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontWeight: 600 }}
+                            style={{ background: 'transparent', border: 'none', color: '#9ca3af', fontSize: '0.72rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontWeight: 600 }}
                           >
                             <HelpCircle size={12} /> Guia dos 12 Portais
                           </button>

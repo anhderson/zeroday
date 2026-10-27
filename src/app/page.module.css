@@ -2057,15 +2057,15 @@
 }
 
 .miniNexusHelpBtn {
-  border-color: rgba(0, 243, 255, 0.4) !important;
-  color: #00f3ff !important;
-  background: rgba(0, 243, 255, 0.06) !important;
+  border-color: rgba(160, 166, 181, 0.4) !important;
+  color: #9ca3af !important;
+  background: rgba(160, 166, 181, 0.08) !important;
 }
 
 .miniNexusHelpBtn:hover {
-  background: rgba(0, 243, 255, 0.22) !important;
-  border-color: #00f3ff !important;
-  box-shadow: 0 0 16px rgba(0, 243, 255, 0.5) !important;
+  background: rgba(160, 166, 181, 0.22) !important;
+  border-color: #d1d5db !important;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) !important;
   color: #ffffff !important;
   transform: translateY(-1px) scale(1.05);
 }
@@ -2077,9 +2077,9 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: rgba(0, 243, 255, 0.08);
-  border: 1px solid rgba(0, 243, 255, 0.35);
-  color: #00f3ff;
+  background: rgba(160, 166, 181, 0.08);
+  border: 1px solid rgba(160, 166, 181, 0.35);
+  color: #9ca3af;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
@@ -2087,9 +2087,9 @@
 }
 
 .chatHelpBtn:hover {
-  background: rgba(0, 243, 255, 0.25);
-  border-color: #00f3ff;
-  box-shadow: 0 0 14px rgba(0, 243, 255, 0.45);
+  background: rgba(160, 166, 181, 0.25);
+  border-color: #d1d5db;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
   color: #fff;
   transform: scale(1.1);
 }
