@@ -24,7 +24,53 @@ import RealtimePulse from "@/components/RealtimePulse";
 import LuaProjetada from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
+import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
 import styles from "./page.module.css";
+
+export const TRANSCEND_ACTION_COLORS: Record<string, string> = {
+  perceber: '#ffffff',       // Branco
+  observar: '#ff007f',       // Rosa / magenta
+  sentir: '#8a2be2',         // Roxo / violeta
+  servir: '#ff1744',         // Vermelho rosado
+  conectar: '#ff0000',       // Vermelho
+  expressar: '#ff4500',      // Laranja avermelhado
+  criar: '#ff8c00',          // Laranja
+  buscar: '#ffd700',         // Amarelo dourado
+  cuidar: '#76ff03',         // Verde-limão
+  integrar: '#00e676',       // Verde
+  soltar: '#00f3ff',         // Ciano / azul-turquesa
+  transcender: '#0066ff',    // Azul
+};
+
+export const ACTION_COLOR_NAMES: Record<string, string> = {
+  perceber: 'Branco',
+  observar: 'Rosa / magenta',
+  sentir: 'Roxo / violeta',
+  servir: 'Vermelho rosado',
+  conectar: 'Vermelho',
+  expressar: 'Laranja avermelhado',
+  criar: 'Laranja',
+  buscar: 'Amarelo dourado',
+  cuidar: 'Verde-limão',
+  integrar: 'Verde',
+  soltar: 'Ciano / azul-turquesa',
+  transcender: 'Azul',
+};
+
+export const ACTION_SUMMARIES: Record<string, string> = {
+  perceber: 'Revela o fluxo invisível e desperta intuição no post.',
+  observar: 'Exibe o relatório vibracional detalhado desta manifestação.',
+  sentir: 'Permite reagir com sentimentos e virtudes nesta mensagem.',
+  servir: 'Agrega e ancora pontos de serviço nesta consciência.',
+  conectar: 'Harmoniza frequências e conecta consciências em sintonia mútua.',
+  expressar: 'Replica e compartilha esta manifestação no seu mundo.',
+  criar: 'Materializa novas criações e expressões visuais no fluxo.',
+  buscar: 'Filtra e sincroniza manifestações por hashtags ou virtudes.',
+  cuidar: 'Emana apoio e cuidado amoroso para o autor.',
+  integrar: 'Entrelaça mundos e sintoniza a frequência desta consciência.',
+  soltar: 'Purifica e libera energias estagnadas desta manifestação.',
+  transcender: 'Ascende a geometria sagrada e ilumina todas as cores.',
+};
 
 const ACTIONS = [
   { id: 'perceber', name: "Perceber", aura: "var(--aura-perceive)", icon: Sun },
@@ -496,6 +542,8 @@ function HomeContent() {
   const [spiritualNotice, setSpiritualNotice] = useState<string | null>(null);
   const [transcendActive, setTranscendActive] = useState(false);
   const [observingManifest, setObservingManifest] = useState<any>(null);
+  const [showGuideModal, setShowGuideModal] = useState(false);
+  const [hoveredAction, setHoveredAction] = useState<string | null>(null);
 
   // === PAGINATION STATE ===
   const [hasMore, setHasMore] = useState(true);
@@ -1773,17 +1821,33 @@ function HomeContent() {
               <div className={styles.sidebarGrid}>
                 {ACTIONS.map((action) => {
                   const Icon = action.icon;
+                  const transcendColor = TRANSCEND_ACTION_COLORS[action.id];
                   return (
                     <button 
                       key={action.id}
                       className={styles.sidebarAction}
                       onClick={() => handleActionClick(action.id)}
+                      style={transcendActive ? { borderColor: transcendColor, boxShadow: `0 0 10px ${transcendColor}44` } : {}}
+                      title={`${action.name} — ${ACTION_SUMMARIES[action.id]}`}
                     >
-                      <Icon size={18} style={{ color: action.aura }} />
+                      <Icon size={18} style={{ color: transcendActive ? transcendColor : action.aura }} />
                       <span>{action.name}</span>
                     </button>
                   )
                 })}
+                <button 
+                  key="sidebar-help"
+                  className={styles.sidebarAction}
+                  onClick={() => {
+                    setShowNexus(false);
+                    setShowGuideModal(true);
+                  }}
+                  style={{ borderColor: 'rgba(0, 243, 255, 0.4)', color: '#00f3ff' }}
+                  title="Guia dos 12 Tipos de Manifestação"
+                >
+                  <HelpCircle size={18} style={{ color: '#00f3ff' }} />
+                  <span>Guia 12 Portais</span>
+                </button>
               </div>
             </motion.aside>
           </>
@@ -2188,16 +2252,72 @@ function HomeContent() {
                     if (action.id === 'sentir') isActive = activeSentimentPicker === manifest.id;
                     if (action.id === 'cuidar') isActive = activeCuidarPicker === manifest.id;
                     if (action.id === 'observar') isActive = observingManifest?.id === manifest.id;
+                    const actionKey = `${manifest.id}-${action.id}`;
+                    const isHovered = hoveredAction === actionKey;
+                    const transcendColor = TRANSCEND_ACTION_COLORS[action.id];
+
                     return (
                       <div key={`action-wrap-${manifest.id}-${action.id}`} className={styles.actionWrapper}>
                         <button
-                          className={`${styles.miniNexusBtn} ${isActive ? styles.miniNexusBtnActive : ''}`}
+                          className={`${styles.miniNexusBtn} ${isActive ? styles.miniNexusBtnActive : ''} ${transcendActive ? styles.transcendAscended : ''}`}
                           onClick={() => handleActionOnPost(action.id, manifest)}
+                          onMouseEnter={() => setHoveredAction(actionKey)}
+                          onMouseLeave={() => setHoveredAction(null)}
                           title={action.name}
-                          style={{ '--action-aura': action.aura } as any}
+                          style={
+                            transcendActive
+                              ? ({
+                                  '--action-aura': transcendColor,
+                                  borderColor: transcendColor,
+                                  color: transcendColor,
+                                  background: `${transcendColor}18`,
+                                  boxShadow: `0 0 12px ${transcendColor}66, inset 0 0 6px ${transcendColor}33`,
+                                } as any)
+                              : ({ '--action-aura': action.aura } as any)
+                          }
                         >
                           <ActionIcon size={13} />
                         </button>
+
+                        {/* Popover flutuante com menos de 10 palavras */}
+                        <AnimatePresence>
+                          {isHovered && (
+                            <motion.div
+                              className={styles.floatingActionTooltip}
+                              initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                              transition={{ duration: 0.15 }}
+                            >
+                              <div 
+                                className={styles.floatingActionTooltipInner}
+                                style={{ borderColor: transcendActive ? transcendColor : 'rgba(255,255,255,0.2)' }}
+                              >
+                                <div className={styles.floatingActionTooltipHeader}>
+                                  <span 
+                                    className={styles.floatingActionTooltipName}
+                                    style={{ color: transcendColor }}
+                                  >
+                                    {action.name}
+                                  </span>
+                                  <span 
+                                    className={styles.floatingActionTooltipColorPill}
+                                    style={{ backgroundColor: `${transcendColor}22`, color: transcendColor }}
+                                  >
+                                    <span 
+                                      className={styles.floatingActionTooltipDot} 
+                                      style={{ backgroundColor: transcendColor }} 
+                                    />
+                                    {ACTION_COLOR_NAMES[action.id]}
+                                  </span>
+                                </div>
+                                <span className={styles.floatingActionTooltipText}>
+                                  {ACTION_SUMMARIES[action.id]}
+                                </span>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
 
                         {/* Local Vibrational Report (Floating above button) */}
                         <AnimatePresence>
@@ -2273,6 +2393,59 @@ function HomeContent() {
                       </div>
                     );
                   })}
+
+                  {/* Botão de Ajuda ao lado de Transcender */}
+                  <div key={`action-wrap-${manifest.id}-ajuda`} className={styles.actionWrapper}>
+                    <button
+                      type="button"
+                      className={`${styles.miniNexusBtn} ${styles.miniNexusHelpBtn}`}
+                      onClick={() => setShowGuideModal(true)}
+                      onMouseEnter={() => setHoveredAction(`${manifest.id}-ajuda`)}
+                      onMouseLeave={() => setHoveredAction(null)}
+                      title="Guia dos 12 Portais de Manifestação"
+                    >
+                      <HelpCircle size={13} />
+                    </button>
+
+                    <AnimatePresence>
+                      {hoveredAction === `${manifest.id}-ajuda` && (
+                        <motion.div
+                          className={styles.floatingActionTooltip}
+                          initial={{ opacity: 0, y: 6, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <div 
+                            className={styles.floatingActionTooltipInner}
+                            style={{ borderColor: '#00f3ff' }}
+                          >
+                            <div className={styles.floatingActionTooltipHeader}>
+                              <span 
+                                className={styles.floatingActionTooltipName}
+                                style={{ color: '#00f3ff' }}
+                              >
+                                Ajuda
+                              </span>
+                              <span 
+                                className={styles.floatingActionTooltipColorPill}
+                                style={{ backgroundColor: 'rgba(0, 243, 255, 0.15)', color: '#00f3ff' }}
+                              >
+                                <span 
+                                  className={styles.floatingActionTooltipDot} 
+                                  style={{ backgroundColor: '#00f3ff' }} 
+                                />
+                                Guia 12 Portais
+                              </span>
+                            </div>
+                            <span className={styles.floatingActionTooltipText}>
+                              Abre o guia completo das 12 manifestações cósmicas.
+                            </span>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
 
                 {/* Spiritual Notice Modal */}
@@ -2615,6 +2788,15 @@ function HomeContent() {
                     <chatAction.icon size={12} />
                     <span>{chatAction.name}</span>
                   </button>
+
+                  <button
+                    type="button"
+                    className={styles.chatHelpBtn}
+                    onClick={() => setShowGuideModal(true)}
+                    title="Guia dos 12 Tipos de Manifestação"
+                  >
+                    <HelpCircle size={14} />
+                  </button>
                   
                   <AnimatePresence>
                     {showAuraSelector && (
@@ -2641,8 +2823,12 @@ function HomeContent() {
                                   setChatAction(action);
                                   setShowAuraSelector(false);
                                 }}
-                                style={chatAction.id === action.id ? { color: action.aura } : {}}
-                                title={action.name}
+                                style={
+                                  transcendActive && TRANSCEND_ACTION_COLORS[action.id]
+                                    ? { color: TRANSCEND_ACTION_COLORS[action.id], borderColor: TRANSCEND_ACTION_COLORS[action.id] }
+                                    : (chatAction.id === action.id ? { color: action.aura } : {})
+                                }
+                                title={`${action.name}${ACTION_SUMMARIES[action.id] ? ` — ${ACTION_SUMMARIES[action.id]}` : ''}`}
                               >
                                 <action.icon size={20} />
                               </button>
@@ -2650,6 +2836,18 @@ function HomeContent() {
 
                           </motion.div>
                         </AnimatePresence>
+                        <div style={{ marginTop: '0.6rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.4rem', textAlign: 'center' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowAuraSelector(false);
+                              setShowGuideModal(true);
+                            }}
+                            style={{ background: 'transparent', border: 'none', color: '#00f3ff', fontSize: '0.72rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.3rem', fontWeight: 600 }}
+                          >
+                            <HelpCircle size={12} /> Guia dos 12 Portais
+                          </button>
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -2980,6 +3178,7 @@ function HomeContent() {
           )}
         </AnimatePresence>
         <WelcomeGuide />
+        <ManifestationsGuideModal isOpen={showGuideModal} onClose={() => setShowGuideModal(false)} />
     </div>
   );
 }

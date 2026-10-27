@@ -2056,6 +2056,123 @@
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.15);
 }
 
+.miniNexusHelpBtn {
+  border-color: rgba(0, 243, 255, 0.4) !important;
+  color: #00f3ff !important;
+  background: rgba(0, 243, 255, 0.06) !important;
+}
+
+.miniNexusHelpBtn:hover {
+  background: rgba(0, 243, 255, 0.22) !important;
+  border-color: #00f3ff !important;
+  box-shadow: 0 0 16px rgba(0, 243, 255, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) scale(1.05);
+}
+
+.chatHelpBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid rgba(0, 243, 255, 0.35);
+  color: #00f3ff;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.chatHelpBtn:hover {
+  background: rgba(0, 243, 255, 0.25);
+  border-color: #00f3ff;
+  box-shadow: 0 0 14px rgba(0, 243, 255, 0.45);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.transcendAscended {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 700;
+  animation: pulseAscended 2.5s infinite alternate;
+}
+
+@keyframes pulseAscended {
+  0% {
+    filter: drop-shadow(0 0 4px var(--action-aura, #fff));
+  }
+  100% {
+    filter: drop-shadow(0 0 10px var(--action-aura, #fff));
+  }
+}
+
+.floatingActionTooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000000;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.floatingActionTooltipInner {
+  background: rgba(8, 10, 16, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 0.5rem 0.8rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  width: max-content;
+  max-width: 240px;
+  text-align: center;
+}
+
+.floatingActionTooltipHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.floatingActionTooltipName {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.floatingActionTooltipColorPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 20px;
+}
+
+.floatingActionTooltipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.floatingActionTooltipText {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.35;
+  white-space: normal;
+}
+
 /* ══════════════════════════════════════════
    ZEN MODE
    ══════════════════════════════════════════ */
