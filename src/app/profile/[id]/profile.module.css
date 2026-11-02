@@ -3718,3 +3718,286 @@
 .pulseShiftDown {
   margin-top: 2vh;
 }
+
+
+/* =========================================================================
+   SISTEMA DE INTERFERÊNCIA (Harmônica, Convergente, Divergente)
+   ========================================================================= */
+
+.interferenceHeaderNotice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  margin-bottom: 0.8rem;
+  background: rgba(0, 243, 255, 0.08);
+  border: 1px solid rgba(0, 243, 255, 0.28);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #00f3ff;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 18px rgba(0, 243, 255, 0.15);
+  animation: pulseCyanAura 3s infinite ease-in-out;
+}
+
+@keyframes pulseCyanAura {
+  0%, 100% { box-shadow: 0 0 12px rgba(0, 243, 255, 0.12); }
+  50% { box-shadow: 0 0 22px rgba(0, 243, 255, 0.3); }
+}
+
+/* Estados visuais do card da manifestação recebida como interferência */
+.manifestationConvergente {
+  background: rgba(6, 6, 10, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.92), inset 0 0 25px rgba(0, 0, 0, 0.9) !important;
+  transition: all 0.4s ease;
+}
+
+.manifestationConvergente .username,
+.manifestationConvergente .timestamp,
+.manifestationConvergente .content,
+.manifestationConvergente .actionTagMinimal,
+.manifestationConvergente .feedMedia {
+  opacity: 0.58 !important;
+  filter: brightness(0.75) !important;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.manifestationConvergente:hover .username,
+.manifestationConvergente:hover .timestamp,
+.manifestationConvergente:hover .content,
+.manifestationConvergente:hover .actionTagMinimal,
+.manifestationConvergente:hover .feedMedia {
+  opacity: 0.85 !important;
+  filter: brightness(0.92) !important;
+}
+
+.manifestationDivergente {
+  border-color: rgba(255, 69, 0, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.1) !important;
+  transition: all 0.4s ease;
+}
+
+/* Aviso discreto e elegante de divergência quando o texto é ocultado */
+.divergenceNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.6rem;
+  background: rgba(255, 69, 0, 0.07);
+  border: 1px dashed rgba(255, 69, 0, 0.32);
+  border-radius: 12px;
+  color: rgba(255, 175, 140, 0.92);
+  font-size: 0.84rem;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+/* Tag no cabeçalho indicando o tipo de interferência */
+.interferenceHeaderTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.interferenceHeader_harmonica {
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  color: #00e676;
+}
+
+.interferenceHeader_convergente {
+  background: rgba(138, 43, 226, 0.15);
+  border: 1px solid rgba(138, 43, 226, 0.35);
+  color: #c48eff;
+}
+
+.interferenceHeader_divergente {
+  background: rgba(255, 69, 0, 0.15);
+  border: 1px solid rgba(255, 69, 0, 0.35);
+  color: #ff7744;
+}
+
+/* Controles de classificação para a consciência que recebeu a interferência */
+.interferenceControls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.interferenceControlsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.interferenceBtnGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.interferenceBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.interferenceBtn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.interferenceBtnDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.interferenceBtnHarmonica.interferenceBtnActive {
+  background: rgba(0, 230, 118, 0.16) !important;
+  border-color: #00e676 !important;
+  color: #00e676 !important;
+  box-shadow: 0 0 14px rgba(0, 230, 118, 0.35) !important;
+}
+
+.interferenceBtnConvergente.interferenceBtnActive {
+  background: rgba(138, 43, 226, 0.22) !important;
+  border-color: #8a2be2 !important;
+  color: #d1a8ff !important;
+  box-shadow: 0 0 14px rgba(138, 43, 226, 0.45) !important;
+}
+
+.interferenceBtnDivergente.interferenceBtnActive {
+  background: rgba(255, 69, 0, 0.22) !important;
+  border-color: #ff4500 !important;
+  color: #ff8855 !important;
+  box-shadow: 0 0 14px rgba(255, 69, 0, 0.45) !important;
+}
+
+/* Janela flutuante explicativa (tooltip) com Significado simples e Exemplo */
+.interferenceTooltipCard {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  bottom: calc(100% + 11px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 300px;
+  padding: 12px 14px;
+  background: rgba(12, 12, 18, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.92), 0 0 15px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  z-index: 10000;
+  pointer-events: none;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), visibility 0.25s;
+}
+
+.interferenceTooltipCard::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(12, 12, 18, 0.98);
+}
+
+.interferenceBtn:hover .interferenceTooltipCard {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.interferenceTooltipTitle {
+  font-size: 0.88rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.01em;
+}
+
+.interferenceTooltipMeaning {
+  font-size: 0.79rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+}
+
+.interferenceTooltipExample {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Badge de exibição estática para visitantes */
+.interferenceBadgeStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.interferenceBadge_harmonica {
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.35);
+  color: #00e676;
+}
+
+.interferenceBadge_convergente {
+  background: rgba(138, 43, 226, 0.16);
+  border: 1px solid rgba(138, 43, 226, 0.4);
+  color: #c48eff;
+}
+
+.interferenceBadge_divergente {
+  background: rgba(255, 69, 0, 0.16);
+  border: 1px solid rgba(255, 69, 0, 0.4);
+  color: #ff7744;
+}

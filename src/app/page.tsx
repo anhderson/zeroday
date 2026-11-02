@@ -663,36 +663,75 @@ function HomeContent() {
         'f0000000-0000-0000-0000-000000000000'
       ]);
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
+      const BOT_NAMES = new Set([
+        'ilusionmon', 'lucemon', 'barbamon', 'leviamon', 'beelzemon', 'belphemon', 'lilithmon', 'daemon', 
+        'lumiar', 'soberath', 'avarok', 'invidrax', 'vorath', 'acedrion', 'luxarys', 'irazor', 'zero'
+      ]);
+
+      // 1. Buscar os posts mais recentes para ordenar os usuários da esquerda para a direita pelo post mais novo
+      const { data: recentNodes } = await supabase
+        .from('consciousness_nodes')
+        .select(`
+          user_id,
+          created_at,
+          profiles:user_id (id, username, avatar_url, full_name, character_name)
+        `)
+        .is('metadata->reply_to', null)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      
-      const realUsers: any[] = [];
-      const usedIds = new Set();
-      
-      for (const p of (data || [])) {
-        if (!p || !p.id) continue;
-        if (BOT_IDS.has(p.id)) continue;
-        if (Object.keys(ARCHETYPE_PROFILES).includes(p.id)) continue;
-        const lowerUsername = (p.username || '').toLowerCase();
-        if (['ilusionmon', 'lucemon', 'barbamon', 'leviamon', 'beelzemon', 'belphemon', 'lilithmon', 'daemon', 'lumiar', 'soberath', 'avarok', 'invidrax', 'vorath', 'acedrion', 'luxarys', 'irazor', 'zero'].includes(lowerUsername)) continue;
-        
-        if (!usedIds.has(p.id)) {
-          realUsers.push({
-            ...p,
-            id: p.id,
-            username: p.username || 'consciencia',
-            avatar_url: p.avatar_url
-          });
-          usedIds.add(p.id);
+      const realUsersMap = new Map<string, any>();
+
+      if (recentNodes) {
+        for (const item of recentNodes) {
+          const uid = item.user_id;
+          if (!uid || BOT_IDS.has(uid) || uid.startsWith('00000000') || Object.keys(ARCHETYPE_PROFILES).includes(uid)) continue;
+          const p = Array.isArray(item.profiles) ? item.profiles[0] : item.profiles;
+          const uname = (p?.username || '').toLowerCase();
+          if (BOT_NAMES.has(uname)) continue;
+
+          if (!realUsersMap.has(uid)) {
+            realUsersMap.set(uid, {
+              id: uid,
+              username: p?.username || 'consciencia',
+              avatar_url: p?.avatar_url,
+              full_name: p?.full_name,
+              character_name: p?.character_name,
+              latest_post_at: item.created_at
+            });
+          }
+          if (realUsersMap.size >= 8) break;
         }
-        if (realUsers.length === 8) break;
       }
-      
-      setRecentUsers(realUsers);
+
+      // 2. Completar com outros perfis reais cadastrados que ainda não postaram
+      if (realUsersMap.size < 8) {
+        const { data: allProfiles } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (allProfiles) {
+          for (const p of allProfiles) {
+            if (!p || !p.id || BOT_IDS.has(p.id) || p.id.startsWith('00000000') || Object.keys(ARCHETYPE_PROFILES).includes(p.id)) continue;
+            const uname = (p.username || '').toLowerCase();
+            if (BOT_NAMES.has(uname)) continue;
+
+            if (!realUsersMap.has(p.id)) {
+              realUsersMap.set(p.id, {
+                id: p.id,
+                username: p.username || 'consciencia',
+                avatar_url: p.avatar_url,
+                full_name: p.full_name,
+                character_name: p.character_name,
+                latest_post_at: null
+              });
+            }
+            if (realUsersMap.size >= 8) break;
+          }
+        }
+      }
+
+      setRecentUsers(Array.from(realUsersMap.values()));
     } catch (err) {
       console.error("Erro ao buscar perfis reais:", err);
     }
@@ -2015,41 +2054,48 @@ function HomeContent() {
                   </motion.div>
                 ) : (
                   <motion.div key="real-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {recentUsers.slice(0, 4).map((s, i) => (
-                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
-                        <div 
-                          className={styles.sideStoryRing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenLatestPost(s);
-                          }}
-                          title={`Ver última manifestação de ${s.username}`}
-                        >
-                          <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
-                            {s.avatar_url ? (
-                              <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                            ) : (s.username?.[0] || '?')}
+                    {[0, 1, 2, 3].map((slotIndex) => {
+                      const s = recentUsers[slotIndex];
+                      if (s) {
+                        return (
+                          <div key={s.id || slotIndex} className={`${styles.sideStoryItem} glass-hover`} data-phase={slotIndex}>
+                            <div 
+                              className={styles.sideStoryRing}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenLatestPost(s);
+                              }}
+                              title={`Ver última manifestação de ${s.username}`}
+                            >
+                              <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
+                                {s.avatar_url ? (
+                                  <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                ) : (s.username?.[0] || '?')}
+                              </div>
+                            </div>
+                            <span 
+                              className={styles.sideStoryName}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenProfilePreview(s);
+                              }}
+                              title={`Ver perfil de ${s.username}`}
+                            >
+                              {s.username || 'Manifestação'}
+                            </span>
+                          </div>
+                        );
+                      }
+                      return (
+                        <div key={`empty-left-${slotIndex}`} className={styles.sideStoryItem} style={{ opacity: 0.35, pointerEvents: 'none' }}>
+                          <div className={styles.sideStoryRing} style={{ cursor: 'default' }}>
+                            <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`} style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, fontSize: '1rem' }}>
+                              0
+                            </div>
                           </div>
                         </div>
-                        <span 
-                          className={styles.sideStoryName}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenProfilePreview(s);
-                          }}
-                          title={`Ver perfil de ${s.username}`}
-                        >
-                          {s.username || 'Manifestação'}
-                        </span>
-                      </div>
-                    ))}
-                    {recentUsers.length === 0 && Array.from({ length: 4 }).map((_, i) => (
-                       <div key={`empty-left-${i}`} className={`${styles.sideStoryItem} glass-hover`} style={{ opacity: 0.3 }}>
-                         <div className={styles.sideStoryRing}>
-                           <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>?</div>
-                         </div>
-                       </div>
-                    ))}
+                      );
+                    })}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -2157,41 +2203,48 @@ function HomeContent() {
                   </motion.div>
                 ) : (
                   <motion.div key="real-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {recentUsers.slice(4, 8).map((s, i) => (
-                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
-                        <div 
-                          className={styles.sideStoryRing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenLatestPost(s);
-                          }}
-                          title={`Ver última manifestação de ${s.username}`}
-                        >
-                          <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
-                            {s.avatar_url ? (
-                              <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                            ) : (s.username?.[0] || '?')}
+                    {[4, 5, 6, 7].map((slotIndex) => {
+                      const s = recentUsers[slotIndex];
+                      if (s) {
+                        return (
+                          <div key={s.id || slotIndex} className={`${styles.sideStoryItem} glass-hover`} data-phase={slotIndex}>
+                            <div 
+                              className={styles.sideStoryRing}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenLatestPost(s);
+                              }}
+                              title={`Ver última manifestação de ${s.username}`}
+                            >
+                              <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
+                                {s.avatar_url ? (
+                                  <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                                ) : (s.username?.[0] || '?')}
+                              </div>
+                            </div>
+                            <span 
+                              className={styles.sideStoryName}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenProfilePreview(s);
+                              }}
+                              title={`Ver perfil de ${s.username}`}
+                            >
+                              {s.username || 'Manifestação'}
+                            </span>
+                          </div>
+                        );
+                      }
+                      return (
+                        <div key={`empty-right-${slotIndex}`} className={styles.sideStoryItem} style={{ opacity: 0.35, pointerEvents: 'none' }}>
+                          <div className={styles.sideStoryRing} style={{ cursor: 'default' }}>
+                            <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`} style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, fontSize: '1rem' }}>
+                              0
+                            </div>
                           </div>
                         </div>
-                        <span 
-                          className={styles.sideStoryName}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenProfilePreview(s);
-                          }}
-                          title={`Ver perfil de ${s.username}`}
-                        >
-                          {s.username || 'Manifestação'}
-                        </span>
-                      </div>
-                    ))}
-                    {recentUsers.length < 5 && Array.from({ length: 4 - (recentUsers.length > 4 ? recentUsers.length - 4 : 0) }).map((_, i) => (
-                       <div key={`empty-right-${i}`} className={`${styles.sideStoryItem} glass-hover`} style={{ opacity: 0.3 }}>
-                         <div className={styles.sideStoryRing}>
-                           <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>?</div>
-                         </div>
-                       </div>
-                    ))}
+                      );
+                    })}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -2231,6 +2284,9 @@ function HomeContent() {
               const allTags = [...new Set([...(postTags[manifest.id] || []), ...(manifest.metadata?.tags || [])])];
                const isRevealed = activeRevealedPost === manifest.id;
                const isFollowing = followedUsers.has(manifest.user_id);
+
+               const isInterference = Boolean(manifest.metadata?.is_interference);
+               const interferenceStatus: 'harmonica' | 'convergente' | 'divergente' = manifest.metadata?.interference_status || 'harmonica';
                
                // Get emoji reactions from the database sentiments
                const dbSentiments = nodeSentiments[manifest.id] || {};
@@ -2250,7 +2306,7 @@ function HomeContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className={`${styles.manifestation} glass ${manifest.metadata?.is_magic ? styles.magicPulse : ''} ${transcendActive ? styles.transcendMode : ''}`}
+                className={`${styles.manifestation} glass ${manifest.metadata?.is_magic ? styles.magicPulse : ''} ${transcendActive ? styles.transcendMode : ''} ${isInterference && interferenceStatus === 'convergente' ? styles.manifestationConvergente : ''} ${isInterference && interferenceStatus === 'divergente' ? styles.manifestationDivergente : ''}`}
                 data-window="true"
                 style={{ 
                   transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
@@ -2263,9 +2319,17 @@ function HomeContent() {
               >
                 <div className={styles.manifestHeader}>
                   <div className={styles.headerColumn}>
-                    <span className={styles.username}>
-                      @{getCleanUsername(manifest.user_id, manifest.profiles?.username, `presenca_${manifest.id.slice(0, 4)}`)}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span className={styles.username}>
+                        @{getCleanUsername(manifest.user_id, manifest.profiles?.username, `presenca_${manifest.id.slice(0, 4)}`)}
+                      </span>
+                      {isInterference && (
+                        <span className={`${styles.interferenceHeaderTag} ${styles[`interferenceHeader_${interferenceStatus}`]}`}>
+                          <Zap size={10} />
+                          <span>Interferência {interferenceStatus === 'harmonica' ? 'Harmônica' : interferenceStatus === 'convergente' ? 'Convergente' : 'Divergente'}</span>
+                        </span>
+                      )}
+                    </div>
                     <span className={styles.timestamp}>
                       <Clock size={10} style={{ marginRight: 4, opacity: 0.5 }} />
                       {new Date(manifest.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -2308,45 +2372,54 @@ function HomeContent() {
                   </div>
                 </div>
                 
-                {manifest.metadata?.image_url && (
-                  <div key={`image-${manifest.id}`} className={styles.feedMedia}>
-                    <img 
-                      src={manifest.metadata.image_url} 
-                      alt="Manifestação" 
-                      onClick={() => setFullscreenImage(manifest.metadata.image_url)}
-                      style={{ cursor: 'pointer' }}
-                    />
+                {isInterference && interferenceStatus === 'divergente' ? (
+                  <div className={styles.divergenceNotice}>
+                    <span style={{ fontSize: '1.1rem' }}>🔀</span>
+                    <span>Interferência Divergente — o conteúdo textual foi recolhido.</span>
                   </div>
-                )}
+                ) : (
+                  <>
+                    {manifest.metadata?.image_url && (
+                      <div key={`image-${manifest.id}`} className={styles.feedMedia}>
+                        <img 
+                          src={manifest.metadata.image_url} 
+                          alt="Manifestação" 
+                          onClick={() => setFullscreenImage(manifest.metadata.image_url)}
+                          style={{ cursor: 'pointer' }}
+                        />
+                      </div>
+                    )}
 
-                {manifest.content && (
-                  <div 
-                    key={`content-${manifest.id}`} 
-                    className={styles.content}
-                    style={{ '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff' } as any}
-                  >
-                    {manifest.content.split(/\s+/).map((word: string, i: number) => {
-                      const ytId = getYoutubeId(word);
-                      if (ytId) {
-                        return (
-                          <div key={i} className={styles.youtubeEmbed}>
-                            <iframe
-                              width="100%"
-                              height="315"
-                              src={`https://www.youtube.com/embed/${ytId}`}
-                              frameBorder="0"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
-                          </div>
-                        );
-                      }
-                      if (word.startsWith('http')) {
-                        return <a key={i} href={word} target="_blank" rel="noopener noreferrer" className={styles.link}>{word} </a>;
-                      }
-                      return word + " ";
-                    })}
-                  </div>
+                    {manifest.content && (
+                      <div 
+                        key={`content-${manifest.id}`} 
+                        className={styles.content}
+                        style={{ '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff' } as any}
+                      >
+                        {manifest.content.split(/\s+/).map((word: string, i: number) => {
+                          const ytId = getYoutubeId(word);
+                          if (ytId) {
+                            return (
+                              <div key={i} className={styles.youtubeEmbed}>
+                                <iframe
+                                  width="100%"
+                                  height="315"
+                                  src={`https://www.youtube.com/embed/${ytId}`}
+                                  frameBorder="0"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                            );
+                          }
+                          if (word.startsWith('http')) {
+                            return <a key={i} href={word} target="_blank" rel="noopener noreferrer" className={styles.link}>{word} </a>;
+                          }
+                          return word + " ";
+                        })}
+                      </div>
+                    )}
+                  </>
                 )}
 
                 {/* Vibrational Report relocated to global floating layer below */}

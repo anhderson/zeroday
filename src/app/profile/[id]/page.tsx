@@ -78,19 +78,27 @@ interface Manifestation {
   type: string;
   user_id: string;
   metadata?: {
-    aura: string;
+    aura?: string;
     image_url?: string;
     audio_url?: string;
     timestamp?: string;
     tags?: string[];
+    is_interference?: boolean;
+    target_profile_id?: string | null;
+    target_username?: string | null;
+    interference_status?: 'harmonica' | 'convergente' | 'divergente' | null;
+    is_magic?: boolean;
+    reply_to?: string;
     repost_of?: string;
     repost_snapshot?: {
       author: string;
       content: string;
       image?: string;
     };
+    [key: string]: any;
   };
   created_at: string;
+  profiles?: any;
 }
 
 const ACTIONS = [
@@ -538,8 +546,11 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
 
       const { data: manifestationsData, error: manifestationsError } = await supabase
         .from('consciousness_nodes')
-        .select('*')
-        .eq('user_id', userId)
+        .select(`
+          *,
+          profiles:user_id (id, username, avatar_url, full_name, character_name)
+        `)
+        .or(`user_id.eq.${userId},metadata->>target_profile_id.eq.${userId}`)
         .is('metadata->reply_to', null) // Excluir comentários do feed principal
         .not('type', 'in', '("perceber", "observar")') // Excluir tipos reativos do feed principal
         .order('created_at', { ascending: false });
@@ -606,21 +617,36 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
     if (!userId) return;
 
     const channel = supabase
-      .channel(`profile-${userId}`)
+      .channel(`profile-nodes-${userId}`)
       .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'consciousness_nodes', filter: `user_id=eq.${userId}` },
+        { event: '*', schema: 'public', table: 'consciousness_nodes' },
         (payload) => {
           if (payload.eventType === 'INSERT') {
             const newNode = payload.new as any;
-            // Se for uma resposta ou tipo reativo, não adicionar ao feed principal
             const meta = typeof newNode.metadata === 'string' ? JSON.parse(newNode.metadata) : newNode.metadata;
+            const isTarget = newNode.user_id === userId || meta?.target_profile_id === userId;
+            if (!isTarget) return;
+
             const isReply = meta?.reply_to;
             if (isReply || newNode.type === 'perceber' || newNode.type === 'observar') return;
 
             setManifestations((prev) => {
               if (prev.find(m => m.id === newNode.id)) return prev;
-              return [newNode as Manifestation, ...prev];
+              return [normalizeNodeProfiles(newNode) as Manifestation, ...prev];
             });
+          } else if (payload.eventType === 'UPDATE') {
+            const updatedNode = payload.new as any;
+            setManifestations((prev) => prev.map(m => {
+              if (m.id === updatedNode.id) {
+                return normalizeNodeProfiles({ ...m, ...updatedNode });
+              }
+              return m;
+            }));
+          } else if (payload.eventType === 'DELETE') {
+            const oldNode = payload.old as any;
+            if (oldNode?.id) {
+              setManifestations((prev) => prev.filter(m => m.id !== oldNode.id));
+            }
           }
         }
       )
@@ -808,13 +834,53 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
   const handleDeleteNode = async (nodeId: string) => {
     if (!currentUser) return;
     try {
-      const { error } = await supabase.from('consciousness_nodes').delete().eq('id', nodeId).eq('user_id', currentUser.id);
+      const node = manifestations.find(m => m.id === nodeId);
+      let query = supabase.from('consciousness_nodes').delete().eq('id', nodeId);
+      if (node?.user_id === currentUser.id) {
+        query = query.eq('user_id', currentUser.id);
+      }
+      const { error } = await query;
       if (error) throw error;
       setManifestations(prev => prev.filter(m => m.id !== nodeId));
       setNodeToDelete(null);
     } catch (err) {
       console.error('Erro ao deletar manifestação:', err);
       alert('Não foi possível soltar a manifestação.');
+    }
+  };
+
+  const handleUpdateInterferenceStatus = async (nodeId: string, status: 'harmonica' | 'convergente' | 'divergente') => {
+    // Atualização otimista imediata na UI
+    setManifestations(prev => prev.map(m => {
+      if (m.id === nodeId) {
+        return {
+          ...m,
+          metadata: {
+            ...(m.metadata || {}),
+            interference_status: status
+          }
+        } as Manifestation;
+      }
+      return m;
+    }));
+
+    try {
+      const targetNode = manifestations.find(m => m.id === nodeId);
+      const updatedMetadata = {
+        ...(targetNode?.metadata || {}),
+        interference_status: status
+      };
+
+      const { error } = await supabase
+        .from('consciousness_nodes')
+        .update({ metadata: updatedMetadata })
+        .eq('id', nodeId);
+
+      if (error) {
+        console.error('Erro ao gravar status da interferência:', error);
+      }
+    } catch (err) {
+      console.error('Erro ao atualizar status da interferência:', err);
     }
   };
 
@@ -1023,6 +1089,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
         }
       }
 
+      const isInterference = !isOwnProfile;
+
       const { data, error } = await supabase
         .from('consciousness_nodes')
         .insert([{
@@ -1034,6 +1102,10 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
             timestamp: new Date().toISOString(),
             image_url: imageUrl,
             audio_url: audioUrl,
+            is_interference: isInterference,
+            target_profile_id: isInterference ? userId : null,
+            target_username: isInterference ? (profile?.username || null) : null,
+            interference_status: isInterference ? 'harmonica' : null,
             repost_of: repostTarget?.id,
             repost_snapshot: repostTarget ? {
               author: repostTarget.author,
@@ -1042,11 +1114,14 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
             } : null
           }
         }])
-        .select()
+        .select(`
+          *,
+          profiles:user_id (id, username, avatar_url, full_name, character_name)
+        `)
         .single();
 
       if (error) throw error;
-      if (data) setManifestations(prev => [data, ...prev]);
+      if (data) setManifestations(prev => [normalizeNodeProfiles(data), ...prev]);
       setChatMessage("");
       setAttachedFiles({ image: null, audio: null });
     } catch (error) {
@@ -7523,13 +7598,19 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
           </div>
 
 
-          <div className={`${styles.floatingFluxoWrapper} ${!isOwnProfile ? styles.guestView : ''} ${manifestations.length === 0 ? styles.emptyFluxo : ''}`}>
+          <div className={`${styles.floatingFluxoWrapper} ${!isOwnProfile && !currentUser ? styles.guestView : ''} ${manifestations.length === 0 ? styles.emptyFluxo : ''}`}>
             <div className={styles.floatingFluxo}>
                 {/* Center — title + sparks + pulse */}
                 <div className={styles.feedHeaderCenter}>
-                  {isOwnProfile && (
+                  {currentUser && (
                     <div className={styles.chatBarInHeader}>
                       <div className={styles.chatInputArea}>
+                        {!isOwnProfile && (
+                          <div className={styles.interferenceHeaderNotice}>
+                            <Zap size={13} />
+                            <span>Interferência na Nascente Universal de @{profile?.username || 'Consciência'}</span>
+                          </div>
+                        )}
                         <div className={styles.chatAttachedRow}>
                           {attachedFiles.image && (
                             <div className={styles.attachedFile}>
@@ -7577,7 +7658,9 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                         >
                           <div className={styles.chatActionButtons}>
                             <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                              <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>Vibrar em:</span>
+                              <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
+                                {isOwnProfile ? "Vibrar em:" : "Interferir em:"}
+                              </span>
                               <button 
                                 type="button" 
                                 className={styles.auraSelectorTrigger}
@@ -7647,7 +7730,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                             <MessageCircle size={16} className={styles.chatIcon} />
                             <input
                               type="text"
-                              placeholder="Seu fluxo vai para a Nascente Universal..."
+                              placeholder={isOwnProfile ? "Seu fluxo vai para a Nascente Universal..." : `Causar interferência na Nascente de @${profile?.username || 'consciência'}...`}
                               value={chatMessage}
                               onChange={(e) => setChatMessage(e.target.value)}
                               className={styles.chatInput}
@@ -7659,6 +7742,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                             className={styles.chatSendBtn}
                             disabled={(!chatMessage.trim() && !attachedFiles.image && !attachedFiles.audio) || isSending}
                             style={{ color: chatAction.aura }}
+                            title={isOwnProfile ? "Manifestar no Fluxo" : "Transmitir Interferência"}
                           >
                             <Send size={18} />
                           </button>
@@ -7725,6 +7809,20 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                 const Icon = ACTIONS.find(a => a.id === manifest.type)?.icon || Sparkles;
                 const allTags = [...new Set([...(postTags[manifest.id] || []), ...(manifest.metadata?.tags || [])])];
                 
+                const isInterference = Boolean(
+                  manifest.metadata?.is_interference || 
+                  (manifest.user_id && manifest.user_id !== profile?.id)
+                );
+                const interferenceStatus: 'harmonica' | 'convergente' | 'divergente' = 
+                  manifest.metadata?.interference_status || 'harmonica';
+                const isRecipient = currentUser && (currentUser.id === profile?.id || isOwnProfile);
+
+                const authorUsername = getCleanUsername(
+                  manifest.user_id, 
+                  manifest.profiles?.username || (manifest.user_id === profile?.id ? profile?.username : null), 
+                  `consciencia_${manifest.id.slice(0, 4)}`
+                );
+
                 return (
                 <motion.div 
                   key={manifest.id}
@@ -7732,7 +7830,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95 }}
-                  className={`${styles.manifestation} glass ${(manifest.metadata as any)?.is_magic ? styles.magicPulse : ''} ${transcendActive ? styles.transcendMode : ''}`}
+                  className={`${styles.manifestation} glass ${(manifest.metadata as any)?.is_magic ? styles.magicPulse : ''} ${transcendActive ? styles.transcendMode : ''} ${isInterference && interferenceStatus === 'convergente' ? styles.manifestationConvergente : ''} ${isInterference && interferenceStatus === 'divergente' ? styles.manifestationDivergente : ''}`}
                   data-window="true"
                   style={{ 
                     transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
@@ -7745,9 +7843,17 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                 >
                   <div className={styles.manifestHeader}>
                     <div className={styles.headerColumn}>
-                      <span className={styles.username}>
-                        @{getCleanUsername(manifest.user_id, manifest.profiles?.username || profile?.username, `presenca_${manifest.id.slice(0, 4)}`)}
-                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <span className={styles.username}>
+                          @{authorUsername}
+                        </span>
+                        {isInterference && (
+                          <span className={`${styles.interferenceHeaderTag} ${styles[`interferenceHeader_${interferenceStatus}`]}`}>
+                            <Zap size={10} />
+                            <span>Interferência {interferenceStatus === 'harmonica' ? 'Harmônica' : interferenceStatus === 'convergente' ? 'Convergente' : 'Divergente'}</span>
+                          </span>
+                        )}
+                      </div>
                       <span className={styles.timestamp}>
                         <Clock size={10} style={{ marginRight: 4, opacity: 0.5 }} />
                         {new Date(manifest.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -7772,11 +7878,11 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                     </div>
 
                     <div className={styles.headerColumnRight} style={{ marginLeft: 'auto' }}>
-                      {currentUser && currentUser.id === manifest.user_id && (
+                      {currentUser && (currentUser.id === manifest.user_id || isOwnProfile) && (
                         <button 
                           className={styles.deleteBtnMinimal}
                           onClick={() => setNodeToDelete(manifest.id)}
-                          title="Soltar Manifestação"
+                          title={currentUser.id === manifest.user_id ? "Soltar Manifestação" : "Dissipar Interferência"}
                         >
                           <div 
                             className={styles.soltarCircle}
@@ -7790,52 +7896,157 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                     </div>
                   </div>
                   
-                  {manifest.metadata?.image_url && (
-                    <div key={`image-${manifest.id}`} className={styles.feedMedia}>
-                      <img 
-                        src={manifest.metadata.image_url} 
-                        alt="Manifestação" 
-                        onClick={() => setFullscreenImage(manifest.metadata.image_url)}
-                        style={{ cursor: 'pointer' }}
-                      />
+                  {isInterference && interferenceStatus === 'divergente' ? (
+                    /* Se for Divergente, não deixar texto, somente deixar o nome mesmo da pessoa que postou na janela, para que saibam da Divergência */
+                    <div className={styles.divergenceNotice}>
+                      <span style={{ fontSize: '1.1rem' }}>🔀</span>
+                      <span>Interferência Divergente — o conteúdo textual e mídias foram recolhidos pela consciência receptora.</span>
                     </div>
+                  ) : (
+                    <>
+                      {manifest.metadata?.image_url && (
+                        <div key={`image-${manifest.id}`} className={styles.feedMedia}>
+                          <img 
+                            src={manifest.metadata.image_url} 
+                            alt="Manifestação" 
+                            onClick={() => setFullscreenImage(manifest.metadata.image_url)}
+                            style={{ cursor: 'pointer' }}
+                          />
+                        </div>
+                      )}
+
+                      {manifest.content && (
+                        <div 
+                          key={`content-${manifest.id}`} 
+                          className={styles.content}
+                          style={{ '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff' } as any}
+                        >
+                          {manifest.content.split(/\s+/).map((word: string, i: number) => {
+                            const ytId = getYoutubeId(word);
+                            if (ytId) {
+                              return (
+                                <div key={i} className={styles.youtubeEmbed}>
+                                  <iframe
+                                    width="100%"
+                                    height="315"
+                                    src={`https://www.youtube.com/embed/${ytId}`}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  ></iframe>
+                                </div>
+                              );
+                            }
+                            if (word.startsWith('http')) {
+                              return <a key={i} href={word} target="_blank" rel="noopener noreferrer" className={styles.link}>{word} </a>;
+                            }
+                            return word + " ";
+                          })}
+                        </div>
+                      )}
+
+                      {manifest.metadata?.audio_url && (
+                        <div key={`audio-${manifest.id}`} className={styles.audioFeedContainer}>
+                          <audio controls src={manifest.metadata.audio_url}>
+                            Seu navegador não suporta áudio.
+                          </audio>
+                        </div>
+                      )}
+                    </>
                   )}
 
-                  {manifest.content && (
-                    <div 
-                      key={`content-${manifest.id}`} 
-                      className={styles.content}
-                      style={{ '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff' } as any}
-                    >
-                      {manifest.content.split(/\s+/).map((word: string, i: number) => {
-                        const ytId = getYoutubeId(word);
-                        if (ytId) {
-                          return (
-                            <div key={i} className={styles.youtubeEmbed}>
-                              <iframe
-                                width="100%"
-                                height="315"
-                                src={`https://www.youtube.com/embed/${ytId}`}
-                                frameBorder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                              ></iframe>
-                            </div>
-                          );
-                        }
-                        if (word.startsWith('http')) {
-                          return <a key={i} href={word} target="_blank" rel="noopener noreferrer" className={styles.link}>{word} </a>;
-                        }
-                        return word + " ";
-                      })}
-                    </div>
-                  )}
+                  {/* Controles de Interferência: 3 botões para a consciência que recebeu (Harmônica, Convergente, Divergente) */}
+                  {isInterference && (
+                    <div className={styles.interferenceControls}>
+                      {isRecipient ? (
+                        <>
+                          <div className={styles.interferenceControlsHeader}>
+                            <span>Classificação da Interferência</span>
+                            <span style={{ fontSize: '0.68rem', opacity: 0.55 }}>Passe o mouse para entender cada modo</span>
+                          </div>
+                          <div className={styles.interferenceBtnGroup}>
+                            {/* Harmônica */}
+                            <button
+                              type="button"
+                              className={`${styles.interferenceBtn} ${styles.interferenceBtnHarmonica} ${interferenceStatus === 'harmonica' ? styles.interferenceBtnActive : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUpdateInterferenceStatus(manifest.id, 'harmonica');
+                              }}
+                            >
+                              <span className={styles.interferenceBtnDot} style={{ background: '#00e676' }} />
+                              <span>Harmônica</span>
+                              <div className={styles.interferenceTooltipCard}>
+                                <div className={styles.interferenceTooltipTitle} style={{ color: '#00e676' }}>
+                                  <span>☯️ Harmônica</span>
+                                </div>
+                                <div className={styles.interferenceTooltipMeaning}>
+                                  <strong>Significado simples:</strong> As opiniões convivem com respeito e equilíbrio, mesmo quando são diferentes.
+                                </div>
+                                <div className={styles.interferenceTooltipExample}>
+                                  <strong>Exemplo:</strong> “Penso de forma parecida, e entendo seu ponto.”
+                                </div>
+                              </div>
+                            </button>
 
-                  {manifest.metadata?.audio_url && (
-                    <div key={`audio-${manifest.id}`} className={styles.audioFeedContainer}>
-                      <audio controls src={manifest.metadata.audio_url}>
-                        Seu navegador não suporta áudio.
-                      </audio>
+                            {/* Convergente */}
+                            <button
+                              type="button"
+                              className={`${styles.interferenceBtn} ${styles.interferenceBtnConvergente} ${interferenceStatus === 'convergente' ? styles.interferenceBtnActive : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUpdateInterferenceStatus(manifest.id, 'convergente');
+                              }}
+                            >
+                              <span className={styles.interferenceBtnDot} style={{ background: '#8a2be2' }} />
+                              <span>Convergente</span>
+                              <div className={styles.interferenceTooltipCard}>
+                                <div className={styles.interferenceTooltipTitle} style={{ color: '#c48eff' }}>
+                                  <span>🎯 Convergente</span>
+                                </div>
+                                <div className={styles.interferenceTooltipMeaning}>
+                                  <strong>Significado simples:</strong> As opiniões se aproximam e apontam para a mesma direção.
+                                </div>
+                                <div className={styles.interferenceTooltipExample}>
+                                  <strong>Exemplo:</strong> “Penso de forma diferente. Vamos pelo mesmo caminho.”
+                                </div>
+                              </div>
+                            </button>
+
+                            {/* Divergente */}
+                            <button
+                              type="button"
+                              className={`${styles.interferenceBtn} ${styles.interferenceBtnDivergente} ${interferenceStatus === 'divergente' ? styles.interferenceBtnActive : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleUpdateInterferenceStatus(manifest.id, 'divergente');
+                              }}
+                            >
+                              <span className={styles.interferenceBtnDot} style={{ background: '#ff4500' }} />
+                              <span>Divergente</span>
+                              <div className={styles.interferenceTooltipCard}>
+                                <div className={styles.interferenceTooltipTitle} style={{ color: '#ff7744' }}>
+                                  <span>🔀 Divergente</span>
+                                </div>
+                                <div className={styles.interferenceTooltipMeaning}>
+                                  <strong>Significado simples:</strong> As opiniões seguem direções diferentes e apresentam muitas possibilidades.
+                                </div>
+                                <div className={styles.interferenceTooltipExample}>
+                                  <strong>Exemplo:</strong> “Penso muito diferente, Gastaremos muita energia e teremos poucos resultados.”
+                                </div>
+                              </div>
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className={styles.interferenceBtnGroup}>
+                          <div className={`${styles.interferenceBadgeStatus} ${styles[`interferenceBadge_${interferenceStatus}`]}`}>
+                            {interferenceStatus === 'harmonica' && <span>☯️ Interferência Harmônica</span>}
+                            {interferenceStatus === 'convergente' && <span>🎯 Interferência Convergente</span>}
+                            {interferenceStatus === 'divergente' && <span>🔀 Interferência Divergente</span>}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 

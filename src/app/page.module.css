@@ -4242,3 +4242,85 @@
 
 
 
+
+
+/* =========================================================================
+   SISTEMA DE INTERFERÊNCIA NO FEED PRINCIPAL (Harmônica, Convergente, Divergente)
+   ========================================================================= */
+
+.manifestationConvergente {
+  background: rgba(6, 6, 10, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.92), inset 0 0 25px rgba(0, 0, 0, 0.9) !important;
+  transition: all 0.4s ease;
+}
+
+.manifestationConvergente .username,
+.manifestationConvergente .timestamp,
+.manifestationConvergente .content,
+.manifestationConvergente .actionTagMinimal,
+.manifestationConvergente .feedMedia {
+  opacity: 0.58 !important;
+  filter: brightness(0.75) !important;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.manifestationConvergente:hover .username,
+.manifestationConvergente:hover .timestamp,
+.manifestationConvergente:hover .content,
+.manifestationConvergente:hover .actionTagMinimal,
+.manifestationConvergente:hover .feedMedia {
+  opacity: 0.85 !important;
+  filter: brightness(0.92) !important;
+}
+
+.manifestationDivergente {
+  border-color: rgba(255, 69, 0, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.1) !important;
+  transition: all 0.4s ease;
+}
+
+.divergenceNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-top: 0.6rem;
+  background: rgba(255, 69, 0, 0.07);
+  border: 1px dashed rgba(255, 69, 0, 0.32);
+  border-radius: 12px;
+  color: rgba(255, 175, 140, 0.92);
+  font-size: 0.84rem;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.interferenceHeaderTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.interferenceHeader_harmonica {
+  background: rgba(0, 230, 118, 0.12);
+  border: 1px solid rgba(0, 230, 118, 0.3);
+  color: #00e676;
+}
+
+.interferenceHeader_convergente {
+  background: rgba(138, 43, 226, 0.15);
+  border: 1px solid rgba(138, 43, 226, 0.35);
+  color: #c48eff;
+}
+
+.interferenceHeader_divergente {
+  background: rgba(255, 69, 0, 0.15);
+  border: 1px solid rgba(255, 69, 0, 0.35);
+  color: #ff7744;
+}
