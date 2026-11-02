@@ -18,7 +18,8 @@ export default function StarField({ active }: { active: boolean }) {
 
   useEffect(() => {
     if (active && stars.length === 0) {
-      const newStars = Array.from({ length: 250 }).map((_, i) => {
+      // Quantidade reduzida em 50% (de 250 para 125 estrelas) no Ciclo Aberto
+      const newStars = Array.from({ length: 125 }).map((_, i) => {
         // Bias towards left (0-40%)
         const x = Math.random() < 0.7 ? Math.random() * 45 : Math.random() * 100;
         return {

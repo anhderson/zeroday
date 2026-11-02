@@ -107,20 +107,20 @@ const getYoutubeId = (url: string) => {
 
 const MOON_PHASES = ['🌑', '🌒', '🌓', '🌔', '🌕', '🌖', '🌗', '🌘'];
 
-// 12 cores para os 12 feixes (null = preto com neon branco)
+// 12 cores e ordem correspondentes exatamente aos 12 botões (Perceber, Observar, Sentir, Servir, Conectar, Expressar, Criar, Buscar, Cuidar, Integrar, Soltar, Transcender)
 const SPARK_COLORS = [
-  '#ff2200', // Vermelho
-  '#ff6600', // Laranja
-  '#ffdd00', // Amarelo
-  '#aaff00', // Amarelo-Verde
-  '#00ff44', // Verde
-  '#00ffff', // Ciano
-  '#0055ff', // Azul
-  '#3300ff', // Índigo
-  '#8800ee', // Roxo
-  '#ff00cc', // Magenta
-  null,       // Preto com neon branco
-  '#ffffff', // Branco
+  '#ffffff', // 1. Perceber (Branco)
+  '#ff007f', // 2. Observar (Rosa / magenta)
+  '#8a2be2', // 3. Sentir (Roxo / violeta)
+  '#ff1744', // 4. Servir (Vermelho rosado)
+  '#ff0000', // 5. Conectar (Vermelho)
+  '#ff4500', // 6. Expressar (Laranja avermelhado)
+  '#ff8c00', // 7. Criar (Laranja)
+  '#ffd700', // 8. Buscar (Amarelo dourado)
+  '#76ff03', // 9. Cuidar (Verde-limão)
+  '#00e676', // 10. Integrar (Verde)
+  '#00f3ff', // 11. Soltar (Ciano / azul-turquesa)
+  '#0066ff', // 12. Transcender (Azul)
 ];
 
 const ACTION_NEON_COLORS: Record<string, string> = {
@@ -449,6 +449,13 @@ function HomeContent() {
   const [hexFailing, setHexFailing] = useState(false);
   const [recentUsers, setRecentUsers] = useState<any[]>([]);
 
+  // Modal para Janela com o mesmo design de Nascente Universal (Última postagem / Perfil)
+  const [storyModalTarget, setStoryModalTarget] = useState<any | null>(null);
+  const [storyModalType, setStoryModalType] = useState<'post' | 'profile' | null>(null);
+  const [storyModalLoading, setStoryModalLoading] = useState<boolean>(false);
+  const [storyLatestPost, setStoryLatestPost] = useState<any | null>(null);
+  const [storyProfileData, setStoryProfileData] = useState<any | null>(null);
+
   // Logo physics
   const [logoHovered, setLogoHovered] = useState(false);
   const logoRotation = useRef(0);
@@ -643,41 +650,136 @@ function HomeContent() {
 
   const fetchRecentUsers = async () => {
     try {
-      // Busca os usuários baseados nas postagens mais recentes
+      // Busca somente perfis reais criados com email (exclui arquétipos e contas simuladas)
+      const BOT_IDS = new Set([
+        '00000000-0000-0000-0000-000000000001',
+        '00000000-0000-0000-0000-000000000002',
+        '00000000-0000-0000-0000-000000000003',
+        '00000000-0000-0000-0000-000000000004',
+        '00000000-0000-0000-0000-000000000005',
+        '00000000-0000-0000-0000-000000000006',
+        '00000000-0000-0000-0000-000000000007',
+        '00000000-0000-0000-0000-000000000008',
+        'f0000000-0000-0000-0000-000000000000'
+      ]);
+
       const { data, error } = await supabase
-        .from('consciousness_nodes')
-        .select(`
-          user_id,
-          created_at,
-          profiles:user_id (id, username, avatar_url)
-        `)
+        .from('profiles')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       
-      // Filtrar para ter apenas usuários únicos e pegar os 8 primeiros
-      const uniqueUsers: any[] = [];
+      const realUsers: any[] = [];
       const usedIds = new Set();
       
-      for (const node of (data || [])) {
-        const norm = normalizeNodeProfiles(node as any);
-        const user = norm.profiles;
-        const uid = (norm as any).user_id || user?.id;
-        if (user && uid && !usedIds.has(uid)) {
-          uniqueUsers.push({
-            ...user,
-            id: uid,
-            username: getCleanUsername(uid, user.username),
-            avatar_url: getCleanAvatar(uid, user.username, user.avatar_url)
+      for (const p of (data || [])) {
+        if (!p || !p.id) continue;
+        if (BOT_IDS.has(p.id)) continue;
+        if (Object.keys(ARCHETYPE_PROFILES).includes(p.id)) continue;
+        const lowerUsername = (p.username || '').toLowerCase();
+        if (['ilusionmon', 'lucemon', 'barbamon', 'leviamon', 'beelzemon', 'belphemon', 'lilithmon', 'daemon', 'lumiar', 'soberath', 'avarok', 'invidrax', 'vorath', 'acedrion', 'luxarys', 'irazor', 'zero'].includes(lowerUsername)) continue;
+        
+        if (!usedIds.has(p.id)) {
+          realUsers.push({
+            ...p,
+            id: p.id,
+            username: p.username || 'consciencia',
+            avatar_url: p.avatar_url
           });
-          usedIds.add(uid);
+          usedIds.add(p.id);
         }
-        if (uniqueUsers.length === 8) break;
+        if (realUsers.length === 8) break;
       }
       
-      setRecentUsers(uniqueUsers);
+      setRecentUsers(realUsers);
     } catch (err) {
-      console.error("Erro ao buscar usuários recentes:", err);
+      console.error("Erro ao buscar perfis reais:", err);
+    }
+  };
+
+  const handleOpenLatestPost = async (targetUser: any) => {
+    const userId = targetUser.id;
+    setStoryModalTarget(targetUser);
+    setStoryModalType('post');
+    setStoryModalLoading(true);
+    setStoryLatestPost(null);
+
+    try {
+      const { data, error } = await supabase
+        .from('consciousness_nodes')
+        .select(`
+          *,
+          profiles:user_id (id, username, avatar_url)
+        `)
+        .eq('user_id', userId)
+        .is('metadata->reply_to', null)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (!error && data && data.length > 0) {
+        setStoryLatestPost(normalizeNodeProfiles(data[0]));
+      } else {
+        // Fallback caso seja um arquétipo sem post recente no banco
+        const arc = ARCHETYPE_PROFILES[userId];
+        if (arc) {
+          setStoryLatestPost({
+            id: `arc-post-${userId}`,
+            user_id: userId,
+            content: arc.phrase,
+            type: 'expressar',
+            created_at: new Date().toISOString(),
+            profiles: {
+              id: userId,
+              username: arc.name,
+              avatar_url: arc.avatar
+            }
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Erro ao buscar última postagem:", err);
+    } finally {
+      setStoryModalLoading(false);
+    }
+  };
+
+  const handleOpenProfilePreview = async (targetUser: any) => {
+    const userId = targetUser.id;
+    setStoryModalTarget(targetUser);
+    setStoryModalType('profile');
+    setStoryModalLoading(true);
+    setStoryProfileData(null);
+
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (!error && data) {
+        setStoryProfileData(data);
+      } else {
+        const arc = ARCHETYPE_PROFILES[userId];
+        if (arc) {
+          setStoryProfileData({
+            id: userId,
+            username: arc.name,
+            full_name: arc.name,
+            avatar_url: arc.avatar,
+            bio: arc.phrase,
+            title: arc.title
+          });
+        } else {
+          setStoryProfileData(targetUser);
+        }
+      }
+    } catch (err) {
+      console.error("Erro ao carregar perfil:", err);
+      setStoryProfileData(targetUser);
+    } finally {
+      setStoryModalLoading(false);
     }
   };
 
@@ -1885,28 +1987,60 @@ function HomeContent() {
                       { id: '00000000-0000-0000-0000-000000000003', username: 'Avarok', label: 'Avareza 💰', image: '/personagens/Avarok.png' },
                       { id: '00000000-0000-0000-0000-000000000004', username: 'Invidrax', label: 'Inveja 🌊', image: '/personagens/Invidrax.png' },
                     ].map((s, i) => (
-                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i} onClick={() => router.push(`/profile/${s.id}`)}>
-                        <div className={styles.sideStoryRing}>
+                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
+                        <div 
+                          className={styles.sideStoryRing}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenLatestPost(s);
+                          }}
+                          title={`Ver última manifestação de ${s.username}`}
+                        >
                           <div className={styles.sideStoryAvatar}>
                             {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
                           </div>
                         </div>
-                        <span className={styles.sideStoryName}>{s.username}</span>
+                        <span 
+                          className={styles.sideStoryName}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenProfilePreview(s);
+                          }}
+                          title={`Ver perfil de ${s.username}`}
+                        >
+                          {s.username}
+                        </span>
                       </div>
                     ))}
                   </motion.div>
                 ) : (
                   <motion.div key="real-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {recentUsers.slice(0, 4).map((s, i) => (
-                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i} onClick={() => router.push(`/profile/${s.id}`)}>
-                        <div className={styles.sideStoryRing}>
+                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
+                        <div 
+                          className={styles.sideStoryRing}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenLatestPost(s);
+                          }}
+                          title={`Ver última manifestação de ${s.username}`}
+                        >
                           <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
                             {s.avatar_url ? (
                               <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                             ) : (s.username?.[0] || '?')}
                           </div>
                         </div>
-                        <span className={styles.sideStoryName}>{s.username || 'Manifestação'}</span>
+                        <span 
+                          className={styles.sideStoryName}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenProfilePreview(s);
+                          }}
+                          title={`Ver perfil de ${s.username}`}
+                        >
+                          {s.username || 'Manifestação'}
+                        </span>
                       </div>
                     ))}
                     {recentUsers.length === 0 && Array.from({ length: 4 }).map((_, i) => (
@@ -1995,28 +2129,60 @@ function HomeContent() {
                       { id: '00000000-0000-0000-0000-000000000007', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
                       { id: '00000000-0000-0000-0000-000000000008', username: 'Irázor', label: 'Ira 💢', image: '/personagens/Irazor.png' },
                     ].map((s, i) => (
-                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4} onClick={() => router.push(`/profile/${s.id}`)}>
-                        <div className={styles.sideStoryRing}>
+                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
+                        <div 
+                          className={styles.sideStoryRing}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenLatestPost(s);
+                          }}
+                          title={`Ver última manifestação de ${s.username}`}
+                        >
                           <div className={styles.sideStoryAvatar}>
                             {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
                           </div>
                         </div>
-                        <span className={styles.sideStoryName}>{s.username}</span>
+                        <span 
+                          className={styles.sideStoryName}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenProfilePreview(s);
+                          }}
+                          title={`Ver perfil de ${s.username}`}
+                        >
+                          {s.username}
+                        </span>
                       </div>
                     ))}
                   </motion.div>
                 ) : (
                   <motion.div key="real-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {recentUsers.slice(4, 8).map((s, i) => (
-                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4} onClick={() => router.push(`/profile/${s.id}`)}>
-                        <div className={styles.sideStoryRing}>
+                      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
+                        <div 
+                          className={styles.sideStoryRing}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenLatestPost(s);
+                          }}
+                          title={`Ver última manifestação de ${s.username}`}
+                        >
                           <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
                             {s.avatar_url ? (
                               <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                             ) : (s.username?.[0] || '?')}
                           </div>
                         </div>
-                        <span className={styles.sideStoryName}>{s.username || 'Manifestação'}</span>
+                        <span 
+                          className={styles.sideStoryName}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenProfilePreview(s);
+                          }}
+                          title={`Ver perfil de ${s.username}`}
+                        >
+                          {s.username || 'Manifestação'}
+                        </span>
                       </div>
                     ))}
                     {recentUsers.length < 5 && Array.from({ length: 4 - (recentUsers.length > 4 ? recentUsers.length - 4 : 0) }).map((_, i) => (
@@ -3190,6 +3356,205 @@ function HomeContent() {
         </AnimatePresence>
         <WelcomeGuide />
         <ManifestationsGuideModal isOpen={showGuideModal} onClose={() => setShowGuideModal(false)} />
+
+        {/* --- MODAL COM O MESMO DESIGN DE NASCENTE UNIVERSAL (Última postagem / Perfil) --- */}
+        <AnimatePresence>
+          {storyModalType && storyModalTarget && (
+            <motion.div 
+              key="story-universal-modal"
+              className={styles.storyUniversalModalOverlay}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setStoryModalType(null)}
+            >
+              <motion.div 
+                className={styles.storyUniversalModalWrapper}
+                initial={{ scale: 0.92, opacity: 0, y: 25 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.92, opacity: 0, y: 25 }}
+                transition={{ type: "spring", damping: 26, stiffness: 320 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={styles.storyUniversalModalInner}>
+                  {/* Header */}
+                  <div className={styles.storyModalHeader}>
+                    <div className={styles.storyModalTitle}>
+                      {storyModalType === 'post' ? (
+                        <>
+                          <Sparkles size={15} style={{ color: 'var(--design-neon, #00f3ff)' }} />
+                          <span>Última Manifestação</span>
+                        </>
+                      ) : (
+                        <>
+                          <Compass size={15} style={{ color: 'var(--design-neon, #00f3ff)' }} />
+                          <span>Consciência Sintonizada</span>
+                        </>
+                      )}
+                    </div>
+                    <button 
+                      className={styles.storyModalCloseBtn} 
+                      onClick={() => setStoryModalType(null)}
+                      title="Fechar Janela"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+
+                  {/* Body Content */}
+                  {storyModalLoading ? (
+                    <div className={styles.storyModalLoading}>
+                      <div className={styles.activePulse} style={{ width: 14, height: 14 }} />
+                      <span>Sincronizando com a Nascente...</span>
+                    </div>
+                  ) : storyModalType === 'post' ? (
+                    <div className={styles.storyModalCard}>
+                      {storyLatestPost ? (
+                        <>
+                          <div className={styles.storyModalAuthorRow}>
+                            <div className={styles.storyModalAvatarRing}>
+                              {storyLatestPost.profiles?.avatar_url || storyModalTarget.image ? (
+                                <img 
+                                  src={getCleanAvatar(storyLatestPost.user_id, storyLatestPost.profiles?.username, storyLatestPost.profiles?.avatar_url || storyModalTarget.image) || undefined} 
+                                  alt="Avatar" 
+                                  className={styles.storyModalAvatarImg} 
+                                />
+                              ) : (
+                                <span style={{ color: '#fff', fontWeight: 900, fontSize: '1.1rem' }}>
+                                  {storyModalTarget.username?.[0] || '?'}
+                                </span>
+                              )}
+                            </div>
+                            <div className={styles.storyModalAuthorInfo}>
+                              <span className={styles.storyModalAuthorName}>
+                                {getCleanUsername(storyLatestPost.user_id, storyLatestPost.profiles?.username || storyModalTarget.username, 'Consciência')}
+                              </span>
+                              <span className={styles.storyModalAuthorHandle}>
+                                @{getCleanUsername(storyLatestPost.user_id, storyLatestPost.profiles?.username || storyModalTarget.username, 'voz')}
+                                <span style={{ margin: '0 6px', opacity: 0.4 }}>•</span>
+                                {new Date(storyLatestPost.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className={styles.storyModalPostContent}>
+                            {storyLatestPost.content}
+                          </div>
+
+                          {storyLatestPost.metadata?.image_url && (
+                            <div className={styles.feedMedia} style={{ marginTop: '0.5rem' }}>
+                              <img src={storyLatestPost.metadata.image_url} alt="Manifestação" />
+                            </div>
+                          )}
+
+                          <button 
+                            className={styles.storyModalActionBtn}
+                            onClick={() => {
+                              const targetId = storyModalTarget.id;
+                              setStoryModalType(null);
+                              router.push(`/profile/${targetId}`);
+                            }}
+                          >
+                            <Sparkles size={14} />
+                            <span>Entrar no Mundo desta Consciência</span>
+                          </button>
+                        </>
+                      ) : (
+                        <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+                          <div className={styles.storyModalAvatarRing} style={{ margin: '0 auto 1rem' }}>
+                            {storyModalTarget.image || storyModalTarget.avatar_url ? (
+                              <img 
+                                src={storyModalTarget.image || storyModalTarget.avatar_url} 
+                                alt="Avatar" 
+                                className={styles.storyModalAvatarImg} 
+                              />
+                            ) : (
+                              <span style={{ color: '#fff', fontWeight: 900 }}>?</span>
+                            )}
+                          </div>
+                          <h4 style={{ color: '#fff', marginBottom: '0.4rem', fontSize: '1.1rem' }}>
+                            @{storyModalTarget.username || 'consciencia'}
+                          </h4>
+                          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+                            Esta consciência ainda está em repouso e não emitiu manifestações recentes no Fluxo Universal.
+                          </p>
+                          <button 
+                            className={styles.storyModalActionBtn}
+                            style={{ marginTop: '1.5rem' }}
+                            onClick={() => {
+                              const targetId = storyModalTarget.id;
+                              setStoryModalType(null);
+                              router.push(`/profile/${targetId}`);
+                            }}
+                          >
+                            <Sparkles size={14} />
+                            <span>Acessar Consciência</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    /* Modal Perfil Preview */
+                    <div className={styles.storyProfilePreviewCard}>
+                      <div className={styles.storyProfileAvatarBig}>
+                        {storyProfileData?.avatar_url || storyModalTarget.image ? (
+                          <img 
+                            src={getCleanAvatar(storyProfileData?.id || storyModalTarget.id, storyProfileData?.username || storyModalTarget.username, storyProfileData?.avatar_url || storyModalTarget.image) || undefined} 
+                            alt="Avatar" 
+                          />
+                        ) : (
+                          <span style={{ color: '#fff', fontWeight: 900, fontSize: '1.8rem' }}>
+                            {storyModalTarget.username?.[0] || '?'}
+                          </span>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>
+                          {storyProfileData?.character_name || storyProfileData?.full_name || getCleanUsername(storyProfileData?.id || storyModalTarget.id, storyProfileData?.username || storyModalTarget.username, 'Consciência')}
+                        </h3>
+                        <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.45)' }}>
+                          @{getCleanUsername(storyProfileData?.id || storyModalTarget.id, storyProfileData?.username || storyModalTarget.username, 'frequencia_zero')}
+                        </p>
+                      </div>
+
+                      <p className={styles.storyProfileBio}>
+                        “{storyProfileData?.bio || storyProfileData?.status || "Presença sintonizada na frequência da Nascente Universal."}”
+                      </p>
+
+                      <div className={styles.storyProfileBadges}>
+                        <span className={styles.storyProfileBadge}>
+                          Lar: {storyProfileData?.world_name || (storyModalTarget.label ? storyModalTarget.label.split(' ')[0] : 'Terra')}
+                        </span>
+                        {storyProfileData?.level && (
+                          <span className={styles.storyProfileBadge}>
+                            Nível {storyProfileData.level}
+                          </span>
+                        )}
+                        <span className={styles.storyProfileBadge}>
+                          {storyProfileData?.created_at ? `Desde ${new Date(storyProfileData.created_at).toLocaleDateString('pt-BR')}` : 'Frequência Zero'}
+                        </span>
+                      </div>
+
+                      <button 
+                        className={styles.storyModalActionBtn}
+                        style={{ marginTop: '0.8rem' }}
+                        onClick={() => {
+                          const targetId = storyModalTarget.id;
+                          setStoryModalType(null);
+                          router.push(`/profile/${targetId}`);
+                        }}
+                      >
+                        <Sparkles size={14} />
+                        <span>Acessar Página de Consciência</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
     </div>
   );
 }

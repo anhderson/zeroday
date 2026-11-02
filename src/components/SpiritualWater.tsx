@@ -107,7 +107,8 @@ export default function SpiritualWater({ active }: { active: boolean }) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (active) {
-        if (Math.random() > 0.3) {
+        // Redução de 50% na emissão de luzes/estrelas quando o Ciclo Aberto está ativo
+        if (Math.random() > 0.65) {
           particles.current.push(createParticle());
         }
       }
