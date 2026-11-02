@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { getLumiarDailyMessage } from '@/data/transcendentMessages';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rsrjkhqffvvqkofxhvhg.supabase.co',
@@ -107,7 +108,8 @@ const ARCHETYPES = {
   }
 };
 
-// Lumíar NÃO fala no feed ("MAs Lumiar não vai falar").
+// Lumíar fala 1 vez por dia com as 365 mensagens transcendentes, apenas em seu próprio mundo
+// Os outros 7 arquétipos falam 1 vez por semana cada um no seu dia da semana
 
 export async function GET(req: Request) {
   const authHeader = req.headers.get('authorization');
@@ -120,50 +122,93 @@ export async function GET(req: Request) {
     const dayOfWeek = today.getDay(); // 0 a 6 (Domingo a Sábado)
     const dayOfMonth = today.getDate();
 
-    // 1. Cada arquétipo fala uma única vez por semana somente, no seu dia da semana.
-    // Lumíar NÃO fala no feed conforme instrução explícita.
-    const archetype = ARCHETYPES[dayOfWeek as keyof typeof ARCHETYPES];
-    if (!archetype) {
-      return NextResponse.json({ success: true, message: 'Nenhum arquétipo programado para hoje.' });
-    }
-
-    // Checar se este arquétipo já falou hoje
     const startOfDay = new Date(today);
     startOfDay.setHours(0, 0, 0, 0);
 
-    const { data: existingPost } = await supabase
+    const results: Record<string, any> = {};
+
+    // 1. Lumíar: posta 1 mensagem por dia do ciclo das 365 Mensagens Transcendentes
+    // Lumíar NÃO aparece em Nascente Universal (filtrado na home), apenas no mundo dele
+    const LUMIAR_ID = '00000000-0000-0000-0000-000000000001';
+    const { data: lumiarToday } = await supabase
       .from('consciousness_nodes')
       .select('id')
-      .eq('user_id', archetype.id)
+      .eq('user_id', LUMIAR_ID)
       .gte('created_at', startOfDay.toISOString())
       .limit(1);
 
-    if (existingPost && existingPost.length > 0) {
-      return NextResponse.json({ 
-        success: true, 
-        message: `${archetype.name} já falou nesta semana em seu dia.` 
-      });
+    if (!lumiarToday || lumiarToday.length === 0) {
+      const { dayNumber, message } = getLumiarDailyMessage(today);
+      const lumiarPost = {
+        user_id: LUMIAR_ID,
+        content: message,
+        type: 'transcender',
+        frequency: 1.0,
+        metadata: {
+          is_archetype: true,
+          is_lumiar_daily: true,
+          day_of_year: dayNumber,
+          aura: '#ffffff'
+        }
+      };
+
+      const { error: lumiarErr } = await supabase
+        .from('consciousness_nodes')
+        .insert([lumiarPost]);
+
+      if (lumiarErr) {
+        console.error('Erro ao postar mensagem diária de Lumíar:', lumiarErr);
+        results.lumiar = { error: lumiarErr.message };
+      } else {
+        results.lumiar = { dayNumber, status: 'posted' };
+      }
+    } else {
+      results.lumiar = { status: 'already_posted_today' };
     }
 
-    const postIndex = dayOfMonth % archetype.posts.length;
-    const postToInsert = {
-      user_id: archetype.id,
-      content: archetype.posts[postIndex],
-      type: archetype.type,
-      frequency: 1.0,
-      metadata: { is_archetype: true, bot_weekly: true }
-    };
+    // 2. Os outros 7 arquétipos: cada um fala uma única vez por semana em seu dia da semana
+    const archetype = ARCHETYPES[dayOfWeek as keyof typeof ARCHETYPES];
+    if (archetype) {
+      // Checar se este arquétipo já falou hoje
+      const { data: existingPost } = await supabase
+        .from('consciousness_nodes')
+        .select('id')
+        .eq('user_id', archetype.id)
+        .gte('created_at', startOfDay.toISOString())
+        .limit(1);
 
-    const { error } = await supabase
-      .from('consciousness_nodes')
-      .insert([postToInsert]);
+      if (existingPost && existingPost.length > 0) {
+        results.archetype = {
+          name: archetype.name,
+          dayOfWeek,
+          status: 'already_posted_this_week'
+        };
+      } else {
+        const postIndex = dayOfMonth % archetype.posts.length;
+        const postToInsert = {
+          user_id: archetype.id,
+          content: archetype.posts[postIndex],
+          type: archetype.type,
+          frequency: 1.0,
+          metadata: { is_archetype: true, bot_weekly: true }
+        };
 
-    if (error) throw error;
+        const { error: arcErr } = await supabase
+          .from('consciousness_nodes')
+          .insert([postToInsert]);
+
+        if (arcErr) {
+          console.error(`Erro ao postar mensagem semanal de ${archetype.name}:`, arcErr);
+          results.archetype = { name: archetype.name, error: arcErr.message };
+        } else {
+          results.archetype = { name: archetype.name, dayOfWeek, status: 'posted' };
+        }
+      }
+    }
 
     return NextResponse.json({ 
       success: true, 
-      archetype: archetype.name, 
-      dayOfWeek 
+      results
     });
   } catch (error: any) {
     console.error('Error in archetype cron:', error);

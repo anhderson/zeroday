@@ -875,6 +875,9 @@ function HomeContent() {
             }
           }
 
+          // Lumíar posta na sua própria Nascente (Mundo dele), não na Nascente Universal
+          if (normNode.user_id === '00000000-0000-0000-0000-000000000001') return;
+
           setManifestations(prev => {
             if (prev.find(m => m.id === normNode.id)) return prev;
             return [normNode, ...prev];
@@ -936,6 +939,7 @@ function HomeContent() {
         .select('*, profiles(username, avatar_url)')
         .is('metadata->reply_to', null) // Excluir comentários do feed principal
         .not('type', 'in', '("perceber", "observar")') // Excluir tipos reativos do feed principal
+        .neq('user_id', '00000000-0000-0000-0000-000000000001') // Lumíar posta no mundo dele, não na Nascente Universal
         .order('created_at', { ascending: false })
         .range(currentOffset, currentOffset + PAGE_SIZE - 1);
 
@@ -2022,9 +2026,9 @@ function HomeContent() {
                   <motion.div key="bots-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
                       { id: '00000000-0000-0000-0000-000000000001', username: 'Lumíar', label: 'União dos Sete Pecados ✨', image: '/personagens/Lumiar.png' },
-                      { id: '00000000-0000-0000-0000-000000000002', username: 'Soberath', label: 'Soberba ⚡', image: '/personagens/Soberath.png' },
-                      { id: '00000000-0000-0000-0000-000000000003', username: 'Avarok', label: 'Avareza 💰', image: '/personagens/Avarok.png' },
                       { id: '00000000-0000-0000-0000-000000000004', username: 'Invidrax', label: 'Inveja 🌊', image: '/personagens/Invidrax.png' },
+                      { id: '00000000-0000-0000-0000-000000000007', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
+                      { id: '00000000-0000-0000-0000-000000000003', username: 'Avarok', label: 'Avareza 💰', image: '/personagens/Avarok.png' },
                     ].map((s, i) => (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
                         <div 
@@ -2171,8 +2175,8 @@ function HomeContent() {
                   <motion.div key="bots-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
                       { id: '00000000-0000-0000-0000-000000000005', username: 'Vorath', label: 'Gula 🔥', image: '/personagens/Vorath.png' },
+                      { id: '00000000-0000-0000-0000-000000000002', username: 'Soberath', label: 'Soberba ⚡', image: '/personagens/Soberath.png' },
                       { id: '00000000-0000-0000-0000-000000000006', username: 'Acedrion', label: 'Preguiça 💤', image: '/personagens/Acedrion.png' },
-                      { id: '00000000-0000-0000-0000-000000000007', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
                       { id: '00000000-0000-0000-0000-000000000008', username: 'Irázor', label: 'Ira 💢', image: '/personagens/Irazor.png' },
                     ].map((s, i) => (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
@@ -2271,6 +2275,7 @@ function HomeContent() {
             )}
             {manifestations
               .filter(m => !hiddenPosts.has(m.id))
+              .filter(m => m.user_id !== '00000000-0000-0000-0000-000000000001')
               .filter(m => {
                 if (!tagFilter) return true;
                 const dbTags = Object.keys(nodeSentiments[m.id] || {})
