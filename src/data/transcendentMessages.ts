@@ -377,7 +377,7 @@ export function getDayOfYear(date: Date = new Date()): number {
   return Math.max(1, Math.min(365, day));
 }
 
-export function getLumiarDailyMessage(date: Date = new Date()): { dayNumber: number; message: string } {
+export function getLuxyusDailyMessage(date: Date = new Date()): { dayNumber: number; message: string } {
   const dayOfYear = getDayOfYear(date);
   const index = (dayOfYear - 1) % TRANSCENDENT_MESSAGES.length;
   return {
@@ -385,3 +385,5 @@ export function getLumiarDailyMessage(date: Date = new Date()): { dayNumber: num
     message: TRANSCENDENT_MESSAGES[index]
   };
 }
+
+export const getLumiarDailyMessage = getLuxyusDailyMessage;

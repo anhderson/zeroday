@@ -159,8 +159,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 0: Domingo - Soberath
   0: {
     id: '00000000-0000-0000-0000-000000000002',
-    name: 'Soberath',
-    avatar: '/personagens/Soberath.png',
+    name: 'Sobturno', avatar: '/personagens/Sobturno.png',
     title: 'Soberba — Superioridade e Domínio',
     aura: 'var(--aura-express)',
     type: 'expressar',
@@ -182,8 +181,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 1: Segunda - Avarok
   1: {
     id: '00000000-0000-0000-0000-000000000003',
-    name: 'Avarok',
-    avatar: '/personagens/Avarok.png',
+    name: 'Iramar', avatar: '/personagens/Iramar.png',
     title: 'Avareza — Posse e Ambição Insaciável',
     aura: 'var(--aura-seek)',
     type: 'buscar',
@@ -205,8 +203,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 2: Terça - Invidrax
   2: {
     id: '00000000-0000-0000-0000-000000000004',
-    name: 'Invidrax',
-    avatar: '/personagens/Invidrax.png',
+    name: 'Luxênus', avatar: '/personagens/Luxenus.png',
     title: 'Inveja — Cobiça pela Existência Alheia',
     aura: 'var(--aura-feel)',
     type: 'sentir',
@@ -228,8 +225,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 3: Quarta - Vorath
   3: {
     id: '00000000-0000-0000-0000-000000000005',
-    name: 'Vorath',
-    avatar: '/personagens/Vorath.png',
+    name: 'Avarcúrio', avatar: '/personagens/Avarcurio.png',
     title: 'Gula — Fome que Nada Consegue Saciar',
     aura: 'var(--aura-care)',
     type: 'cuidar',
@@ -251,8 +247,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 4: Quinta - Acedrion
   4: {
     id: '00000000-0000-0000-0000-000000000006',
-    name: 'Acedrion',
-    avatar: '/personagens/Acedrion.png',
+    name: 'Inveranus', avatar: '/personagens/Inveranus.png',
     title: 'Preguiça — Inércia e Sono Profundo',
     aura: 'var(--aura-service)',
     type: 'servir',
@@ -274,8 +269,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 5: Sexta - Luxarys
   5: {
     id: '00000000-0000-0000-0000-000000000007',
-    name: 'Luxarys',
-    avatar: '/personagens/Luxarys.png',
+    name: 'Gúpiter', avatar: '/personagens/Gupiter.png',
     title: 'Luxúria — Desejo e Sedução',
     aura: 'var(--aura-connect)',
     type: 'conectar',
@@ -297,8 +291,7 @@ const DAILY_JUDGE_CONFIG: Record<number, {
   // 6: Sábado - Irázor
   6: {
     id: '00000000-0000-0000-0000-000000000008',
-    name: 'Irázor',
-    avatar: '/personagens/Irazor.png',
+    name: 'Pretuno', avatar: '/personagens/Pretuno.png',
     title: 'Ira — Fúria e Destruição',
     aura: 'var(--aura-observe)',
     type: 'observar',
@@ -320,29 +313,29 @@ const DAILY_JUDGE_CONFIG: Record<number, {
 };
 
 const MON_MAPPING: Record<string, { name: string; image: string; label: string; phrase: string }> = {
-  'cuidar': { name: 'Vorath', image: '/personagens/Vorath.png', label: 'Gula', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  'sentir': { name: 'Invidrax', image: '/personagens/Invidrax.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  'buscar': { name: 'Avarok', image: '/personagens/Avarok.png', label: 'Avareza', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
-  'conectar': { name: 'Luxarys', image: '/personagens/Luxarys.png', label: 'Luxúria', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  'expressar': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  'perceber': { name: 'Lumíar', image: '/personagens/Lumiar.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  'servir': { name: 'Acedrion', image: '/personagens/Acedrion.png', label: 'Preguiça', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  'observar': { name: 'Irázor', image: '/personagens/Irazor.png', label: 'Ira', phrase: "Eu te dou força… mas tiro seu controle." },
-  'soltar': { name: 'Invidrax', image: '/personagens/Invidrax.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  'integrar': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  'criar': { name: 'Lumíar', image: '/personagens/Lumiar.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  'transcender': { name: 'Soberath', image: '/personagens/Soberath.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'cuidar': { name: 'Avarcúrio', image: '/personagens/Avarcurio.png', label: 'Gula', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
+  'sentir': { name: 'Luxênus', image: '/personagens/Luxenus.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  'buscar': { name: 'Iramar', image: '/personagens/Iramar.png', label: 'Avareza', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
+  'conectar': { name: 'Gúpiter', image: '/personagens/Gupiter.png', label: 'Luxúria', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
+  'expressar': { name: 'Sobturno', image: '/personagens/Sobturno.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'perceber': { name: 'Luxyus', image: '/personagens/Luxyus.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  'servir': { name: 'Inveranus', image: '/personagens/Inveranus.png', label: 'Preguiça', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  'observar': { name: 'Pretuno', image: '/personagens/Pretuno.png', label: 'Ira', phrase: "Eu te dou força… mas tiro seu controle." },
+  'soltar': { name: 'Luxênus', image: '/personagens/Luxenus.png', label: 'Inveja', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  'integrar': { name: 'Sobturno', image: '/personagens/Sobturno.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  'criar': { name: 'Luxyus', image: '/personagens/Luxyus.png', label: 'União dos Sete Pecados', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  'transcender': { name: 'Sobturno', image: '/personagens/Sobturno.png', label: 'Soberba', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
 };
 
 const SIMULATED_ACCOUNTS: Record<string, { name: string; avatar: string; phrase: string }> = {
-  '00000000-0000-0000-0000-000000000001': { name: 'Lumíar', avatar: '/personagens/Lumiar.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
-  '00000000-0000-0000-0000-000000000002': { name: 'Soberath', avatar: '/personagens/Soberath.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
-  '00000000-0000-0000-0000-000000000003': { name: 'Avarok', avatar: '/personagens/Avarok.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
-  '00000000-0000-0000-0000-000000000004': { name: 'Invidrax', avatar: '/personagens/Invidrax.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
-  '00000000-0000-0000-0000-000000000005': { name: 'Vorath', avatar: '/personagens/Vorath.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
-  '00000000-0000-0000-0000-000000000006': { name: 'Acedrion', avatar: '/personagens/Acedrion.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
-  '00000000-0000-0000-0000-000000000007': { name: 'Luxarys', avatar: '/personagens/Luxarys.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
-  '00000000-0000-0000-0000-000000000008': { name: 'Irázor', avatar: '/personagens/Irazor.png', phrase: "Eu te dou força… mas tiro seu controle." },
+  '00000000-0000-0000-0000-000000000001': { name: 'Luxyus', avatar: '/personagens/Luxyus.png', phrase: "Eu não minto… eu só mostro o que você quer acreditar." },
+  '00000000-0000-0000-0000-000000000002': { name: 'Sobturno', avatar: '/personagens/Sobturno.png', phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo." },
+  '00000000-0000-0000-0000-000000000003': { name: 'Iramar', avatar: '/personagens/Iramar.png', phrase: "Eu te prometo segurança… mas te prendo na escassez." },
+  '00000000-0000-0000-0000-000000000004': { name: 'Luxênus', avatar: '/personagens/Luxenus.png', phrase: "Eu te faço olhar para o outro… e esquecer de si." },
+  '00000000-0000-0000-0000-000000000005': { name: 'Avarcúrio', avatar: '/personagens/Avarcurio.png', phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também." },
+  '00000000-0000-0000-0000-000000000006': { name: 'Inveranus', avatar: '/personagens/Inveranus.png', phrase: "Eu te faço confortável… enquanto sua vida para." },
+  '00000000-0000-0000-0000-000000000007': { name: 'Gúpiter', avatar: '/personagens/Gupiter.png', phrase: "Eu te confundo com prazer… mas te esvazio por dentro." },
+  '00000000-0000-0000-0000-000000000008': { name: 'Pretuno', avatar: '/personagens/Pretuno.png', phrase: "Eu te dou força… mas tiro seu controle." },
 };
 
 const VIRTUES = [
@@ -2027,11 +2020,14 @@ function HomeContent() {
                 {!showRealStories ? (
                   <motion.div key="bots-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
-                      { id: '00000000-0000-0000-0000-000000000001', username: 'Lumíar', label: 'União dos Sete Pecados ✨', image: '/personagens/Lumiar.png' },
-                      { id: '00000000-0000-0000-0000-000000000004', username: 'Invidrax', label: 'Inveja 🌊', image: '/personagens/Invidrax.png' },
-                      { id: '00000000-0000-0000-0000-000000000007', username: 'Luxarys', label: 'Luxúria 💋', image: '/personagens/Luxarys.png' },
-                      { id: '00000000-0000-0000-0000-000000000003', username: 'Avarok', label: 'Avareza 💰', image: '/personagens/Avarok.png' },
-                    ].map((s, i) => (
+                      { id: '00000000-0000-0000-0000-000000000001', username: 'Luxyus', label: 'União dos Sete Pecados ✨', image: '/personagens/Luxyus.png' },
+                      { id: '00000000-0000-0000-0000-000000000004', username: 'Luxênus', label: 'Inveja 🌊', image: '/personagens/Luxenus.png' },
+                      { id: '00000000-0000-0000-0000-000000000007', username: 'Gúpiter', label: 'Luxúria 💋', image: '/personagens/Gupiter.png' },
+                      { id: '00000000-0000-0000-0000-000000000003', username: 'Iramar', label: 'Avareza 💰', image: '/personagens/Iramar.png' },
+                    ].map((s, i) => {
+                      const hasShutter = s.id !== '00000000-0000-0000-0000-000000000001';
+                      const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
+                      return (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
                         <div 
                           className={styles.sideStoryRing}
@@ -2043,6 +2039,13 @@ function HomeContent() {
                         >
                           <div className={styles.sideStoryAvatar}>
                             {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
+                            {hasShutter && (
+                              <div className={`${styles.capsuleEyelids} ${isSelected ? styles.capsuleOpen : ''}`}>
+                                <div className={styles.shutterBladeTop} />
+                                <div className={styles.shutterBladeBottom} />
+                                <div className={styles.shutterEyeSeam} />
+                              </div>
+                            )}
                           </div>
                         </div>
                         <span 
@@ -2056,7 +2059,7 @@ function HomeContent() {
                           {s.username}
                         </span>
                       </div>
-                    ))}
+                    );})}
                   </motion.div>
                 ) : (
                   <motion.div key="real-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
@@ -2176,11 +2179,14 @@ function HomeContent() {
                 {!showRealStories ? (
                   <motion.div key="bots-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
                     {[
-                      { id: '00000000-0000-0000-0000-000000000005', username: 'Vorath', label: 'Gula 🔥', image: '/personagens/Vorath.png' },
-                      { id: '00000000-0000-0000-0000-000000000002', username: 'Soberath', label: 'Soberba ⚡', image: '/personagens/Soberath.png' },
-                      { id: '00000000-0000-0000-0000-000000000006', username: 'Acedrion', label: 'Preguiça 💤', image: '/personagens/Acedrion.png' },
-                      { id: '00000000-0000-0000-0000-000000000008', username: 'Irázor', label: 'Ira 💢', image: '/personagens/Irazor.png' },
-                    ].map((s, i) => (
+                      { id: '00000000-0000-0000-0000-000000000005', username: 'Avarcúrio', label: 'Gula 🔥', image: '/personagens/Avarcurio.png' },
+                      { id: '00000000-0000-0000-0000-000000000002', username: 'Sobturno', label: 'Soberba ⚡', image: '/personagens/Sobturno.png' },
+                      { id: '00000000-0000-0000-0000-000000000006', username: 'Inveranus', label: 'Preguiça 💤', image: '/personagens/Inveranus.png' },
+                      { id: '00000000-0000-0000-0000-000000000008', username: 'Pretuno', label: 'Ira 💢', image: '/personagens/Pretuno.png' },
+                    ].map((s, i) => {
+                      const hasShutter = true;
+                      const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
+                      return (
                       <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
                         <div 
                           className={styles.sideStoryRing}
@@ -2192,6 +2198,13 @@ function HomeContent() {
                         >
                           <div className={styles.sideStoryAvatar}>
                             {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
+                            {hasShutter && (
+                              <div className={`${styles.capsuleEyelids} ${isSelected ? styles.capsuleOpen : ''}`}>
+                                <div className={styles.shutterBladeTop} />
+                                <div className={styles.shutterBladeBottom} />
+                                <div className={styles.shutterEyeSeam} />
+                              </div>
+                            )}
                           </div>
                         </div>
                         <span 
@@ -2205,7 +2218,7 @@ function HomeContent() {
                           {s.username}
                         </span>
                       </div>
-                    ))}
+                    );})}
                   </motion.div>
                 ) : (
                   <motion.div key="real-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
@@ -3291,17 +3304,17 @@ function HomeContent() {
             exit={{ opacity: 0, scale: 0.5, y: 50 }}
             transition={{ type: "spring", damping: 20 }}
             style={{ 
-              boxShadow: `0 0 60px ${activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? 'rgba(255, 0, 204, 0.2)' : activeBot.name === 'Vorath' || activeBot.name === 'Beelzemon' ? 'rgba(255, 100, 0, 0.2)' : 'rgba(255, 255, 255, 0.1)'}` 
+              boxShadow: `0 0 60px ${activeBot.name === 'Gúpiter' || activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? 'rgba(255, 0, 204, 0.2)' : activeBot.name === 'Avarcúrio' || activeBot.name === 'Vorath' || activeBot.name === 'Beelzemon' ? 'rgba(255, 100, 0, 0.2)' : 'rgba(255, 255, 255, 0.1)'}` 
             }}
           >
             <div className={styles.lucemonJudgmentAvatar} style={{ 
-              borderColor: activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Soberath' || activeBot.name === 'Lucemon' ? '#fff' : activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255,255,255,0.5)' 
+              borderColor: activeBot.name === 'Gúpiter' || activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Sobturno' || activeBot.name === 'Soberath' || activeBot.name === 'Lucemon' ? '#fff' : activeBot.name === 'Pretuno' || activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255,255,255,0.5)' 
             }}>
               <img src={activeBot.avatar} alt={activeBot.name} />
             </div>
             <div className={styles.lucemonJudgmentBox}>
               <div className={styles.lucemonJudgmentHeader} style={{ 
-                color: activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255, 255, 255, 0.4)' 
+                color: activeBot.name === 'Gúpiter' || activeBot.name === 'Luxarys' || activeBot.name === 'Lilithmon' ? '#ff00cc' : activeBot.name === 'Pretuno' || activeBot.name === 'Irázor' || activeBot.name === 'Daemon' ? '#ff4400' : 'rgba(255, 255, 255, 0.4)' 
               }}>
                 {activeBot.title}
               </div>

@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { getLumiarDailyMessage } from '@/data/transcendentMessages';
+import { getLuxyusDailyMessage } from '@/data/transcendentMessages';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://rsrjkhqffvvqkofxhvhg.supabase.co',
@@ -8,10 +8,10 @@ const supabase = createClient(
 );
 
 const ARCHETYPES = {
-  // 0: Domingo - Soberath (Soberba)
+  // 0: Domingo - Sobturno (ex-Soberath / Soberba)
   0: { 
     id: '00000000-0000-0000-0000-000000000002', 
-    name: 'soberath', 
+    name: 'sobturno', 
     type: 'expressar', 
     posts: [
       'Eu, já me coloquei acima de todos… e caí por isso.\n\nA soberba me cegou — me fez acreditar que eu não precisava aprender.\nMas foi na queda que eu entendi:\n\nReconhecer meu valor não significa negar o valor dos outros.\n\nHoje, eu não abaixo minha essência…\nmas também não ignoro o que o mundo pode me ensinar.\n\nO verdadeiro poder não está em se achar superior…\nmas em não precisar provar isso.',
@@ -22,10 +22,10 @@ const ARCHETYPES = {
       'Ajuda, Eu já tive dificuldade de pedir ajuda.\n\nAchava que tinha que dar conta de tudo sozinho.\n\nMas isso só me cansava mais.\n\nHoje eu ainda gosto de fazer do meu jeito…\nmas já aceito quando alguém soma.\n\nFica tudo mais leve.'
     ] 
   },
-  // 1: Segunda - Avarok (Avareza)
+  // 1: Segunda - Iramar (ex-Avarok / Avareza)
   1: { 
     id: '00000000-0000-0000-0000-000000000003', 
-    name: 'avarok', 
+    name: 'iramar', 
     type: 'buscar', 
     posts: [
       'Eu, acumulava… com medo de perder.\n\nA avareza me fechava, me isolava, me prendia ao que eu tinha.\nAté eu perceber:\n\nNada cresce quando não circula.\n\nEla me ensinou valor…\nmas também me ensinou fluxo.\n\nHoje, eu sei guardar…\nmas também sei liberar.\n\nPorque riqueza de verdade…\nnão é só ter — é saber usar.',
@@ -36,10 +36,10 @@ const ARCHETYPES = {
       'Partilha, Eu já tive dificuldade de compartilhar.\n\nTempo, coisas, até atenção.\n\nComo se eu fosse ficar sem depois.\n\nMas percebi que dividir não me diminui.\n\nHoje eu ainda penso às vezes…\nmas já consigo soltar mais.'
     ] 
   },
-  // 2: Terça - Invidrax (Inveja)
+  // 2: Terça - Luxênus (ex-Invidrax / Inveja)
   2: { 
     id: '00000000-0000-0000-0000-000000000004', 
-    name: 'invidrax', 
+    name: 'luxênus', 
     type: 'sentir', 
     posts: [
       'Eu, desejava tudo que não era meu.\n\nA inveja me consumia… me comparava… me diminuía.\nAté eu perceber:\n\nO que me incomodava nos outros… era o que faltava em mim.\n\nEla me ensinou a enxergar meus próprios vazios.\nE a transformá-los em construção.\n\nHoje, eu não quero o que é do outro…\neu me torno alguém que também pode conquistar.',
@@ -50,10 +50,10 @@ const ARCHETYPES = {
       'Motivação, Já me peguei pensando que a vida dos outros era melhor.\n\nE isso me travava.\n\nPorque enquanto eu olhava pra eles…\neu não fazia nada por mim.\n\nHoje eu tento usar isso como motivação.\n\nSe me incomoda…\né porque importa pra mim.'
     ] 
   },
-  // 3: Quarta - Vorath (Gula)
+  // 3: Quarta - Avarcúrio (ex-Vorath / Gula)
   3: { 
     id: '00000000-0000-0000-0000-000000000005', 
-    name: 'vorath', 
+    name: 'avarcúrio', 
     type: 'cuidar', 
     posts: [
       'Eu, queria tudo… o tempo todo.\n\nA gula nunca me deixava satisfeito.\nMas foi nesse excesso… que eu encontrei o limite.\n\nEla me mostrou o valor do suficiente.\nO peso do desequilíbrio.\n\nHoje, eu ainda desejo…\nmas sei quando parar.\n\nPorque o verdadeiro controle…\nnão está em consumir — mas em saber o bastante.',
@@ -64,10 +64,10 @@ const ARCHETYPES = {
       'Sentido, Eu já quis tudo ao mesmo tempo.\n\nAssistir tudo, comer tudo, viver tudo…\n\nE no fim ficava cansado.\n\nHoje eu tento aproveitar melhor…\nem vez de só consumir.\n\nFaz mais sentido assim.'
     ] 
   },
-  // 4: Quinta - Acedrion (Preguiça)
+  // 4: Quinta - Inveranus (ex-Acedrion / Preguiça)
   4: { 
     id: '00000000-0000-0000-0000-000000000006', 
-    name: 'acedrion', 
+    name: 'inveranus', 
     type: 'servir', 
     posts: [
       'Eu, evitava tudo… até a mim mesmo.\n\nA preguiça me paralisava, me afastava do que eu poderia ser.\nMas no silêncio… eu entendi algo:\n\nNem todo movimento é necessário.\n\nEla me ensinou a economizar energia…\na escolher melhor minhas batalhas.\n\nHoje, eu não fujo da ação…\neu ajo com intenção.\n\nPorque descansar também é estratégia.',
@@ -78,10 +78,10 @@ const ARCHETYPES = {
       'Ritmo, Tem dias que eu só quero ficar parado.\n\nSem pensar, sem fazer nada.\n\nE às vezes eu deixo.\n\nMas não como antes… por dias.\n\nHoje eu tento pelo menos fazer algo pequeno.\n\nSó pra não perder o ritmo.'
     ] 
   },
-  // 5: Sexta - Luxarys (Luxúria)
+  // 5: Sexta - Gúpiter (ex-Luxarys / Luxúria)
   5: { 
     id: '00000000-0000-0000-0000-000000000007', 
-    name: 'luxarys', 
+    name: 'gúpiter', 
     type: 'conectar', 
     posts: [
       'Eu, era movido pelo desejo… sem controle.\n\nA luxúria me puxava para tudo que era intenso e passageiro.\nMas dentro dela… havia vida.\n\nEla me ensinou sobre conexão.\nSobre sentir… sem fugir.\n\nHoje, eu não reprimo meu desejo…\neu o compreendo.\n\nPorque quando consciente…\nele deixa de ser vício — e se torna energia criadora.',
@@ -92,10 +92,10 @@ const ARCHETYPES = {
       'Escolha, Eu já fui muito no impulso do momento.\n\nSem pensar no depois.\n\nE nem sempre o depois foi bom.\n\nHoje eu tento sentir…\nmas também entender.\n\nNem todo desejo precisa virar ação.\n\nIsso mudou bastante coisa pra mim.'
     ] 
   },
-  // 6: Sábado - Irázor (Ira)
+  // 6: Sábado - Pretuno (ex-Irázor / Ira)
   6: { 
     id: '00000000-0000-0000-0000-000000000008', 
-    name: 'irazor', 
+    name: 'pretuno', 
     type: 'observar', 
     posts: [
       'Eu, destruía tudo ao meu redor… sem pensar.\n\nA ira me dominava — rápida, intensa, cega.\nMas dentro dela… havia verdade.\n\nEla me mostrou meus limites.\nMe ensinou o que eu não aceitava mais.\n\nHoje, eu não elimino minha ira…\neu a controlo.\n\nPorque quando direcionada…\nela deixa de destruir — e começa a proteger.',
@@ -127,43 +127,43 @@ export async function GET(req: Request) {
 
     const results: Record<string, any> = {};
 
-    // 1. Lumíar: posta 1 mensagem por dia do ciclo das 365 Mensagens Transcendentes
-    // Lumíar NÃO aparece em Nascente Universal (filtrado na home), apenas no mundo dele
-    const LUMIAR_ID = '00000000-0000-0000-0000-000000000001';
-    const { data: lumiarToday } = await supabase
+    // 1. Luxyus (ex-Lumíar): posta 1 mensagem por dia do ciclo das 365 Mensagens Transcendentes
+    // Luxyus NÃO aparece em Nascente Universal (filtrado na home), apenas no mundo dele
+    const LUXYUS_ID = '00000000-0000-0000-0000-000000000001';
+    const { data: luxyusToday } = await supabase
       .from('consciousness_nodes')
       .select('id')
-      .eq('user_id', LUMIAR_ID)
+      .eq('user_id', LUXYUS_ID)
       .gte('created_at', startOfDay.toISOString())
       .limit(1);
 
-    if (!lumiarToday || lumiarToday.length === 0) {
-      const { dayNumber, message } = getLumiarDailyMessage(today);
-      const lumiarPost = {
-        user_id: LUMIAR_ID,
+    if (!luxyusToday || luxyusToday.length === 0) {
+      const { dayNumber, message } = getLuxyusDailyMessage(today);
+      const luxyusPost = {
+        user_id: LUXYUS_ID,
         content: message,
         type: 'transcender',
         frequency: 1.0,
         metadata: {
           is_archetype: true,
-          is_lumiar_daily: true,
+          is_luxyus_daily: true,
           day_of_year: dayNumber,
           aura: '#ffffff'
         }
       };
 
-      const { error: lumiarErr } = await supabase
+      const { error: luxyusErr } = await supabase
         .from('consciousness_nodes')
-        .insert([lumiarPost]);
+        .insert([luxyusPost]);
 
-      if (lumiarErr) {
-        console.error('Erro ao postar mensagem diária de Lumíar:', lumiarErr);
-        results.lumiar = { error: lumiarErr.message };
+      if (luxyusErr) {
+        console.error('Erro ao postar mensagem diária de Luxyus:', luxyusErr);
+        results.luxyus = { error: luxyusErr.message };
       } else {
-        results.lumiar = { dayNumber, status: 'posted' };
+        results.luxyus = { dayNumber, status: 'posted' };
       }
     } else {
-      results.lumiar = { status: 'already_posted_today' };
+      results.luxyus = { status: 'already_posted_today' };
     }
 
     // 2. Os outros 7 arquétipos: cada um fala uma única vez por semana em seu dia da semana

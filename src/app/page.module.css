@@ -760,6 +760,78 @@
   overflow: hidden;
 }
 
+/* --- Cápsula Tecnológica / Olho Fechando (Lâminas Superior e Inferior) --- */
+.capsuleEyelids {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.shutterBladeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50.5%;
+  background: linear-gradient(180deg, #222933 0%, #12161c 70%, #1d2530 100%);
+  border-bottom: 1.5px solid rgba(0, 243, 255, 0.7);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+.shutterBladeBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50.5%;
+  background: linear-gradient(0deg, #222933 0%, #12161c 70%, #1d2530 100%);
+  border-top: 1.5px solid rgba(0, 243, 255, 0.7);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.8), inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(0);
+}
+
+.shutterEyeSeam {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 2.5px;
+  background: #00f3ff;
+  box-shadow: 0 0 10px #00f3ff, 0 0 4px #ffffff;
+  border-radius: 2px;
+  opacity: 0.95;
+  transition: opacity 0.3s ease, transform 0.4s ease;
+  z-index: 11;
+  pointer-events: none;
+}
+
+/* Ao passar o mouse por cima dos botões esferas dos seres, abre as lâminas como se abrindo olhos */
+.sideStoryItem:hover .capsuleEyelids .shutterBladeTop,
+.sideStoryRing:hover .capsuleEyelids .shutterBladeTop,
+.capsuleOpen .shutterBladeTop {
+  transform: translateY(-100%);
+}
+
+.sideStoryItem:hover .capsuleEyelids .shutterBladeBottom,
+.sideStoryRing:hover .capsuleEyelids .shutterBladeBottom,
+.capsuleOpen .shutterBladeBottom {
+  transform: translateY(100%);
+}
+
+.sideStoryItem:hover .capsuleEyelids .shutterEyeSeam,
+.sideStoryRing:hover .capsuleEyelids .shutterEyeSeam,
+.capsuleOpen .shutterEyeSeam {
+  opacity: 0;
+  transform: translate(-50%, -50%) scaleX(0);
+}
+
 .sideStoryName {
   font-size: 0.65rem;
   font-weight: 700;

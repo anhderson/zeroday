@@ -197,9 +197,9 @@ export default function UserPresence({
   ];
 
   const ARQUETIPOS = [
-    "😈 SOBERATH (Soberba)", "👿 AVAROK (Avareza)", "💋 LUXARYS (Luxúria)", 
-    "🌊 INVIDRAX (Inveja)", "🌑 VORATH (Gula)", "👹 IRÁZOR (Ira)", 
-    "💤 ACEDRION (Preguiça)", "✨ LUMÍAR (União dos Sete Pecados)"
+    "Sobturno (Soberba)", "Iramar (Avareza)", "Gúpiter (Luxúria)", 
+    "Luxênus (Inveja)", "Avarcúrio (Gula)", "Pretuno (Ira)", 
+    "Inveranus (Preguiça)", "Luxyus (União dos Sete Pecados)"
   ];
 
   const NASCENTE_12_COLORS = [
@@ -225,7 +225,7 @@ export default function UserPresence({
   const levelColorIndex = Math.max(0, (currentLevel > 0 ? currentLevel - 1 : 0)) % NASCENTE_12_COLORS.length;
   const currentConsciousnessColor = NASCENTE_12_COLORS[levelColorIndex];
 
-  const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
+  const BOTS = ["sobturno", "iramar", "luxênus", "luxenus", "avarcúrio", "avarcurio", "inveranus", "gúpiter", "gupiter", "pretuno", "luxyus", "soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
   const LARES = [
     "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter", 
     "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"

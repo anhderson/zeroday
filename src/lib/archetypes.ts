@@ -10,97 +10,116 @@ export interface ArchetypeProfile {
 export const ARCHETYPE_PROFILES: Record<string, ArchetypeProfile> = {
   '00000000-0000-0000-0000-000000000001': {
     id: '00000000-0000-0000-0000-000000000001',
-    name: 'Lumíar',
-    avatar: '/personagens/Lumiar.png',
+    name: 'Luxyus',
+    avatar: '/personagens/Luxyus.png',
     title: 'União dos Sete Pecados',
     sin: 'União',
     phrase: "Eu não minto… eu só mostro o que você quer acreditar."
   },
   '00000000-0000-0000-0000-000000000002': {
     id: '00000000-0000-0000-0000-000000000002',
-    name: 'Soberath',
-    avatar: '/personagens/Soberath.png',
+    name: 'Sobturno',
+    avatar: '/personagens/Sobturno.png',
     title: 'Soberba — Superioridade e Domínio',
     sin: 'Soberba',
     phrase: "Eu te faço acreditar que você já chegou no topo… cuidado comigo."
   },
   '00000000-0000-0000-0000-000000000003': {
     id: '00000000-0000-0000-0000-000000000003',
-    name: 'Avarok',
-    avatar: '/personagens/Avarok.png',
+    name: 'Iramar',
+    avatar: '/personagens/Iramar.png',
     title: 'Avareza — Posse e Ambição Insaciável',
     sin: 'Avareza',
     phrase: "Eu te prometo segurança… mas te prendo na escassez."
   },
   '00000000-0000-0000-0000-000000000004': {
     id: '00000000-0000-0000-0000-000000000004',
-    name: 'Invidrax',
-    avatar: '/personagens/Invidrax.png',
+    name: 'Luxênus',
+    avatar: '/personagens/Luxenus.png',
     title: 'Inveja — Cobiça pela Existência Alheia',
     sin: 'Inveja',
     phrase: "Eu te faço olhar para o outro… e esquecer de si."
   },
   '00000000-0000-0000-0000-000000000005': {
     id: '00000000-0000-0000-0000-000000000005',
-    name: 'Vorath',
-    avatar: '/personagens/Vorath.png',
+    name: 'Avarcúrio',
+    avatar: '/personagens/Avarcurio.png',
     title: 'Gula — Fome que Nada Consegue Saciar',
     sin: 'Gula',
     phrase: "Eu nunca estou satisfeito… e ensino você a nunca estar também."
   },
   '00000000-0000-0000-0000-000000000006': {
     id: '00000000-0000-0000-0000-000000000006',
-    name: 'Acedrion',
-    avatar: '/personagens/Acedrion.png',
+    name: 'Inveranus',
+    avatar: '/personagens/Inveranus.png',
     title: 'Preguiça — Inércia e Sono Profundo',
     sin: 'Preguiça',
     phrase: "Eu te faço confortável… enquanto sua vida para."
   },
   '00000000-0000-0000-0000-000000000007': {
     id: '00000000-0000-0000-0000-000000000007',
-    name: 'Luxarys',
-    avatar: '/personagens/Luxarys.png',
+    name: 'Gúpiter',
+    avatar: '/personagens/Gupiter.png',
     title: 'Luxúria — Desejo e Sedução',
     sin: 'Luxúria',
     phrase: "Eu te confundo com prazer… mas te esvazio por dentro."
   },
   '00000000-0000-0000-0000-000000000008': {
     id: '00000000-0000-0000-0000-000000000008',
-    name: 'Irázor',
-    avatar: '/personagens/Irazor.png',
+    name: 'Pretuno',
+    avatar: '/personagens/Pretuno.png',
     title: 'Ira — Fúria e Destruição',
     sin: 'Ira',
     phrase: "Eu te dou força… mas tiro seu controle."
   },
 };
 
-// Aliases antigos mapeando para o identificador canônico
+// Aliases mapeando nomes atuais e antigos para o identificador canônico
 export const OLD_NAME_TO_ARCHETYPE: Record<string, string> = {
-  ilusionmon: '00000000-0000-0000-0000-000000000001',
+  // 1: Luxyus (ex-Lumiar)
+  luxyus: '00000000-0000-0000-0000-000000000001',
   lumiar: '00000000-0000-0000-0000-000000000001',
   lumíar: '00000000-0000-0000-0000-000000000001',
+  ilusionmon: '00000000-0000-0000-0000-000000000001',
 
-  lucemon: '00000000-0000-0000-0000-000000000002',
+  // 2: Sobturno (ex-Soberath)
+  sobturno: '00000000-0000-0000-0000-000000000002',
   soberath: '00000000-0000-0000-0000-000000000002',
+  lucemon: '00000000-0000-0000-0000-000000000002',
 
-  barbamon: '00000000-0000-0000-0000-000000000003',
+  // 3: Iramar (ex-Avarok)
+  iramar: '00000000-0000-0000-0000-000000000003',
   avarok: '00000000-0000-0000-0000-000000000003',
+  barbamon: '00000000-0000-0000-0000-000000000003',
 
-  leviamon: '00000000-0000-0000-0000-000000000004',
+  // 4: Luxênus (ex-Invidrax)
+  luxênus: '00000000-0000-0000-0000-000000000004',
+  luxenus: '00000000-0000-0000-0000-000000000004',
   invidrax: '00000000-0000-0000-0000-000000000004',
+  leviamon: '00000000-0000-0000-0000-000000000004',
 
-  beelzemon: '00000000-0000-0000-0000-000000000005',
+  // 5: Avarcúrio (ex-Vorath)
+  avarcúrio: '00000000-0000-0000-0000-000000000005',
+  avarcurio: '00000000-0000-0000-0000-000000000005',
   vorath: '00000000-0000-0000-0000-000000000005',
+  beelzemon: '00000000-0000-0000-0000-000000000005',
 
-  belphemon: '00000000-0000-0000-0000-000000000006',
+  // 6: Inveranus (ex-Acedrion)
+  inveranus: '00000000-0000-0000-0000-000000000006',
   acedrion: '00000000-0000-0000-0000-000000000006',
+  belphemon: '00000000-0000-0000-0000-000000000006',
 
-  lilithmon: '00000000-0000-0000-0000-000000000007',
+  // 7: Gúpiter (ex-Luxarys)
+  gúpiter: '00000000-0000-0000-0000-000000000007',
+  gupiter: '00000000-0000-0000-0000-000000000007',
   luxarys: '00000000-0000-0000-0000-000000000007',
+  lilithmon: '00000000-0000-0000-0000-000000000007',
 
-  daemon: '00000000-0000-0000-0000-000000000008',
-  irazor: '00000000-0000-0000-0000-000000000008',
+  // 8: Pretuno (ex-Irázor)
+  pretuno: '00000000-0000-0000-0000-000000000008',
   irázor: '00000000-0000-0000-0000-000000000008',
+  irazor: '00000000-0000-0000-0000-000000000008',
+  daemon: '00000000-0000-0000-0000-000000000008',
 };
 
 export function resolveArchetype(userId?: string | null, rawUsername?: string | null): ArchetypeProfile | null {
