@@ -1847,7 +1847,7 @@ function HomeContent() {
             <div className={styles.logoContainer}>
               <img 
                 ref={logoRef}
-                src={laserActive ? "/logo.jpg" : "/zerodayicone2.png"} 
+                src={laserActive ? "/zerodayicone2.png" : "/zerodayimage.png"} 
                 alt="Nexus Menu" 
                 className={styles.mainLogo} 
               />
@@ -1927,21 +1927,22 @@ function HomeContent() {
                 ))}
               </div>
             )}
-            <div className={styles.avatar}>
+            <div className={styles.avatarWrapper}>
               <div className={styles.headerWhiteSpherePulse}></div>
-              {profileGlitchActive && <div className={styles.digitalNoise}></div>}
-              {profile?.avatar_url ? (
-                <img 
-                  src={profile.avatar_url} 
-                  alt={profile.full_name} 
-                  className={`${styles.avatarImg} ${profileGlitchActive ? styles.profileImageGlitch : ''}`} 
-                />
-              ) : (
-                <span className={profileGlitchActive ? styles.profileImageGlitch : ''}>
-                  {user?.email?.[0].toUpperCase() || 'U'}
-                </span>
-              )}
-
+              <div className={styles.avatar}>
+                {profileGlitchActive && <div className={styles.digitalNoise}></div>}
+                {profile?.avatar_url ? (
+                  <img 
+                    src={profile.avatar_url} 
+                    alt={profile.full_name} 
+                    className={`${styles.avatarImg} ${profileGlitchActive ? styles.profileImageGlitch : ''}`} 
+                  />
+                ) : (
+                  <span className={profileGlitchActive ? styles.profileImageGlitch : ''}>
+                    {user?.email?.[0].toUpperCase() || 'U'}
+                  </span>
+                )}
+              </div>
             </div>
           </button>
         </div>

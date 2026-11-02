@@ -929,17 +929,17 @@
 }
 
 
-/* --- SCOUTER TECNOLÓGICO DISPOSITIVO --- */
+/* --- SCOUTER TECNOLÓGICO DISPOSITIVO (BRANCO CLARO E CINZA) --- */
 .scouterDevice {
   position: relative;
   width: 100%;
   max-width: 330px;
   margin: 0.8rem auto 1.2rem;
-  background: linear-gradient(180deg, rgba(14, 18, 27, 0.95), rgba(7, 10, 15, 0.98));
-  border: 1.5px solid rgba(0, 243, 255, 0.4);
-  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(38, 42, 50, 0.96), rgba(20, 23, 29, 0.98));
+  border: 1.5px solid rgba(220, 226, 235, 0.4);
+  border-radius: 6px;
   padding: 0.9rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 243, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 255, 255, 0.05);
   box-sizing: border-box;
 }
 
@@ -947,7 +947,7 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  border-color: #00f3ff;
+  border-color: rgba(240, 244, 250, 0.85);
   border-style: solid;
   pointer-events: none;
 }
@@ -961,7 +961,7 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 0.7rem;
 }
 
@@ -973,14 +973,14 @@
 .scouterBrandPrefix {
   font-family: monospace;
   font-size: 0.65rem;
-  color: #00f3ff;
+  color: #f0f4fa;
   font-weight: 800;
   letter-spacing: 1px;
 }
 .scouterBrandTitle {
   font-size: 0.62rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
+  color: #c4cacf;
   letter-spacing: 0.6px;
 }
 
@@ -1023,7 +1023,7 @@
 .scouterConsciousnessLabel {
   font-size: 0.62rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(220, 226, 235, 0.7);
   letter-spacing: 1.5px;
   margin-bottom: 0.3rem;
   text-transform: uppercase;
@@ -1070,7 +1070,7 @@
   background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .scouterExpFill {
@@ -1083,7 +1083,7 @@
 .scouterSpectrumContainer {
   margin-bottom: 0.8rem;
   background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   padding: 0.45rem 0.55rem;
 }
@@ -1094,7 +1094,7 @@
   align-items: center;
   font-size: 0.58rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(220, 226, 235, 0.6);
   letter-spacing: 0.6px;
   margin-bottom: 0.4rem;
 }
@@ -1129,10 +1129,10 @@
 }
 
 .scouterReadoutItem {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 4px;
-  padding: 0.4rem 0.5rem;
+  padding: 0.45rem 0.55rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1141,7 +1141,7 @@
 .scouterItemLabel {
   font-size: 0.55rem;
   font-weight: 800;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(220, 226, 235, 0.6);
   letter-spacing: 0.7px;
   text-transform: uppercase;
 }
@@ -1176,44 +1176,113 @@
   flex-shrink: 0;
 }
 
-.scouterStatusBox {
-  margin-top: 0.45rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-  padding: 0.35rem 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.scouterStatusText {
-  font-size: 0.68rem;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.75);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .experienceExplanation {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 0.4px;
   text-align: center;
   margin: 0 0 0.8rem 0;
   padding: 0.45rem 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-family: inherit;
 }
 
-.btnActionIcon {
-  width: 18px;
-  height: 18px;
+/* Footer Action Buttons with Tooltips */
+.footerIconButtonsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 0.8rem;
+  width: 100%;
+}
+
+.tooltipWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconActionBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+  outline: none;
+}
+
+.iconActionBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.logoutActionBtn {
+  background: rgba(255, 50, 50, 0.08);
+  border-color: rgba(255, 50, 50, 0.35);
+}
+
+.logoutActionBtn:hover {
+  background: rgba(255, 50, 50, 0.2);
+  border-color: #ff4d4d;
+  box-shadow: 0 0 20px rgba(255, 50, 50, 0.35);
+}
+
+.btnActionIconSolo {
+  width: 22px;
+  height: 22px;
   object-fit: contain;
-  vertical-align: middle;
-  margin-right: 8px;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+}
+
+.tooltipPopup {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(18, 22, 28, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+}
+
+.tooltipPopup::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(18, 22, 28, 0.96) transparent transparent transparent;
+}
+
+.tooltipWrapper:hover .tooltipPopup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }

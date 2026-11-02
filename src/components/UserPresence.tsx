@@ -221,6 +221,7 @@ export default function UserPresence({
   const currentLevel = (totalManifestations % 33) || (totalManifestations > 0 ? 33 : 0);
   const arquetipoIndex = Math.floor(totalManifestations / 33) % ARQUETIPOS.length;
   const currentArquetipo = ARQUETIPOS[arquetipoIndex];
+  const cleanRankTitle = currentArquetipo.replace(/[^\w\s()À-ÿ]/g, '').trim();
   const levelColorIndex = Math.max(0, (currentLevel > 0 ? currentLevel - 1 : 0)) % NASCENTE_12_COLORS.length;
   const currentConsciousnessColor = NASCENTE_12_COLORS[levelColorIndex];
 
@@ -700,8 +701,8 @@ export default function UserPresence({
               </span>
             </div>
 
-            {/* Nome do Arquétipo posicionado abaixo do hexágono */}
-            <span className={styles.scouterRankTitle}>{currentArquetipo}</span>
+            {/* Nome do Arquétipo posicionado abaixo do hexágono (sem símbolos/emojis) */}
+            <span className={styles.scouterRankTitle}>{cleanRankTitle}</span>
 
             <div className={styles.scouterExpBar}>
               <div 
@@ -767,13 +768,6 @@ export default function UserPresence({
               </span>
             </div>
           </div>
-
-          {profile?.status && (
-            <div className={styles.scouterStatusBox}>
-              <span className={styles.scouterItemLabel}>ASSINATURA:</span>
-              <span className={styles.scouterStatusText}>"{profile.status}"</span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -836,36 +830,48 @@ export default function UserPresence({
 
             <div className={styles.footer}>
               <button className={styles.settingsBtn} onClick={onOpenSettings}>
-                <img src="/botoes/Icone Ligar.png" alt="Ligar" className={styles.btnActionIcon} />
-                <span>Sintonizar Presença</span>
+                Sintonizar Presença
               </button>
 
-              {showHistory && (
-                <button 
-                  onClick={() => {
-                    if (profile?.id) {
-                      setIsMinimized(true);
-                      router.push(`/profile/${profile.id}`);
-                    }
-                  }} 
-                  className={styles.historyBtn}
-                >
-                  <img src="/botoes/Icone Ligar.png" alt="Ligar" className={styles.btnActionIcon} />
-                  <span>{profile?.world_name ? `ENTRAR NO MUNDO: ${profile.world_name.toUpperCase()}` : "Minha frequência"}</span>
-                </button>
-              )}
-              {showLogout && (
-                <button 
-                  className={styles.logoutBtn}
-                  onClick={async () => {
-                    await supabase.auth.signOut();
-                    router.push('/auth');
-                  }}
-                >
-                  <img src="/botoes/Icone Desligar.png" alt="Desligar" className={styles.btnActionIcon} />
-                  <span>Desconectar</span>
-                </button>
-              )}
+              <div className={styles.footerIconButtonsRow}>
+                {showHistory && (
+                  <div className={styles.tooltipWrapper}>
+                    <button 
+                      onClick={() => {
+                        if (profile?.id) {
+                          setIsMinimized(true);
+                          router.push(`/profile/${profile.id}`);
+                        }
+                      }} 
+                      className={styles.iconActionBtn}
+                      aria-label={profile?.world_name ? `ENTRAR NO MUNDO: ${profile.world_name.toUpperCase()}` : "Minha frequência"}
+                    >
+                      <img src="/botoes/Icone Ligar.png" alt="Entrar no Mundo" className={styles.btnActionIconSolo} />
+                    </button>
+                    <div className={styles.tooltipPopup}>
+                      {profile?.world_name ? `ENTRAR NO MUNDO: ${profile.world_name.toUpperCase()}` : "Minha frequência"}
+                    </div>
+                  </div>
+                )}
+
+                {showLogout && (
+                  <div className={styles.tooltipWrapper}>
+                    <button 
+                      className={`${styles.iconActionBtn} ${styles.logoutActionBtn}`}
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        router.push('/auth');
+                      }}
+                      aria-label="Desconectar"
+                    >
+                      <img src="/botoes/Icone Desligar.png" alt="Desligar" className={styles.btnActionIconSolo} />
+                    </button>
+                    <div className={styles.tooltipPopup}>
+                      Desconectar
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
       </div>
     </motion.div>
