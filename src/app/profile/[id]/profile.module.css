@@ -186,6 +186,159 @@
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.heroBgSmaller {
+  background-color: #000000 !important;
+}
+
+.heroBgImageLayer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 0;
+}
+
+.heroBgImageLayerContain {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+.heroBgCornerVignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 20%, transparent 40%),
+    radial-gradient(circle at 100% 0%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 20%, transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 20%, transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.25) 20%, transparent 40%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, transparent 6%, transparent 94%, rgba(0, 0, 0, 0.5) 100%);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  mask-image: radial-gradient(ellipse at center, transparent 70%, black 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, transparent 70%, black 100%);
+}
+
+/* zoom controls */
+.bannerZoomControls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  padding: 0.4rem 1rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+
+.zoomLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.zoomBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.zoomBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+.zoomSlider {
+  width: 100px;
+  cursor: pointer;
+  accent-color: var(--nexo-color, #00f3ff);
+}
+
+.zoomPercentBadge {
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--nexo-color, #00f3ff);
+  min-width: 38px;
+  text-align: right;
+}
+
+.zoomResetBtn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 0.65rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.zoomResetBtn:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+.bannerZoomPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  margin: 4px 0;
+}
+
+.zoomMiniBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.zoomMiniBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.heroBackground_old {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 350px;
+  background: #020202;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .heroBackground::before {
   content: '';
   position: absolute;

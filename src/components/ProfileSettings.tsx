@@ -546,6 +546,9 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
                   crop={crop}
                   zoom={zoom}
                   aspect={cropType === "avatar" ? 1 : 16/9}
+                  minZoom={cropType === "avatar" ? 1 : 0.3}
+                  maxZoom={3}
+                  restrictPosition={cropType === "avatar"}
                   onCropChange={setCrop}
                   onCropComplete={onCropComplete}
                   onZoomChange={setZoom}
@@ -558,11 +561,11 @@ export default function ProfileSettings({ onClose, onProfileUpdate }: ProfileSet
                   <input
                     type="range"
                     value={zoom}
-                    min={1}
+                    min={cropType === "avatar" ? 1 : 0.3}
                     max={3}
-                    step={0.1}
+                    step={0.05}
                     aria-labelledby="Zoom"
-                    onChange={(e: any) => setZoom(e.target.value)}
+                    onChange={(e: any) => setZoom(parseFloat(e.target.value))}
                     className={styles.zoomRange}
                   />
                 </div>

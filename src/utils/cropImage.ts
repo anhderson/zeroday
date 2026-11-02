@@ -23,6 +23,10 @@ export async function getCroppedImg(
   canvas.width = pixelCrop.width
   canvas.height = pixelCrop.height
 
+  // Fill black so empty sides (pillarbox/letterbox) are filled with pure black
+  ctx.fillStyle = '#000000'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
   // draw the cropped image onto the canvas
   ctx.drawImage(
     image,

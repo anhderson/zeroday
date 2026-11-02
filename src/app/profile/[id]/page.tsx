@@ -10,7 +10,7 @@ import {
   Sun, Anchor, Eye, Wind, Atom, Palette, Sparkles, Trash2,
   Camera, Flame, Settings, RefreshCw, ChevronLeft, ChevronRight, Shield,
   Ghost, Crown, Gem, Clock, Hash, Check,
-  Heart, Scale, Leaf, Cloud
+  Heart, Scale, Leaf, Cloud, Minus, Plus
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { getCleanUsername, getCleanAvatar, resolveArchetype, normalizeNodeProfiles } from "@/lib/archetypes";
@@ -249,9 +249,9 @@ function VascularPath({ angle, startR, cp1, cp2, targetEnd, irisX, irisY, color,
 }
 
 const ARQUETIPOS = [
-  "🕊️ INOCENTE", "🧍 ÓRFÃO", "🛡️ HERÓI", "🤝 CUIDADOR", "🌍 EXPLORADOR",
-  "🔥 REBELDE", "❤️ AMANTE", "🎨 CRIADOR", "👑 GOVERNANTE", "🧙 MAGO",
-  "📚 SÁBIO", "🤡 TOLO"
+  "INOCENTE", "ÓRFÃO", "HERÓI", "CUIDADOR", "EXPLORADOR",
+  "REBELDE", "AMANTE", "CRIADOR", "GOVERNANTE", "MAGO",
+  "SÁBIO", "TOLO"
 ];
 
 export default function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -441,6 +441,10 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
   const bannerInputRef = useRef<HTMLInputElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const heroBgRef = useRef<HTMLDivElement>(null);
+  const [bgZoom, setBgZoom] = useState<number>(1);
+  const [bgNaturalWidth, setBgNaturalWidth] = useState<number>(0);
+  const [bgContainerWidth, setBgContainerWidth] = useState<number>(0);
   const [isEditingEssence, setIsEditingEssence] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [showShareTooltip, setShowShareTooltip] = useState(false);
@@ -468,6 +472,50 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isEditingEssence]);
+
+  useEffect(() => {
+    if (profile?.id) {
+      const saved = localStorage.getItem(`bg_zoom_${profile.id}`);
+      if (saved) {
+        const parsed = parseFloat(saved);
+        if (!isNaN(parsed)) setBgZoom(parsed);
+      }
+    }
+  }, [profile?.id]);
+
+  useEffect(() => {
+    const bgUrl = profile?.banner_url || profile?.world_image;
+    if (!bgUrl) {
+      setBgNaturalWidth(0);
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      setBgNaturalWidth(img.naturalWidth);
+    };
+    img.src = bgUrl;
+  }, [profile?.banner_url, profile?.world_image]);
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (heroBgRef.current) {
+        setBgContainerWidth(heroBgRef.current.clientWidth);
+      } else if (typeof window !== 'undefined') {
+        setBgContainerWidth(window.innerWidth);
+      }
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
+
+  const handleZoomChange = (newZoom: number) => {
+    const clamped = Math.max(0.3, Math.min(2.5, parseFloat(newZoom.toFixed(2))));
+    setBgZoom(clamped);
+    if (profile?.id) {
+      localStorage.setItem(`bg_zoom_${profile.id}`, clamped.toString());
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -1188,7 +1236,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
 
     // Visual update imediato
     const previewUrl = URL.createObjectURL(file);
-    setProfile(prev => ({ ...prev!, banner_url: previewUrl }));
+    setProfile(prev => ({ ...prev!, banner_url: previewUrl, world_image: previewUrl }));
+    setActiveMenu('banner');
 
     try {
       const fileExt = file.name.split('.').pop();
@@ -1202,7 +1251,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
 
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ banner_url: publicUrl })
+        .update({ banner_url: publicUrl, world_image: publicUrl })
         .eq('id', currentUser.id);
 
       if (updateError) throw updateError;
@@ -1666,17 +1715,37 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                     { 
                       id: 'banner', 
                       icon: <ImageIcon size={18} />, 
-                      title: 'Banner',
+                      title: 'Banner / Cenário',
                       color: profile.nexo_color || '#00f3ff',
                       content: (
                         <>
                           <span className={styles.pickerTitle}>Capa do Perfil</span>
                           <div className={styles.colorGridTiny}>
-                            <button className={styles.assetMiniBtn} onClick={() => bannerInputRef.current?.click()} style={{ width: '100%', height: '40px', border: '1px dashed rgba(255,255,255,0.2)' }}>
+                            <button className={styles.assetMiniBtn} onClick={() => bannerInputRef.current?.click()} style={{ width: '100%', height: '36px', border: '1px dashed rgba(255,255,255,0.2)' }}>
                               <Camera size={14} />
+                              <span style={{ fontSize: '0.72rem', marginLeft: '6px' }}>Escolher Imagem</span>
                             </button>
+                            <div className={styles.bannerZoomPanel}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', fontSize: '0.68rem', opacity: 0.85 }}>
+                                <span>Zoom da Imagem</span>
+                                <span style={{ fontFamily: 'monospace', color: profile.nexo_color || '#00f3ff' }}>{Math.round(bgZoom * 100)}%</span>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%', marginTop: '4px' }}>
+                                <button type="button" onClick={() => handleZoomChange(bgZoom - 0.1)} className={styles.zoomMiniBtn}>-</button>
+                                <input
+                                  type="range"
+                                  min={0.3}
+                                  max={2.5}
+                                  step={0.05}
+                                  value={bgZoom}
+                                  onChange={(e) => handleZoomChange(parseFloat(e.target.value))}
+                                  style={{ flex: 1, accentColor: profile.nexo_color || '#00f3ff', cursor: 'pointer' }}
+                                />
+                                <button type="button" onClick={() => handleZoomChange(bgZoom + 0.1)} className={styles.zoomMiniBtn}>+</button>
+                              </div>
+                            </div>
                             {RITUAL_COLORS.map(c => (
-                              <button key={c} className={styles.colorDot} style={{ backgroundColor: c }} onClick={() => { setProfile({ ...profile, banner_url: null, nexo_color: c }); supabase.from('profiles').update({ banner_url: null, nexo_color: c }).eq('id', profile.id); setActiveMenu(null); }} />
+                              <button key={c} className={styles.colorDot} style={{ backgroundColor: c }} onClick={() => { setProfile({ ...profile, banner_url: null, world_image: null, nexo_color: c }); supabase.from('profiles').update({ banner_url: null, world_image: null, nexo_color: c }).eq('id', profile.id); setActiveMenu(null); }} />
                             ))}
                             <div className={styles.customColorWrapper}>
                               <Palette size={8} className={styles.rgbIcon} />
@@ -1686,8 +1755,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                                 value={profile.nexo_color || '#ffffff'}
                                 onChange={(e) => {
                                   const c = e.target.value;
-                                  setProfile({ ...profile, banner_url: null, nexo_color: c });
-                                  supabase.from('profiles').update({ banner_url: null, nexo_color: c }).eq('id', profile.id);
+                                  setProfile({ ...profile, banner_url: null, world_image: null, nexo_color: c });
+                                  supabase.from('profiles').update({ banner_url: null, world_image: null, nexo_color: c }).eq('id', profile.id);
                                 }}
                               />
                             </div>
@@ -2050,25 +2119,105 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       </header>
 
       <section className={styles.hero} ref={heroRef}>
-        <div
-          className={`${styles.heroBackground} ${(isEditingEssence && activeMenu === 'banner') ? styles.essenceEditActive : ''}`}
-          style={{ backgroundImage: profile.banner_url ? `url(${profile.banner_url})` : 'none' }}
-          onClick={() => (isEditingEssence && activeMenu === 'banner') && bannerInputRef.current?.click()}
-        >
-          {(isEditingEssence && activeMenu === 'banner') && (
-            <div className={styles.bannerEditOverlay}>
-              <Camera size={24} />
-              <span>Mudar Banner</span>
+        {(() => {
+          const currentBgUrl = profile.banner_url || profile.world_image;
+          const isImageSmaller = Boolean(
+            currentBgUrl && (
+              bgZoom < 0.99 || 
+              (bgNaturalWidth > 0 && bgContainerWidth > 0 && (bgNaturalWidth * bgZoom) < bgContainerWidth)
+            )
+          );
+
+          return (
+            <div
+              ref={heroBgRef}
+              className={`${styles.heroBackground} ${isEditingEssence ? styles.essenceEditActive : ''} ${isImageSmaller ? styles.heroBgSmaller : ''}`}
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest(`.${styles.bannerZoomControls}`)) return;
+                if (isEditingEssence) {
+                  bannerInputRef.current?.click();
+                }
+              }}
+              title={isEditingEssence ? "Clique no fundo para selecionar imagem" : undefined}
+            >
+              {/* Layer da imagem com zoom e escala */}
+              {currentBgUrl && (
+                <div
+                  className={`${styles.heroBgImageLayer} ${isImageSmaller ? styles.heroBgImageLayerContain : ''}`}
+                  style={{
+                    backgroundImage: `url(${currentBgUrl})`,
+                    transform: `scale(${bgZoom})`,
+                    transformOrigin: 'center center',
+                  }}
+                />
+              )}
+
+              {/* Preenchimento preto nas laterais com efeito ofuscado visível das laterais até o centro, bem pouco nos cantos, somente se imagem for menor */}
+              {isImageSmaller && (
+                <div className={styles.heroBgCornerVignette} />
+              )}
+
+              {/* Overlay com botão de escolher imagem e controle de zoom */}
+              {isEditingEssence && (
+                <div className={styles.bannerEditOverlay}>
+                  <div className={styles.bannerActionBtn} onClick={() => bannerInputRef.current?.click()}>
+                    <Camera size={20} />
+                    <span>Mudar Fundo</span>
+                  </div>
+
+                  <div className={styles.bannerZoomControls} onClick={(e) => e.stopPropagation()}>
+                    <span className={styles.zoomLabel}>Zoom</span>
+                    <button 
+                      type="button" 
+                      className={styles.zoomBtn} 
+                      onClick={() => handleZoomChange(bgZoom - 0.1)}
+                      title="Diminuir Zoom"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <input
+                      type="range"
+                      min={0.3}
+                      max={2.5}
+                      step={0.05}
+                      value={bgZoom}
+                      onChange={(e) => handleZoomChange(parseFloat(e.target.value))}
+                      className={styles.zoomSlider}
+                      title="Ajustar Zoom da Imagem de Fundo"
+                    />
+                    <button 
+                      type="button" 
+                      className={styles.zoomBtn} 
+                      onClick={() => handleZoomChange(bgZoom + 0.1)}
+                      title="Aumentar Zoom"
+                    >
+                      <Plus size={14} />
+                    </button>
+                    <span className={styles.zoomPercentBadge}>{Math.round(bgZoom * 100)}%</span>
+                    {Math.abs(bgZoom - 1) > 0.01 && (
+                      <button 
+                        type="button" 
+                        className={styles.zoomResetBtn} 
+                        onClick={() => handleZoomChange(1)}
+                        title="Restaurar tamanho padrão"
+                      >
+                        100%
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <input
+                type="file"
+                ref={bannerInputRef}
+                className={styles.hiddenInput}
+                accept="image/*"
+                onChange={handleBannerChange}
+              />
             </div>
-          )}
-          <input
-            type="file"
-            ref={bannerInputRef}
-            className={styles.hiddenInput}
-            accept="image/*"
-            onChange={handleBannerChange}
-          />
-        </div>
+          );
+        })()}
         <div className={styles.profileCard}>
           <div
             className={`${styles.avatarLarge} ${styles[`archetype_${arquetipoIndex}`]}`}
@@ -7465,7 +7614,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
               </div>
 
             {(() => {
-              const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
+              const BOTS = ["soberath", "sobturno", "avarok", "iramar", "invidrax", "luxênus", "luxenus", "vorath", "avarcúrio", "avarcurio", "acedrion", "inveranus", "luxarys", "gúpiter", "gupiter", "irazor", "pretuno", "lumiar", "luxyus", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
               const LARES = [
                 "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter",
                 "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"
@@ -7494,7 +7643,6 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                   className={styles.monthlyLarTag}
                   style={{ '--nexo-color': profile.nexo_color || '#00f3ff' } as any}
                 >
-                  <Sparkles size={14} className={styles.sparkleIcon} />
                   <span className={styles.larLabel}>Estado de consciência:</span>
                   <span className={styles.larValue}>{calculatedLar}</span>
                 </div>
