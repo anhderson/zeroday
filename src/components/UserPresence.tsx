@@ -202,10 +202,46 @@ export default function UserPresence({
     "💤 ACEDRION (Preguiça)", "✨ LUMÍAR (União dos Sete Pecados)"
   ];
 
+  const NASCENTE_12_COLORS = [
+    '#ffffff', // 1: Branco
+    '#ff007f', // 2: Rosa / magenta
+    '#8a2be2', // 3: Roxo / violeta
+    '#ff1744', // 4: Vermelho rosado
+    '#ff0000', // 5: Vermelho
+    '#ff4500', // 6: Laranja avermelhado
+    '#ff8c00', // 7: Laranja
+    '#ffd700', // 8: Amarelo dourado
+    '#76ff03', // 9: Verde-limão
+    '#00e676', // 10: Verde
+    '#00f3ff', // 11: Ciano / azul-turquesa
+    '#0066ff'  // 12: Azul
+  ];
+
   const totalManifestations = targetManifestations.length;
   const currentLevel = (totalManifestations % 33) || (totalManifestations > 0 ? 33 : 0);
   const arquetipoIndex = Math.floor(totalManifestations / 33) % ARQUETIPOS.length;
   const currentArquetipo = ARQUETIPOS[arquetipoIndex];
+  const levelColorIndex = Math.max(0, (currentLevel > 0 ? currentLevel - 1 : 0)) % NASCENTE_12_COLORS.length;
+  const currentConsciousnessColor = NASCENTE_12_COLORS[levelColorIndex];
+
+  const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
+  const LARES = [
+    "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter", 
+    "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"
+  ];
+  let calculatedLar = "Terra";
+  if (profile?.username && BOTS.includes(profile.username.toLowerCase())) {
+     const mockIndex = profile.username.length % LARES.length; 
+     calculatedLar = LARES[mockIndex];
+  } else if (profile?.created_at) {
+     const createdDate = new Date(profile.created_at);
+     const now = new Date();
+     const monthsDiff = (now.getFullYear() - createdDate.getFullYear()) * 12 + (now.getMonth() - createdDate.getMonth());
+     if (monthsDiff >= 1) {
+        const index = Math.min(monthsDiff - 1, LARES.length - 1);
+        calculatedLar = LARES[index];
+     }
+  }
 
   const getBorderStyle = () => {
     return styles[`archetype_${arquetipoIndex}` as keyof typeof styles];
@@ -266,6 +302,7 @@ export default function UserPresence({
         
         <div className={styles.profileSection}>
           <div className={`${styles.avatarLarge} ${getBorderStyle()}`}>
+            <div className={styles.whiteSpherePulse}></div>
             {/* CLOAK OF WIND */}
             {profile?.cloak_enabled && (
               <motion.div 
@@ -615,94 +652,128 @@ export default function UserPresence({
           <div className={styles.userInfo}>
             <h3 className={styles.title}>{getCleanUsername(profile?.id, profile?.full_name, "Consciência")}</h3>
             <p className={styles.realName}>@{getCleanUsername(profile?.id, profile?.username, "frequencia_zero")}</p>
-            
-            {profile && (() => {
-              const BOTS = ["soberath", "avarok", "invidrax", "vorath", "acedrion", "luxarys", "irazor", "lumiar", "lucemon", "barbamon", "leviamon", "beelzemon", "belphemon", "lilithmon", "daemon", "belialvamdemon"];
-              const LARES = [
-                "Sol", "Mercúrio", "Vênus", "Terra", "Marte", "Júpiter", 
-                "Saturno", "Urano", "Netuno", "Lua", "Tsukuyomi", "X"
-              ];
-              let lar: string | null = null;
-              
-              if (profile.username && BOTS.includes(profile.username.toLowerCase())) {
-                 const mockIndex = profile.username.length % LARES.length; 
-                 lar = LARES[mockIndex];
-              } else if (profile.created_at) {
-                 const createdDate = new Date(profile.created_at);
-                 const now = new Date();
-                 const monthsDiff = (now.getFullYear() - createdDate.getFullYear()) * 12 + (now.getMonth() - createdDate.getMonth());
-                 if (monthsDiff >= 1) {
-                    const index = Math.min(monthsDiff - 1, LARES.length - 1);
-                    lar = LARES[index];
-                 }
-              }
-
-              return (
-                <>
-                  {lar && (
-                    <div className={styles.worldBadge} style={{ marginTop: '4px', background: 'rgba(255,255,255,0.1)' }}>
-                      <Sparkles size={10} className={styles.badgeIcon} />
-                      <span>Lar: {lar}</span>
-                    </div>
-                  )}
-                  {selectedColor && (
-                    <div className={styles.favoriteColorBadge} style={{ marginTop: '4px', background: 'rgba(255,255,255,0.1)' }}>
-                      <Palette size={10} style={{ color: selectedColor }} className={styles.badgeIcon} />
-                      <span>Cor favorita: {selectedColor.toUpperCase()}</span>
-                      <div 
-                        style={{ 
-                          width: '8px', 
-                          height: '8px', 
-                          borderRadius: '50%', 
-                          backgroundColor: selectedColor, 
-                          marginLeft: '6px',
-                          display: 'inline-block',
-                          boxShadow: `0 0 8px ${selectedColor}`
-                        }} 
-                      />
-                    </div>
-                  )}
-                </>
-              );
-            })()}
-
-            {profile?.status && (
-              <p className={styles.statusMessage}>
-                <Sparkles size={10} />
-                <span>{profile.status}</span>
-              </p>
-            )}
-            {profile?.world_name && (
-              <div className={styles.worldBadge}>
-                <Sparkles size={10} className={styles.badgeIcon} />
-                <span>{profile.world_name}</span>
-              </div>
-            )}
           </div>
         </div>
 
-        <div className={styles.levelCard}>
-          <div 
-            className={`${styles.levelHex} ${currentLevel === 33 ? styles.levelMax : ''}`}
-            style={{ '--selected-color': selectedColor } as any}
-          >
-            <div className={styles.hexInner}>
-              <span style={{ textShadow: `0 0 10px ${selectedColor}` }}>{currentLevel}</span>
+        {/* SCOUTER TECNOLÓGICO */}
+        <div className={styles.scouterDevice}>
+          <div className={styles.scouterCornerTL}></div>
+          <div className={styles.scouterCornerTR}></div>
+          <div className={styles.scouterCornerBL}></div>
+          <div className={styles.scouterCornerBR}></div>
+
+          <div className={styles.scouterHeader}>
+            <div className={styles.scouterBrand}>
+              <span className={styles.scouterBrandPrefix}>SCOUTER //</span>
+              <span className={styles.scouterBrandTitle}>DIAGNÓSTICO CONSCIENCIAL</span>
+            </div>
+            <div className={styles.scouterOnlineTag}>
+              <span className={styles.scouterLedActive}></span>
+              <span>ONLINE</span>
             </div>
           </div>
-          <div className={styles.levelInfo}>
-            <span className={styles.rankTitle}>{currentArquetipo}</span>
-            <div className={styles.expBar}>
-              <div 
-                className={styles.expFill} 
+
+          {/* Seção do Nível e Hexágono Não-Giratório */}
+          <div className={styles.scouterHexSection}>
+            <span className={styles.scouterConsciousnessLabel}>NÍVEL DE CONSCIÊNCIA</span>
+            
+            {/* Hexágono com apenas borda na cor do nível (12 cores da nascente), sem rotação */}
+            <div className={styles.scouterHexWrapper}>
+              <svg viewBox="0 0 100 115.47" className={styles.scouterHexSvg}>
+                <polygon
+                  points="50 3, 97 29.8, 97 85.6, 50 112.5, 3 85.6, 3 29.8"
+                  fill="rgba(8, 12, 18, 0.9)"
+                  stroke={currentConsciousnessColor}
+                  strokeWidth="4"
+                  strokeLinejoin="round"
+                  style={{ filter: `drop-shadow(0 0 10px ${currentConsciousnessColor})` }}
+                />
+              </svg>
+              <span 
+                className={styles.scouterHexValue}
                 style={{ 
-                  width: `${(currentLevel / 33) * 100}%`,
-                  background: `linear-gradient(90deg, ${selectedColor}cc, ${selectedColor})`,
-                  boxShadow: `0 0 12px ${selectedColor}66`
+                  color: currentConsciousnessColor,
+                  textShadow: `0 0 12px ${currentConsciousnessColor}`
                 }}
-              ></div>
+              >
+                {currentLevel}
+              </span>
+            </div>
+
+            {/* Nome do Arquétipo posicionado abaixo do hexágono */}
+            <span className={styles.scouterRankTitle}>{currentArquetipo}</span>
+
+            <div className={styles.scouterExpBar}>
+              <div 
+                className={styles.scouterExpFill} 
+                style={{ 
+                  width: `${Math.min(100, Math.max(4, (currentLevel / 33) * 100))}%`,
+                  background: `linear-gradient(90deg, ${currentConsciousnessColor}88, ${currentConsciousnessColor})`,
+                  boxShadow: `0 0 10px ${currentConsciousnessColor}`
+                }}
+              />
             </div>
           </div>
+
+          {/* Espectro das 12 Cores da Nascente */}
+          <div className={styles.scouterSpectrumContainer}>
+            <div className={styles.scouterSpectrumLabel}>
+              <span>ESPECTRO DAS 12 CORES DA NASCENTE</span>
+              <span style={{ color: currentConsciousnessColor }}>COR {levelColorIndex + 1}/12</span>
+            </div>
+            <div className={styles.scouterSpectrumGrid}>
+              {NASCENTE_12_COLORS.map((col, idx) => {
+                const isActive = idx === levelColorIndex;
+                return (
+                  <div 
+                    key={idx}
+                    className={`${styles.scouterSpectrumDot} ${isActive ? styles.scouterSpectrumDotActive : ''}`}
+                    style={{
+                      backgroundColor: col,
+                      boxShadow: isActive ? `0 0 12px ${col}, 0 0 4px #fff` : `0 0 3px ${col}44`,
+                      borderColor: isActive ? '#fff' : 'rgba(255,255,255,0.2)'
+                    }}
+                    title={`Cor ${idx + 1}: ${col}`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Dados do Perfil: Lar, Cor Favorita, Online, Nome do Mundo */}
+          <div className={styles.scouterReadoutGrid}>
+            <div className={styles.scouterReadoutItem}>
+              <span className={styles.scouterItemLabel}>LAR</span>
+              <span className={styles.scouterItemValue}>{calculatedLar}</span>
+            </div>
+            <div className={styles.scouterReadoutItem}>
+              <span className={styles.scouterItemLabel}>COR FAVORITA</span>
+              <div className={styles.scouterColorRow}>
+                <span 
+                  className={styles.scouterColorDot} 
+                  style={{ backgroundColor: selectedColor, boxShadow: `0 0 8px ${selectedColor}` }} 
+                />
+                <span className={styles.scouterItemValue}>{selectedColor.toUpperCase()}</span>
+              </div>
+            </div>
+            <div className={styles.scouterReadoutItem}>
+              <span className={styles.scouterItemLabel}>CONEXÃO</span>
+              <span className={styles.scouterItemValueOnline}>Sintonizado</span>
+            </div>
+            <div className={styles.scouterReadoutItem}>
+              <span className={styles.scouterItemLabel}>NOME DO MUNDO</span>
+              <span className={styles.scouterItemValue} title={profile?.world_name || "Mundo Primordial"}>
+                {profile?.world_name || "Nascente"}
+              </span>
+            </div>
+          </div>
+
+          {profile?.status && (
+            <div className={styles.scouterStatusBox}>
+              <span className={styles.scouterItemLabel}>ASSINATURA:</span>
+              <span className={styles.scouterStatusText}>"{profile.status}"</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -731,6 +802,7 @@ export default function UserPresence({
             )}
 
             <div className={styles.stats}>
+              <p className={styles.experienceExplanation}>Cada ação te trará experiência e níveis de consciência.</p>
               <h4 className={styles.sectionTitle}>EQUILÍBRIO DE SER</h4>
               <div className={styles.grid}>
                 <div className={styles.totalSummary}>
@@ -764,7 +836,8 @@ export default function UserPresence({
 
             <div className={styles.footer}>
               <button className={styles.settingsBtn} onClick={onOpenSettings}>
-                Sintonizar Presença
+                <img src="/botoes/Icone Ligar.png" alt="Ligar" className={styles.btnActionIcon} />
+                <span>Sintonizar Presença</span>
               </button>
 
               {showHistory && (
@@ -777,7 +850,8 @@ export default function UserPresence({
                   }} 
                   className={styles.historyBtn}
                 >
-                  {profile?.world_name ? `ENTRAR NO MUNDO: ${profile.world_name.toUpperCase()}` : "Minha frequência"}
+                  <img src="/botoes/Icone Ligar.png" alt="Ligar" className={styles.btnActionIcon} />
+                  <span>{profile?.world_name ? `ENTRAR NO MUNDO: ${profile.world_name.toUpperCase()}` : "Minha frequência"}</span>
                 </button>
               )}
               {showLogout && (
@@ -788,7 +862,8 @@ export default function UserPresence({
                     router.push('/auth');
                   }}
                 >
-                  Desconectar
+                  <img src="/botoes/Icone Desligar.png" alt="Desligar" className={styles.btnActionIcon} />
+                  <span>Desconectar</span>
                 </button>
               )}
             </div>

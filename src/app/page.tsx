@@ -1847,7 +1847,7 @@ function HomeContent() {
             <div className={styles.logoContainer}>
               <img 
                 ref={logoRef}
-                src="/logo.jpg" 
+                src={laserActive ? "/logo.jpg" : "/zerodayicone2.png"} 
                 alt="Nexus Menu" 
                 className={styles.mainLogo} 
               />
@@ -1928,6 +1928,7 @@ function HomeContent() {
               </div>
             )}
             <div className={styles.avatar}>
+              <div className={styles.headerWhiteSpherePulse}></div>
               {profileGlitchActive && <div className={styles.digitalNoise}></div>}
               {profile?.avatar_url ? (
                 <img 

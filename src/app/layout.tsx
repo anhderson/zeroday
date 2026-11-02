@@ -18,9 +18,9 @@ export const metadata: Metadata = {
   title: "DZ | Dia Zero",
   description: "A natural social experience based on universal human actions.",
   icons: {
-    icon: '/zerodayimage.png',
-    shortcut: '/zerodayimage.png',
-    apple: '/zerodayimage.png',
+    icon: '/zerodayicone.png',
+    shortcut: '/zerodayicone.png',
+    apple: '/zerodayicone.png',
   },
 };
 

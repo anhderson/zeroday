@@ -212,9 +212,51 @@
 .archetype_0::before, .archetype_0::after {
   content: ''; position: absolute; inset: -4px; border-radius: 50%;
   border: 1.5px solid #fff; box-shadow: 0 0 15px #fff, 0 0 5px #ffd700; 
-  animation: wings-flap 2s ease-in-out infinite;
+  animation: white-sphere-pulse 8s ease-in-out infinite;
 }
-@keyframes wings-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(1.3); } }
+@keyframes white-sphere-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 0 4px #ffd700;
+  }
+  25% {
+    transform: scale(1.15);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.95), 0 0 8px #ffd700;
+  }
+  50% {
+    transform: scale(1.22);
+    box-shadow: 0 0 30px #ffffff, 0 0 12px #ffd700;
+  }
+  75% {
+    transform: scale(1.12);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 7px #ffd700;
+  }
+  87.5% {
+    transform: scale(1);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 0 4px #ffd700;
+  }
+  89% { transform: scale(1.04) translate(-2px, 1px); }
+  91% { transform: scale(1.08) translate(2px, -2px); }
+  93% { transform: scale(1.03) translate(-3px, 0px); }
+  95% { transform: scale(1.07) translate(2px, 2px); }
+  97% { transform: scale(1.02) translate(-1px, -2px); }
+  99% { transform: scale(1.06) translate(1px, 1px); }
+  100% {
+    transform: scale(1) translate(0, 0);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 0 4px #ffd700;
+  }
+}
+
+.whiteSpherePulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.9), 0 0 6px #ffd700;
+  pointer-events: none;
+  animation: white-sphere-pulse 8s ease-in-out infinite;
+  z-index: 1;
+}
 
 /* 1. AVAROK (Avareza) - Tesouro do Vazio */
 .archetype_1::before {
@@ -884,4 +926,294 @@
   flex-direction: column;
   align-items: center;
   margin-top: 1rem;
+}
+
+
+/* --- SCOUTER TECNOLÓGICO DISPOSITIVO --- */
+.scouterDevice {
+  position: relative;
+  width: 100%;
+  max-width: 330px;
+  margin: 0.8rem auto 1.2rem;
+  background: linear-gradient(180deg, rgba(14, 18, 27, 0.95), rgba(7, 10, 15, 0.98));
+  border: 1.5px solid rgba(0, 243, 255, 0.4);
+  border-radius: 4px;
+  padding: 0.9rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 243, 255, 0.05);
+  box-sizing: border-box;
+}
+
+.scouterCornerTL, .scouterCornerTR, .scouterCornerBL, .scouterCornerBR {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #00f3ff;
+  border-style: solid;
+  pointer-events: none;
+}
+.scouterCornerTL { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.scouterCornerTR { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.scouterCornerBL { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.scouterCornerBR { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+.scouterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.7rem;
+}
+
+.scouterBrand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.scouterBrandPrefix {
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: #00f3ff;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+.scouterBrandTitle {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.6px;
+}
+
+.scouterOnlineTag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #00ff66;
+  letter-spacing: 1px;
+  background: rgba(0, 255, 102, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 255, 102, 0.3);
+}
+
+.scouterLedActive {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff66;
+  box-shadow: 0 0 8px #00ff66;
+  animation: scouterLedPulse 2s infinite ease-in-out;
+}
+
+@keyframes scouterLedPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.scouterHexSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+}
+
+.scouterConsciousnessLabel {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1.5px;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+.scouterHexWrapper {
+  position: relative;
+  width: 68px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.2rem auto 0.3rem;
+}
+
+.scouterHexSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  animation: none !important;
+  transform: none !important;
+}
+
+.scouterHexValue {
+  position: absolute;
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-family: monospace;
+}
+
+.scouterRankTitle {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0.3rem 0 0.5rem;
+  text-align: center;
+}
+
+.scouterExpBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scouterExpFill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+/* 12 Cores da Nascente */
+.scouterSpectrumContainer {
+  margin-bottom: 0.8rem;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 0.45rem 0.55rem;
+}
+
+.scouterSpectrumLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.6px;
+  margin-bottom: 0.4rem;
+}
+
+.scouterSpectrumGrid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+}
+
+.scouterSpectrumDot {
+  flex: 1;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.scouterSpectrumDotActive {
+  transform: scaleY(1.4);
+  border-radius: 3px;
+  z-index: 2;
+}
+
+/* Readouts Grid */
+.scouterReadoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+}
+
+.scouterReadoutItem {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  padding: 0.4rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scouterItemLabel {
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+}
+
+.scouterItemValue {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scouterItemValueOnline {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #00ff66;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.4);
+}
+
+.scouterColorRow {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.scouterColorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.scouterStatusBox {
+  margin-top: 0.45rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scouterStatusText {
+  font-size: 0.68rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.75);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.experienceExplanation {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.4px;
+  text-align: center;
+  margin: 0 0 0.8rem 0;
+  padding: 0.45rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.btnActionIcon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.4));
 }
