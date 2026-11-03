@@ -604,7 +604,7 @@ function HomeContent() {
 
   const triggerLaserConvergence = () => {
     setRitualSixSec(true);
-    setTimeout(() => setRitualSixSec(false), 2000);
+    setTimeout(() => setRitualSixSec(false), 1600);
 
     // Quando as 8 luzes atingirem o centro no topo (~800ms):
     setTimeout(() => {
@@ -3498,14 +3498,6 @@ function HomeContent() {
                     <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
                   </linearGradient>
                 ))}
-                {/* Gradiente do cone vermelho ofuscante de cima para baixo */}
-                <linearGradient id="redConeGradient" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                  <stop offset="5%" stopColor="#ff0022" stopOpacity="0.95" />
-                  <stop offset="30%" stopColor="#ff1744" stopOpacity="0.85" />
-                  <stop offset="70%" stopColor="#d50000" stopOpacity="0.5" />
-                  <stop offset="100%" stopColor="#880000" stopOpacity="0.0" />
-                </linearGradient>
               </defs>
               {BEING_BEAM_COLORS.map((color, idx) => {
                 const isLeft = idx < 4;
@@ -3534,7 +3526,7 @@ function HomeContent() {
                   />
                 );
               })}
-              {/* Ponto central de encontro com flash no topo na lua: surge e desaparece mais rápido (~0.32s) */}
+              {/* Ponto central de encontro com flash no topo na lua: surge e desaparece (~0.32s) */}
               <motion.circle
                 cx={typeof window !== 'undefined' ? window.innerWidth / 2 : 960}
                 cy={65}
@@ -3544,20 +3536,6 @@ function HomeContent() {
                 animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
                 transition={{ duration: 0.32, delay: 0.75, ease: "easeOut" }}
                 style={{ filter: 'drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px #ffffff)' }}
-              />
-
-              {/* Assim que a esfera branca desaparece (delay 1.07s): pisca luz vermelha forte na página toda em forma de cone triangular partindo do ponto central */}
-              <motion.polygon
-                points={`${typeof window !== 'undefined' ? window.innerWidth / 2 : 960},65 -150,${typeof window !== 'undefined' ? window.innerHeight + 150 : 1230} ${typeof window !== 'undefined' ? window.innerWidth + 150 : 2070},${typeof window !== 'undefined' ? window.innerHeight + 150 : 1230}`}
-                fill="url(#redConeGradient)"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 0.95, 0] }}
-                transition={{ duration: 0.45, delay: 1.07, ease: "easeInOut" }}
-                style={{ 
-                  filter: 'drop-shadow(0 0 35px #ff0022) drop-shadow(0 0 70px #ff1744) blur(1.5px)',
-                  mixBlendMode: 'screen',
-                  pointerEvents: 'none'
-                }}
               />
             </svg>
           )}
