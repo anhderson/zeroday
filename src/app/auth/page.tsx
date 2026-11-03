@@ -10,7 +10,7 @@ import styles from './auth.module.css';
 // Sequência canônica dos 8 seres da esquerda para a direita com suas respectivas cores
 const CANONICAL_AUTH_BEINGS = [
   { name: 'Luxyus', color: '#ffffff', image: '/personagens/Luxyus.png' },
-  { name: 'Luxênus', color: '#ff4081', image: '/personagens/Luxenus.png' },
+  { name: 'Luxênus', color: '#ff007f', image: '/personagens/Luxenus.png' },
   { name: 'Gúpiter', color: '#a855f7', image: '/personagens/Gupiter.png' },
   { name: 'Iramar', color: '#ef4444', image: '/personagens/Iramar.png' },
   { name: 'Avarcúrio', color: '#f97316', image: '/personagens/Avarcurio.png' },

@@ -25,7 +25,7 @@ import LuaProjetada, { MoonState } from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
 import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
-import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES, getBeingCanonicalColor, getEffectiveBeing } from "@/lib/archetypes";
+import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES, getBeingCanonicalColor, getEffectiveBeing, resolveArchetype } from "@/lib/archetypes";
 import styles from "./page.module.css";
 
 export const TRANSCEND_ACTION_COLORS: Record<string, string> = {
@@ -126,7 +126,7 @@ const SPARK_COLORS = [
 // Cores correspondentes às 8 luzes dos seres (Luxyus, Luxênus, Gúpiter, Iramar, Avarcúrio, Sobturno, Inveranus, Pretuno)
 const BEING_BEAM_COLORS = [
   '#ffffff', // 1. Luxyus (Branca)
-  '#ff4081', // 2. Luxênus (Rosa)
+  '#ff007f', // 2. Luxênus (Rosa Choque)
   '#a855f7', // 3. Gúpiter (Roxo)
   '#ef4444', // 4. Iramar (Vermelho)
   '#f97316', // 5. Avarcúrio (Laranja)
@@ -464,6 +464,7 @@ function HomeContent() {
   const [sparkCount, setSparkCount] = useState(0);
   const [hexBlinkActive, setHexBlinkActive] = useState(false);
   const [hexFailing, setHexFailing] = useState(false);
+  const [effectsPaused, setEffectsPaused] = useState(false);
   const [recentUsers, setRecentUsers] = useState<any[]>([]);
 
   // Modal para Janela com o mesmo design de Nascente Universal (Última postagem / Perfil)
@@ -635,6 +636,7 @@ function HomeContent() {
 
   // Unified Harmonic Ritual: Sync with Nascente Spells
   useEffect(() => {
+    if (effectsPaused) return;
     const interval = setInterval(() => {
       // 1. Trigger the standard Spark (Nascente Blink)
       setSparkActive(true);
@@ -665,14 +667,15 @@ function HomeContent() {
       });
     }, 7000);
     return () => clearInterval(interval);
-  }, [trianglesActive]);
+  }, [trianglesActive, effectsPaused]);
 
   useEffect(() => {
+    if (effectsPaused) return;
     const timer = setInterval(() => {
       setMoonPhaseIdx(prev => (prev + 1) % 8);
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [effectsPaused]);
 
   const checkUser = async () => {
     const { data: { user: _user } } = await supabase.auth.getUser();
@@ -1732,9 +1735,9 @@ function HomeContent() {
   }
 
   return (
-    <div className={`${styles.container} ${hexagramActive ? styles.transcendGlow : ''}`}>
-      <StarField active={laserActive} />
-      <SpiritualWater active={laserActive} />
+    <div className={`${styles.container} ${hexagramActive ? styles.transcendGlow : ''} ${effectsPaused ? styles.effectsPaused : ''}`}>
+      <StarField active={laserActive && !effectsPaused} />
+      <SpiritualWater active={laserActive && !effectsPaused} />
 
       {/* --- NEON TRIANGLES SYSTEM --- */}
       <button 
@@ -2167,6 +2170,21 @@ function HomeContent() {
       </AnimatePresence>
 
       <main className={styles.mainContent}>
+        {/* Botão Pause/Play acima da Lua de Nascente Universal */}
+        <button
+          type="button"
+          className={styles.effectsToggleBtn}
+          onClick={() => setEffectsPaused(prev => !prev)}
+          title={effectsPaused ? "Retomar efeitos visuais" : "Pausar efeitos visuais"}
+          aria-label={effectsPaused ? "Retomar efeitos" : "Pausar efeitos"}
+        >
+          <img 
+            src={effectsPaused ? "/botoes/IconePlay.png" : "/botoes/IconePause.png"} 
+            alt={effectsPaused ? "Play" : "Pause"} 
+            className={styles.effectsToggleImg} 
+          />
+        </button>
+
         <div className={styles.floatingFluxoWrapper}>
         <div 
           className={`${styles.floatingFluxo} glass`}
@@ -2217,14 +2235,14 @@ function HomeContent() {
                         ...activeStyle,
                       }}
                       data-color={isBlack ? '#000000' : (color ?? '#fff')}
-                      data-active={sparkActive ? '1' : '0'}
+                      data-active={effectsPaused ? '0' : (sparkActive ? '1' : '0')}
                     />
                   );
                 })}
 
                 {/* Lua com as 3 camadas (Preto, Branca, Vermelho) e luz em torno como borda justa */}
-                <LuaProjetada moonState={moonState} isGlitching={sparkActive} />
-                <h2 className={styles.fluxoTitle} data-active={sparkActive ? '1' : '0'}>
+                <LuaProjetada moonState={effectsPaused ? 'normal' : moonState} isGlitching={effectsPaused ? false : sparkActive} />
+                <h2 className={styles.fluxoTitle} data-active={effectsPaused ? '0' : (sparkActive ? '1' : '0')}>
                   Nascente Universal
                 </h2>
               </div>
@@ -2338,13 +2356,14 @@ function HomeContent() {
 
 
                const beingColor = getBeingCanonicalColor(manifest.user_id, manifest.profiles?.username);
-               const activeVibeColor = beingColor || (transcendActive ? (ACTION_NEON_COLORS[manifest.type] || '#ffffff') : '#ffffff');
+               const isBeing = Boolean(beingColor || resolveArchetype(manifest.user_id, manifest.profiles?.username));
+               const activeVibeColor = beingColor || (transcendActive ? (TRANSCEND_ACTION_COLORS[manifest.type] || '#ffffff') : '#ffffff');
                const activeVibeGlow = beingColor 
                  ? `${beingColor}66`
                  : (transcendActive 
-                     ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${ACTION_NEON_COLORS[manifest.type] || '#fff'}44`)
+                     ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${TRANSCEND_ACTION_COLORS[manifest.type] || '#fff'}44`)
                      : 'rgba(255, 255, 255, 0.25)');
-               const activeDesignNeon = beingColor || ACTION_NEON_COLORS[manifest.type] || '#00f3ff';
+               const activeDesignNeon = isBeing ? '#ffffff' : (beingColor || TRANSCEND_ACTION_COLORS[manifest.type] || '#00f3ff');
 
                return (
               <motion.div 
@@ -2412,7 +2431,7 @@ function HomeContent() {
                       </button>
                     )}
                     <span className={styles.actionTagMinimal} title={manifest.type}>
-                      <Icon size={12} style={{ color: ACTIONS.find(a => a.id === manifest.type)?.aura }} />
+                      <Icon size={12} style={{ color: isBeing ? '#ffffff' : (TRANSCEND_ACTION_COLORS[manifest.type] || ACTIONS.find(a => a.id === manifest.type)?.aura) }} />
                     </span>
                   </div>
                 </div>
@@ -2439,7 +2458,7 @@ function HomeContent() {
                       <div 
                         key={`content-${manifest.id}`} 
                         className={styles.content}
-                        style={{ '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff' } as any}
+                        style={{ '--design-neon': isBeing ? '#ffffff' : (TRANSCEND_ACTION_COLORS[manifest.type] || ACTION_NEON_COLORS[manifest.type] || '#00f3ff') } as any}
                       >
                         {manifest.content.split(/\s+/).map((word: string, i: number) => {
                           const ytId = getYoutubeId(word);
@@ -2556,17 +2575,18 @@ function HomeContent() {
                           onMouseEnter={() => setHoveredAction(actionKey)}
                           onMouseLeave={() => setHoveredAction(null)}
                           title={action.name}
-                          style={
-                            transcendActive
-                              ? ({
-                                  '--action-aura': transcendColor,
+                          style={{
+                            '--btn-neon': transcendColor,
+                            '--action-aura': transcendColor,
+                            ...(transcendActive
+                              ? {
                                   borderColor: transcendColor,
                                   color: transcendColor,
                                   background: `${transcendColor}18`,
                                   boxShadow: `0 0 12px ${transcendColor}66, inset 0 0 6px ${transcendColor}33`,
-                                } as any)
-                              : ({ '--action-aura': action.aura } as any)
-                          }
+                                }
+                              : {})
+                          } as any}
                         >
                           <ActionIcon size={13} />
                         </button>
@@ -2687,7 +2707,7 @@ function HomeContent() {
                   })}
 
                   {/* Botão de Ajuda ao lado de Transcender */}
-                  <div key={`action-wrap-${manifest.id}-ajuda`} className={styles.actionWrapper}>
+                  <div key={`action-wrap-${manifest.id}-ajuda`} className={`${styles.actionWrapper} ${styles.actionWrapperHelp}`}>
                     <button
                       type="button"
                       className={`${styles.miniNexusBtn} ${styles.miniNexusHelpBtn}`}
@@ -3515,15 +3535,9 @@ function HomeContent() {
                   <div className={styles.storyModalHeader}>
                     <div className={styles.storyModalTitle}>
                       {storyModalType === 'post' ? (
-                        <>
-                          <Sparkles size={15} style={{ color: 'var(--design-neon, #00f3ff)' }} />
-                          <span>Última Manifestação</span>
-                        </>
+                        <span>Última Manifestação</span>
                       ) : (
-                        <>
-                          <Compass size={15} style={{ color: 'var(--design-neon, #00f3ff)' }} />
-                          <span>Consciência Sintonizada</span>
-                        </>
+                        <span>Consciência Sintonizada</span>
                       )}
                     </div>
                     <button 
@@ -3589,7 +3603,6 @@ function HomeContent() {
                               router.push(`/profile/${targetId}`);
                             }}
                           >
-                            <Sparkles size={14} />
                             <span>Entrar no Mundo desta Consciência</span>
                           </button>
                         </>
@@ -3621,8 +3634,7 @@ function HomeContent() {
                               router.push(`/profile/${targetId}`);
                             }}
                           >
-                            <Sparkles size={14} />
-                            <span>Acessar Consciência</span>
+                            <span>Entrar no Mundo desta Consciência</span>
                           </button>
                         </div>
                       )}

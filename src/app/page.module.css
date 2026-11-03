@@ -1902,6 +1902,7 @@
 .ressoarBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6rem;
   padding: 0 1.25rem;
   height: 44px;
@@ -2189,10 +2190,10 @@
 }
 
 .miniNexusBtn:hover {
-  color: var(--design-neon, rgba(255, 255, 255, 0.9));
-  background: rgba(var(--action-aura, 255 255 255), 0.08);
-  border-color: var(--design-neon, var(--action-aura, rgba(255,255,255,0.3)));
-  box-shadow: 0 0 12px var(--design-neon, rgba(255,255,255,0.07));
+  color: var(--btn-neon, var(--design-neon, rgba(255, 255, 255, 0.9)));
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--btn-neon, var(--design-neon, rgba(255, 255, 255, 0.3)));
+  box-shadow: 0 0 12px var(--btn-neon, var(--design-neon, rgba(255, 255, 255, 0.1))), inset 0 0 6px var(--btn-neon, transparent);
   transform: translateY(-1px);
 }
 
@@ -4074,6 +4075,76 @@
 }
 
 /* ========================================================
+   MODO EFEITOS PAUSADOS (DESATIVA TODOS OS EFEITOS VISUAIS)
+   ======================================================== */
+.effectsPaused *,
+.effectsPaused *::before,
+.effectsPaused *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+.effectsPaused .floatingFluxoWrapper {
+  animation: none !important;
+  filter: none !important;
+}
+
+.effectsPaused .laserBeam,
+.effectsPaused .sparkRay,
+.effectsPaused .lightStone,
+.effectsPaused .impactSparks,
+.effectsPaused .impactFlash,
+.effectsPaused .impactShockwave,
+.effectsPaused .headerWhiteSpherePulse,
+.effectsPaused .digitalNoise,
+.effectsPaused .triangleLaserBlast,
+.effectsPaused .triangleLaserReturn,
+.effectsPaused .redLaserBlast,
+.effectsPaused .redLaserReturn,
+.effectsPaused .whiteLaserStar,
+.effectsPaused .sparkleLight {
+  display: none !important;
+}
+
+.effectsPaused {
+  --neon-glow: none !important;
+}
+
+/* Botão de Pause/Play dos Efeitos Visuais */
+.effectsToggleBtn {
+  position: fixed;
+  z-index: 1002;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(15, 20, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.7), 0 0 8px rgba(255, 255, 255, 0.15);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  top: 60px;
+}
+
+.effectsToggleBtn:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(25, 34, 48, 0.95);
+}
+
+.effectsToggleImg {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ========================================================
    MODAL UNIVERSAL (MESMO DESIGN DE NASCENTE UNIVERSAL)
    ======================================================== */
 .storyUniversalModalOverlay {
@@ -4828,13 +4899,13 @@
     height: 34px !important;
   }
 
-  /* 2. Janela da Nascente Universal Flutuante adaptada ao Mobile — movida para cima em 10% (de 25% para 15%) */
+  /* 2. Janela da Nascente Universal Flutuante adaptada ao Mobile — movida para cima em 5% adicionais (de 15% para 10%) */
   .floatingFluxoWrapper {
     width: calc(100% - 10px) !important;
-    top: 15% !important;
+    top: 10% !important;
     bottom: 5px !important;
-    height: calc(85% - 8px) !important;
-    height: calc(100dvh - 15% - 8px) !important;
+    height: calc(90% - 8px) !important;
+    height: calc(100dvh - 10% - 8px) !important;
     border-radius: 18px !important;
     max-height: unset !important;
   }
@@ -4972,7 +5043,12 @@
     white-space: nowrap !important;
   }
 
-  /* Ao clicar em (Digite o que sua consciência deseja manifestar), mover para baixo em 15% a janela de Pré-visualização do Fluxo */
+  /* Janela de Pré-visualização do Fluxo movida para baixo em 5% da tela */
+  .typingPreviewModal {
+    margin-top: 5dvh !important;
+  }
+
+  /* Ao clicar em (Digite o que sua consciência deseja manifestar), mover adicionalmente para baixo em 15% */
   .typingPreviewModalShifted,
   .typingPreviewModal:has(.typingPreviewTextarea:focus) {
     transform: translateY(15%) !important;
@@ -5050,42 +5126,148 @@
     height: 13px !important;
   }
 
-  .ressoarBtn {
-    width: 30px !important;
-    height: 30px !important;
-    min-width: 30px !important;
+  /* Esconde botão de Ajuda dos posts no mobile (permanece somente na barra de escrita) */
+  .actionWrapperHelp,
+  .miniNexusHelpBtn {
+    display: none !important;
+  }
+
+  /* 12 botões em Nascente Universal no mobile: 6 em cima e 6 em baixo, centralizados */
+  .miniNexusFooter {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 0.35rem !important;
+    justify-content: center !important;
+    justify-items: center !important;
+    align-items: center !important;
+    max-width: 250px !important;
+    margin: 0.6rem auto 0 auto !important;
+    padding-top: 0.6rem !important;
+    width: 100% !important;
+  }
+
+  .actionWrapper {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .miniNexusBtn {
+    width: 32px !important;
+    height: 32px !important;
     padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
   }
 
-  .ressoarBtn svg {
-    width: 14px !important;
-    height: 14px !important;
+  /* Botão de Pause/Play posicionado acima da lua, centralizado entre a janela de Nascente e o menu superior */
+  .effectsToggleBtn {
+    top: calc(52px + (10dvh - 52px) / 2) !important;
+    width: 24px !important;
+    height: 24px !important;
   }
 
-  /* Botões Flutuantes de Triângulo (Ativar Ciclo e Ativar Fronteiras) */
+  .effectsToggleImg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  /* Remover botão Enviar da barra de input no mobile (fica exclusivamente dentro da Pré-visualização do Fluxo) */
+  .ressoarBtn {
+    display: none !important;
+  }
+
+  /* Botões Flutuantes de Triângulo (Ativar Ciclo e Ativar Fronteiras) no Mobile: alinhados com o header */
   .triangleBtn {
     bottom: 0.5rem !important;
-    right: 0.4rem !important;
-    width: 30px !important;
-    height: 30px !important;
+    right: 0.5rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .triangleIcon {
-    border-left: 8px solid transparent !important;
-    border-right: 8px solid transparent !important;
-    border-bottom: 15px solid rgba(220, 225, 235, 0.45) !important;
+    border-left: 9px solid transparent !important;
+    border-right: 9px solid transparent !important;
+    border-bottom: 16px solid rgb(220, 225, 235) !important; /* 100% opaco - sem transparência */
+    filter: drop-shadow(0 0 6px rgba(220, 225, 235, 0.8)) !important;
+    opacity: 1 !important;
   }
 
   .triangleBtnRed {
     bottom: 0.5rem !important;
-    left: 0.4rem !important;
-    width: 30px !important;
-    height: 30px !important;
+    left: 0.5rem !important;
+    width: 36px !important;
+    height: 36px !important;
+    opacity: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .triangleIconRed {
-    border-left: 8px solid transparent !important;
-    border-right: 8px solid transparent !important;
-    border-top: 15px solid rgba(75, 85, 100, 0.65) !important;
+    border-left: 9px solid transparent !important;
+    border-right: 9px solid transparent !important;
+    border-top: 16px solid rgb(75, 85, 100) !important; /* 100% opaco - sem transparência */
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9)) !important;
+    opacity: 1 !important;
   }
+
+  /* Lasers Azul e Vermelho no Mobile: saindo do centro dos botões e alinhados verticalmente */
+  .triangleLaserBlast {
+    right: calc(0.5rem + 16px) !important;
+    bottom: 26px !important;
+    animation: blastUpMobile 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+  }
+
+  .triangleLaserReturn {
+    right: calc(0.5rem + 16px) !important;
+    bottom: calc(100vh - 26px) !important;
+    animation: blastDownMobile 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+  }
+
+  .redLaserBlast {
+    left: calc(0.5rem + 16px) !important;
+    bottom: 26px !important;
+    animation: blastUpRedMobile 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+  }
+
+  .redLaserReturn {
+    left: calc(0.5rem + 16px) !important;
+    bottom: calc(100vh - 26px) !important;
+    animation: blastDownRedMobile 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+  }
+}
+
+@keyframes blastUpMobile {
+  0% { bottom: 26px; height: 20px; opacity: 0.5; }
+  50% { height: 250px; opacity: 1; }
+  90% { bottom: calc(100dvh - 76px); height: 50px; opacity: 1; }
+  100% { bottom: calc(100dvh - 26px); height: 0px; opacity: 0; }
+}
+
+@keyframes blastDownMobile {
+  0% { bottom: calc(100dvh - 26px); height: 0px; opacity: 0; }
+  10% { bottom: calc(100dvh - 76px); height: 50px; opacity: 1; }
+  50% { height: 250px; opacity: 1; }
+  100% { bottom: 26px; height: 0px; opacity: 0; }
+}
+
+@keyframes blastUpRedMobile {
+  0% { bottom: 26px; height: 20px; opacity: 0.5; }
+  50% { height: 250px; opacity: 1; }
+  90% { bottom: calc(100dvh - 76px); height: 50px; opacity: 1; }
+  100% { bottom: calc(100dvh - 26px); height: 0px; opacity: 0; }
+}
+
+@keyframes blastDownRedMobile {
+  0% { bottom: calc(100dvh - 26px); height: 0px; opacity: 0; }
+  10% { bottom: calc(100dvh - 76px); height: 50px; opacity: 1; }
+  50% { height: 250px; opacity: 1; }
+  100% { bottom: 26px; height: 0px; opacity: 0; }
 }

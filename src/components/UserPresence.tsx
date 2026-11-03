@@ -184,18 +184,18 @@ export default function UserPresence({
   const maxVal = Math.max(...Object.values(stats) as number[], 1);
 
   const actions = [
-    { id: 'perceber', name: "Perceber", color: "#ff0000" },
-    { id: 'observar', name: "Observar", color: "#ff6600" },
-    { id: 'sentir', name: "Sentir", color: "#ffdd00" },
-    { id: 'integrar', name: "Integrar", color: "#555555" },
-    { id: 'conectar', name: "Harmonizar", color: "#00ff44" },
-    { id: 'expressar', name: "Expressar", color: "#00ffff" },
-    { id: 'criar', name: "Criar", color: "#0055ff" },
-    { id: 'buscar', name: "Sincronizar", color: "#aaff00" },
-    { id: 'cuidar', name: "Emanar", color: "#3300ff" },
-    { id: 'servir', name: "Entrelaçar", color: "#8800ee" },
-    { id: 'soltar', name: "Purificar", color: "#ff00cc" },
-    { id: 'transcender', name: "Transcender", color: "#ffffff" },
+    { id: 'perceber', name: "Perceber", color: "#ffffff" },
+    { id: 'observar', name: "Observar", color: "#ff007f" },
+    { id: 'sentir', name: "Sentir", color: "#8a2be2" },
+    { id: 'servir', name: "Agregar", color: "#ff1744" },
+    { id: 'conectar', name: "Harmonizar", color: "#ff0000" },
+    { id: 'expressar', name: "Expressar", color: "#ff4500" },
+    { id: 'criar', name: "Criar", color: "#ff8c00" },
+    { id: 'buscar', name: "Sincronizar", color: "#ffd700" },
+    { id: 'cuidar', name: "Emanar", color: "#76ff03" },
+    { id: 'integrar', name: "Entrelaçar", color: "#00e676" },
+    { id: 'soltar', name: "Purificar", color: "#00f3ff" },
+    { id: 'transcender', name: "Transcender", color: "#0066ff" },
   ];
 
   const ARQUETIPOS = [

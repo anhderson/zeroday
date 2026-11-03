@@ -1123,7 +1123,7 @@
   background: linear-gradient(145deg, rgba(255, 64, 129, 0.28), rgba(255, 64, 129, 0.06), transparent);
   --crack-x: -8px; --crack-y: 10px;
   --crack-angle: -25deg; --crack-scale: 1.1;
-  --shard-accent: #ff4081;
+  --shard-accent: #ff007f;
   --push-x: -0.8vh;
   --push-y: 0.5vh;
 }

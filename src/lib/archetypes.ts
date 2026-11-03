@@ -131,12 +131,12 @@ export const BEING_CANONICAL_COLORS: Record<string, string> = {
   lumíar: '#ffffff',
   ilusionmon: '#ffffff',
 
-  // Luxênus: Rosa
-  '00000000-0000-0000-0000-000000000004': '#ff4081',
-  luxênus: '#ff4081',
-  luxenus: '#ff4081',
-  invidrax: '#ff4081',
-  leviamon: '#ff4081',
+  // Luxênus: Rosa Choque
+  '00000000-0000-0000-0000-000000000004': '#ff007f',
+  luxênus: '#ff007f',
+  luxenus: '#ff007f',
+  invidrax: '#ff007f',
+  leviamon: '#ff007f',
 
   // Gúpiter: Roxo
   '00000000-0000-0000-0000-000000000007': '#a855f7',
