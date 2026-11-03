@@ -131,3 +131,53 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   margin-bottom: 0.2rem;
 }
+
+@media (max-width: 768px) {
+  .searchWrapper {
+    max-width: 100%;
+  }
+
+  .searchContainer {
+    height: 34px;
+    padding: 0 0.4rem;
+    border-radius: 8px;
+    gap: 0.2rem;
+  }
+
+  .searchIcon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .searchInput {
+    padding: 0 0.3rem;
+    font-size: 0.75rem;
+    min-width: 0;
+  }
+
+  .clearBtn {
+    padding: 2px;
+  }
+
+  .dropdown {
+    border-radius: 8px;
+  }
+
+  .resultItem {
+    padding: 0.45rem 0.6rem;
+    gap: 0.5rem;
+  }
+
+  .avatarMini {
+    width: 26px;
+    height: 26px;
+  }
+
+  .username {
+    font-size: 0.78rem;
+  }
+
+  .fullName {
+    font-size: 0.68rem;
+  }
+}

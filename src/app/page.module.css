@@ -4466,3 +4466,578 @@
   border: 1px solid rgba(255, 69, 0, 0.35);
   color: #ff7744;
 }
+
+/* === JANELA DE PRÉ-VISUALIZAÇÃO DE TEXTO (DIGITAR TEXTO) === */
+.typingPreviewOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  z-index: 99999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.typingPreviewModal {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(14, 14, 18, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(30px);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+}
+
+.typingPreviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.75rem;
+}
+
+.typingPreviewTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.typingPreviewActionBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.typingPreviewHeading {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.typingPreviewCloseBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.typingPreviewCloseBtn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.livePostPreviewCard {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.livePostPreviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.livePostAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.livePostAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.livePostMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.livePostAuthorRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.livePostAuthor {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.livePostBadge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 12px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}
+
+.livePostTime {
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.livePostContent {
+  padding-left: 0.2rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #f0f0f5;
+  word-break: break-word;
+}
+
+.livePostText {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.livePostPlaceholder {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.35);
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.livePostAttachedImage {
+  margin-top: 0.4rem;
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 160px;
+}
+
+.livePostAttachedImage img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: cover;
+}
+
+.livePostAttachedAudio {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.typingPreviewInputWrapper {
+  width: 100%;
+}
+
+.typingPreviewTextarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  outline: none;
+  resize: vertical;
+  min-height: 75px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.typingPreviewTextarea:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.typingPreviewFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.typingPreviewMediaActions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.typingPreviewIconBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.typingPreviewIconBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.typingPreviewVibeBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.typingPreviewSendBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.15rem;
+  border-radius: 10px;
+  border: none;
+  color: #000;
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-left: auto;
+}
+
+.typingPreviewSendBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* === REGRAS MOBILE (MAX-WIDTH: 768px) === */
+@media (max-width: 768px) {
+  /* 1. Menu Superior Inteiro Menor para caber tudo */
+  .header {
+    height: 52px !important;
+    padding: 0 0.5rem !important;
+    gap: 0.35rem !important;
+  }
+
+  .headerLeft {
+    min-width: unset !important;
+    gap: 0.25rem !important;
+    flex: 0 0 auto !important;
+  }
+
+  .logoBtn {
+    padding: 0.15rem !important;
+  }
+
+  .logoContainer {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .laserBeam {
+    display: none !important;
+  }
+
+  .headerCenter {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 0 0.15rem !important;
+  }
+
+  .designPickerToggle {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 3px !important;
+  }
+
+  .designPickerToggle svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .headerRight {
+    min-width: unset !important;
+    gap: 0.25rem !important;
+    flex: 0 0 auto !important;
+  }
+
+  .profileBtn {
+    padding: 2px !important;
+  }
+
+  .avatarWrapper {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .avatar {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* 2. Janela da Nascente Universal Flutuante adaptada ao Mobile */
+  .floatingFluxoWrapper {
+    width: calc(100% - 10px) !important;
+    height: calc(100vh - 60px) !important;
+    bottom: 5px !important;
+    border-radius: 18px !important;
+    max-height: unset !important;
+  }
+
+  .floatingFluxo {
+    border-radius: 18px !important;
+  }
+
+  /* 3. As 8 Esferas cabendo na janela ao lado do botão Espiritualidade (4 para cada lado como no PC) */
+  .feedHeader {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 0.2rem !important;
+    padding: 0.4rem 0.2rem 0.25rem !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .sideStories {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 2px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sideStoriesInner {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 3px !important;
+    align-items: center !important;
+  }
+
+  .sideStoryItem {
+    gap: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sideStoryRing {
+    width: 27px !important;
+    height: 27px !important;
+    padding: 1px !important;
+    border-width: 1px !important;
+    box-shadow: none !important;
+  }
+
+  .sideStoryRing::before {
+    inset: -3px !important;
+    border-width: 0.5px !important;
+  }
+
+  .sideStoryRing::after {
+    inset: -5px !important;
+    border-width: 0.5px !important;
+  }
+
+  .sideStoryAvatar {
+    font-size: 0.65rem !important;
+  }
+
+  .shutterEyeSeam {
+    width: 13px !important;
+    height: 1.5px !important;
+  }
+
+  .sideStoryName {
+    display: none !important; /* Esconde nomes textuais no mobile para que caibam 4 esferas de cada lado sem quebrar layout */
+  }
+
+  .feedHeaderCenter {
+    gap: 0.15rem !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 0 0.1rem !important;
+    align-items: center !important;
+  }
+
+  .fluxoTitleWrap {
+    padding: 0.25rem 0.3rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .fluxoTitle {
+    font-size: 0.72rem !important;
+    margin-left: 2px !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .sparkRay {
+    height: 65px !important;
+  }
+
+  .pulseRow {
+    margin-top: 0 !important;
+    transform: scale(0.72) !important;
+  }
+
+  .storyToggleBtn {
+    margin-top: 0 !important;
+    padding: 2px 7px !important;
+    font-size: 0.55rem !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+  }
+
+  /* 4. Diminuir tamanho dos botões e menu da Nascente Universal */
+  .chatToolbar {
+    padding: 0.3rem 0.35rem 0.45rem !important;
+    gap: 0.3rem !important;
+  }
+
+  .chatInputRow {
+    gap: 0.25rem !important;
+  }
+
+  .chatActionButtons {
+    gap: 0.2rem !important;
+  }
+
+  .chatVibrarLabel {
+    display: none !important; /* Esconde o rótulo "Vibrar em:" no mobile para liberar espaço */
+  }
+
+  .auraSelectorTrigger {
+    padding: 3px 6px !important;
+    font-size: 0.65rem !important;
+    gap: 3px !important;
+    height: 28px !important;
+  }
+
+  .auraSelectorTrigger span {
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chatHelpBtn {
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+  }
+
+  .chatHelpBtn svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .mediaTinyBtn {
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+  }
+
+  .mediaTinyBtn svg {
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .chatInputWrapper {
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .chatInput {
+    padding: 0.35rem 0.5rem 0.35rem 1.6rem !important;
+    font-size: 0.75rem !important;
+    height: 30px !important;
+    border-radius: 8px !important;
+  }
+
+  .chatIcon {
+    left: 5px !important;
+    width: 13px !important;
+    height: 13px !important;
+  }
+
+  .ressoarBtn {
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    padding: 0 !important;
+  }
+
+  .ressoarBtn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* Botões Flutuantes de Triângulo (Ativar Ciclo e Ativar Fronteiras) */
+  .triangleBtn {
+    bottom: 0.5rem !important;
+    right: 0.4rem !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .triangleIcon {
+    border-left: 8px solid transparent !important;
+    border-right: 8px solid transparent !important;
+    border-bottom: 15px solid rgba(220, 225, 235, 0.45) !important;
+  }
+
+  .triangleBtnRed {
+    bottom: 0.5rem !important;
+    left: 0.4rem !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .triangleIconRed {
+    border-left: 8px solid transparent !important;
+    border-right: 8px solid transparent !important;
+    border-top: 15px solid rgba(75, 85, 100, 0.65) !important;
+  }
+}

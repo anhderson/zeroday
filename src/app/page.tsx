@@ -462,6 +462,7 @@ function HomeContent() {
   const [storyLatestPost, setStoryLatestPost] = useState<any | null>(null);
   const [storyProfileData, setStoryProfileData] = useState<any | null>(null);
   const [customArchetypesTrigger, setCustomArchetypesTrigger] = useState(0);
+  const [showTypingPreview, setShowTypingPreview] = useState(false);
 
   useEffect(() => {
     const handleCustomUpdate = () => setCustomArchetypesTrigger(prev => prev + 1);
@@ -3124,7 +3125,7 @@ function HomeContent() {
               <div className={styles.chatActionButtons}>
                 {/* Aura Selector */}
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                  <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>Vibrar em:</span>
+                  <span className={styles.chatVibrarLabel} style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>Vibrar em:</span>
                   <button 
                     type="button" 
                     className={styles.auraSelectorTrigger}
@@ -3232,6 +3233,8 @@ function HomeContent() {
                   placeholder="Seu fluxo vai para a Nascente Universal..."
                   value={chatMessage}
                   onChange={(e) => setChatMessage(e.target.value)}
+                  onClick={() => setShowTypingPreview(true)}
+                  onFocus={() => setShowTypingPreview(true)}
                   className={styles.chatInput}
                   disabled={isSending}
                 />
@@ -3736,6 +3739,157 @@ function HomeContent() {
                       </button>
                     </div>
                   )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Janela de Pré-visualização ao digitar texto */}
+        <AnimatePresence>
+          {showTypingPreview && (
+            <motion.div 
+              className={styles.typingPreviewOverlay} 
+              onClick={() => setShowTypingPreview(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div 
+                className={styles.typingPreviewModal}
+                initial={{ opacity: 0, scale: 0.93, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.93, y: 15 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  borderColor: `${chatAction.aura}99`,
+                  boxShadow: `0 20px 50px rgba(0,0,0,0.85), 0 0 30px ${chatAction.aura}33`
+                }}
+              >
+                {/* Header da Janela de Pré-visualização */}
+                <div className={styles.typingPreviewHeader}>
+                  <div className={styles.typingPreviewTitleGroup}>
+                    <div 
+                      className={styles.typingPreviewActionBadge}
+                      style={{ color: chatAction.aura, borderColor: `${chatAction.aura}77` }}
+                    >
+                      <chatAction.icon size={13} />
+                      <span>{chatAction.name}</span>
+                    </div>
+                    <span className={styles.typingPreviewHeading}>Pré-visualização do Fluxo</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    className={styles.typingPreviewCloseBtn}
+                    onClick={() => setShowTypingPreview(false)}
+                    title="Fechar Pré-visualização"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {/* Live Preview Card (Exatamente como vai ficar postado no feed) */}
+                <div className={styles.livePostPreviewCard}>
+                  <div className={styles.livePostPreviewHeader}>
+                    <div className={styles.livePostAvatar}>
+                      {profile?.avatar_url ? (
+                        <img src={profile.avatar_url} alt="Você" />
+                      ) : (
+                        user?.email?.[0]?.toUpperCase() || 'U'
+                      )}
+                    </div>
+                    <div className={styles.livePostMeta}>
+                      <div className={styles.livePostAuthorRow}>
+                        <span className={styles.livePostAuthor}>{profile?.full_name || user?.email?.split('@')[0] || 'Você'}</span>
+                        <span className={styles.livePostBadge} style={{ color: chatAction.aura, borderColor: `${chatAction.aura}55` }}>
+                          {chatAction.name}
+                        </span>
+                      </div>
+                      <span className={styles.livePostTime}>Agora • Nascente Universal</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.livePostContent}>
+                    {chatMessage.trim() ? (
+                      <p className={styles.livePostText}>{chatMessage}</p>
+                    ) : (
+                      <p className={styles.livePostPlaceholder}>Digitando... sua manifestação aparecerá aqui em tempo real.</p>
+                    )}
+
+                    {attachedFiles.image && (
+                      <div className={styles.livePostAttachedImage}>
+                        <img src={URL.createObjectURL(attachedFiles.image)} alt="Preview anexo" />
+                      </div>
+                    )}
+                    {attachedFiles.audio && (
+                      <div className={styles.livePostAttachedAudio}>
+                        <Music size={14} />
+                        <span>{attachedFiles.audio.name}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Input Textarea direta na Janela de Digitação */}
+                <div className={styles.typingPreviewInputWrapper}>
+                  <textarea
+                    autoFocus
+                    rows={3}
+                    value={chatMessage}
+                    onChange={(e) => setChatMessage(e.target.value)}
+                    placeholder="Digite o que sua consciência deseja manifestar..."
+                    className={styles.typingPreviewTextarea}
+                    disabled={isSending}
+                  />
+                </div>
+
+                {/* Barra de ações e envio */}
+                <div className={styles.typingPreviewFooter}>
+                  <div className={styles.typingPreviewMediaActions}>
+                    <button 
+                      type="button" 
+                      onClick={() => mediaInputRef.current?.click()}
+                      className={styles.typingPreviewIconBtn}
+                      title="Anexar Foto"
+                    >
+                      <ImageIcon size={16} />
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => audioInputRef.current?.click()}
+                      className={styles.typingPreviewIconBtn}
+                      title="Anexar Áudio"
+                    >
+                      <Music size={16} />
+                    </button>
+                    <button 
+                      type="button"
+                      className={styles.typingPreviewVibeBtn}
+                      onClick={() => setShowAuraSelector(prev => !prev)}
+                      style={{ color: chatAction.aura }}
+                    >
+                      <chatAction.icon size={13} />
+                      <span>{chatAction.name}</span>
+                    </button>
+                  </div>
+
+                  <button 
+                    type="button" 
+                    className={styles.typingPreviewSendBtn}
+                    onClick={async () => {
+                      await handleSendChatMessage();
+                      setShowTypingPreview(false);
+                    }}
+                    disabled={(!chatMessage.trim() && !attachedFiles.image && !attachedFiles.audio) || isSending}
+                    style={{ 
+                      backgroundColor: chatAction.aura,
+                      boxShadow: `0 0 15px ${chatAction.aura}66`
+                    }}
+                  >
+                    <Send size={14} />
+                    <span>Ressoar</span>
+                  </button>
                 </div>
               </motion.div>
             </motion.div>
