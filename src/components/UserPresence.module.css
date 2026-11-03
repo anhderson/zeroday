@@ -1316,3 +1316,128 @@
   visibility: visible;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ========================================================
+   QUANDO FOR MOBILE: SCOUTER E PRESENÇA OTIMIZADOS
+   - Remove efeitos pesados de animação, glows múltiplos e blur que causam lag
+   - Renderização limpa, leve e de alta performance
+   - Layout 100% responsivo para telas touch
+   ======================================================== */
+@media (max-width: 768px) {
+  /* Painel de Presença no Mobile */
+  .container {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(14, 16, 22, 0.98) !important;
+    box-shadow: none !important;
+    padding: 0.8rem 0.6rem !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Desativa animações pesadas contínuas do container no mobile */
+  .container *,
+  .scouterDevice * {
+    animation-name: none !important;
+    animation-duration: 0.01ms !important;
+  }
+
+  /* Scouter Dispositivo no Mobile: sem efeitos pesados, renderização limpa e fluida */
+  .scouterDevice {
+    max-width: 100% !important;
+    margin: 0.4rem 0 0.8rem !important;
+    padding: 0.75rem 0.65rem !important;
+    background: #181b24 !important;
+    border: 1px solid rgba(220, 226, 235, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+    filter: none !important;
+  }
+
+  /* Cantos do scouter simplificados */
+  .scouterCornerTL, .scouterCornerTR, .scouterCornerBL, .scouterCornerBR {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  /* LED estático sem pulsação contínua */
+  .scouterLedActive {
+    box-shadow: 0 0 4px #00ff66 !important;
+    animation: none !important;
+  }
+
+  /* Hexágono com linhas geométricas nítidas sem filtros de drop-shadow pesados */
+  .scouterHexSvg {
+    shape-rendering: geometricPrecision;
+    filter: none !important;
+  }
+
+  .scouterHexSvg polygon {
+    filter: none !important;
+  }
+
+  .scouterHexValue {
+    text-shadow: none !important;
+    font-size: 1.25rem !important;
+  }
+
+  /* Barra de Exp direta e leve */
+  .scouterExpBar {
+    height: 5px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none !important;
+  }
+
+  .scouterExpFill {
+    box-shadow: none !important;
+    transition: width 0.25s ease !important;
+  }
+
+  /* Grid das 12 cores sem blur de sombra */
+  .scouterSpectrumContainer {
+    padding: 0.35rem 0.45rem !important;
+    background: #11131a !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .scouterSpectrumDot {
+    width: 7px !important;
+    height: 7px !important;
+    box-shadow: none !important;
+  }
+
+  .scouterSpectrumDotActive {
+    border: 1.5px solid #fff !important;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8) !important;
+  }
+
+  /* Grid de Leituras do Perfil (Lar, Cor Favorita, Online) */
+  .scouterReadoutGrid {
+    gap: 0.35rem !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .scouterReadoutItem {
+    padding: 0.35rem 0.45rem !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 4px !important;
+  }
+
+  .scouterItemLabel {
+    font-size: 0.52rem !important;
+  }
+
+  .scouterItemValue {
+    font-size: 0.72rem !important;
+  }
+
+  /* Botão de Realidade Própria no mobile */
+  .scouterRealityBtn {
+    padding: 0.4rem !important;
+    font-size: 0.64rem !important;
+    box-shadow: none !important;
+  }
+}

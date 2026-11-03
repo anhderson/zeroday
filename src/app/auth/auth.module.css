@@ -1102,119 +1102,233 @@
   }
 }
 
-/* 8 Equal Shards repaired and glued to the sphere (cracking outward from sphere edge) */
+/* 8 Equal Shards (Vidros no Desktop em ordem da esquerda para a direita) */
 
-/* Shard 1 - Invidrax (Rosa) */
+/* Shard 1 - Luxyus (Branco) */
 .shard1 {
   clip-path: polygon(0% 0%, 50% 0%, 50% 3.5vh, 22% 16%, 0% 25%);
-  background: linear-gradient(135deg, rgba(255, 105, 180, 0.28), rgba(255, 105, 180, 0.06), transparent);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.06), transparent);
   --crack-x: -12px; --crack-y: 6px;
   --crack-angle: 12deg; --crack-scale: 1;
-  --shard-accent: #ff69b4;
+  --shard-accent: #ffffff;
   --push-x: -0.9vh;
   --push-y: 0.2vh;
 }
 .shard1 .reflectionWrapper { left: 10%; top: 20%; }
 .shard1 .shardReflection { filter: none; }
 
-/* Shard 2 - Luxarys (Roxo) */
+/* Shard 2 - Luxênus (Rosa) */
 .shard2 {
   clip-path: polygon(50% 3.5vh, 22% 16%, 0% 25%, 0% 55%, 28% 30%);
-  background: linear-gradient(145deg, rgba(147, 112, 219, 0.28), rgba(147, 112, 219, 0.06), transparent);
+  background: linear-gradient(145deg, rgba(255, 64, 129, 0.28), rgba(255, 64, 129, 0.06), transparent);
   --crack-x: -8px; --crack-y: 10px;
   --crack-angle: -25deg; --crack-scale: 1.1;
-  --shard-accent: #9370db;
+  --shard-accent: #ff4081;
   --push-x: -0.8vh;
   --push-y: 0.5vh;
 }
 .shard2 .reflectionWrapper { left: 15%; top: 35%; }
 .shard2 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 3 - Avarok (Vermelho) */
+/* Shard 3 - Gúpiter (Roxo) */
 .shard3 {
   clip-path: polygon(50% 3.5vh, 28% 30%, 0% 55%, 0% 100%, 12% 100%, 27% 55%);
-  background: linear-gradient(160deg, rgba(255, 0, 0, 0.26), rgba(255, 0, 0, 0.06), transparent);
+  background: linear-gradient(160deg, rgba(168, 85, 247, 0.26), rgba(168, 85, 247, 0.06), transparent);
   --crack-x: -3px; --crack-y: 12px;
   --crack-angle: 50deg; --crack-scale: 0.9;
-  --shard-accent: #ff0000;
+  --shard-accent: #a855f7;
   --push-x: -0.5vh;
   --push-y: 0.8vh;
 }
 .shard3 .reflectionWrapper { left: 20%; top: 60%; }
 .shard3 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 4 - Vorath (Laranja) */
+/* Shard 4 - Iramar (Vermelho) */
 .shard4 {
   clip-path: polygon(50% 3.5vh, 27% 55%, 12% 100%, 50% 100%, 50% 55%);
-  background: linear-gradient(180deg, rgba(255, 140, 0, 0.28), rgba(255, 140, 0, 0.06), transparent);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.28), rgba(239, 68, 68, 0.06), transparent);
   --crack-x: 0px; --crack-y: 15px;
   --crack-angle: -10deg; --crack-scale: 1.2;
-  --shard-accent: #ff8c00;
+  --shard-accent: #ef4444;
   --push-x: -0.2vh;
   --push-y: 1.0vh;
 }
 .shard4 .reflectionWrapper { left: 35%; top: 75%; }
 .shard4 .shardReflection { filter: none; }
 
-/* Shard 5 - Soberath (Amarelo) */
+/* Shard 5 - Avarcúrio (Laranja) */
 .shard5 {
   clip-path: polygon(50% 3.5vh, 50% 55%, 50% 100%, 88% 100%, 73% 55%);
-  background: linear-gradient(200deg, rgba(255, 255, 0, 0.26), rgba(255, 255, 0, 0.06), transparent);
+  background: linear-gradient(200deg, rgba(249, 115, 22, 0.26), rgba(249, 115, 22, 0.06), transparent);
   --crack-x: 3px; --crack-y: 12px;
   --crack-angle: 85deg; --crack-scale: 0.8;
-  --shard-accent: #ffff00;
+  --shard-accent: #f97316;
   --push-x: 0.2vh;
   --push-y: 1.0vh;
 }
 .shard5 .reflectionWrapper { left: 65%; top: 75%; }
 .shard5 .shardReflection { filter: none; }
 
-/* Shard 6 - Acedrion (Verde) */
+/* Shard 6 - Sobturno (Amarelo) */
 .shard6 {
   clip-path: polygon(50% 3.5vh, 73% 55%, 88% 100%, 100% 100%, 100% 55%, 72% 30%);
-  background: linear-gradient(220deg, rgba(0, 255, 0, 0.25), rgba(0, 255, 0, 0.06), transparent);
+  background: linear-gradient(220deg, rgba(255, 215, 0, 0.25), rgba(255, 215, 0, 0.06), transparent);
   --crack-x: 8px; --crack-y: 10px;
   --crack-angle: -40deg; --crack-scale: 1.1;
-  --shard-accent: #00ff00;
+  --shard-accent: #ffd700;
   --push-x: 0.5vh;
   --push-y: 0.8vh;
 }
 .shard6 .reflectionWrapper { left: 80%; top: 60%; }
 .shard6 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 7 - Irázor (Azul) */
+/* Shard 7 - Inveranus (Verde) */
 .shard7 {
   clip-path: polygon(50% 3.5vh, 72% 30%, 100% 55%, 100% 25%, 78% 16%);
-  background: linear-gradient(250deg, rgba(0, 120, 255, 0.28), rgba(0, 120, 255, 0.06), transparent);
+  background: linear-gradient(250deg, rgba(34, 197, 94, 0.28), rgba(34, 197, 94, 0.06), transparent);
   --crack-x: 12px; --crack-y: 6px;
   --crack-angle: -15deg; --crack-scale: 1;
-  --shard-accent: #0078ff;
+  --shard-accent: #22c55e;
   --push-x: 0.8vh;
   --push-y: 0.5vh;
 }
 .shard7 .reflectionWrapper { left: 85%; top: 35%; }
 .shard7 .shardReflection { filter: none; object-position: center 30%; }
 
-/* Shard 8 - Lumíar (Branco) */
+/* Shard 8 - Pretuno (Azul) */
 .shard8 {
   clip-path: polygon(50% 3.5vh, 50% 0%, 100% 0%, 100% 25%, 78% 16%);
-  background: linear-gradient(270deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.07), transparent);
+  background: linear-gradient(270deg, rgba(0, 176, 255, 0.28), rgba(0, 176, 255, 0.07), transparent);
   --crack-x: 15px; --crack-y: 2px;
   --crack-angle: -5deg; --crack-scale: 0.9;
-  --shard-accent: #ffffff;
+  --shard-accent: #00b0ff;
   --push-x: 0.9vh;
   --push-y: 0.2vh;
 }
 .shard8 .reflectionWrapper { left: 90%; top: 22%; }
 .shard8 .shardReflection { filter: none; }
 
-/* Responsividade básica para o layout místico */
+/* No Desktop normal: esconde mobileBeingsContainer */
+.mobileBeingsContainer {
+  display: none;
+}
+
+.desktopShards {
+  display: contents;
+}
+
+/* Responsividade e Otimização Mobile */
 @media (max-width: 1024px) {
   .sidePanel {
     display: none;
   }
   .container {
     justify-content: center;
+  }
+}
+
+/* ========================================================
+   QUANDO FOR MOBILE: TELA DE LOGIN OTIMIZADA E DINÂMICA
+   - Remove o efeito de escala/crescimento pesado das esferas
+   - Mostra imagens diretamente nos 8 seres da esquerda para a direita
+   - Muda a cor da esfera preta para a cor canônica em sincronia com os vidros
+   - Renderização fluida e leve sem lag de GPU
+   ======================================================== */
+@media (max-width: 768px) {
+  /* Desativa os cacos poligonais pesados de desktop */
+  .desktopShards {
+    display: none !important;
+  }
+
+  .crystalShard {
+    display: none !important;
+  }
+
+  /* Exibe a barra de 8 esferas canônicas em linha no topo */
+  .mobileBeingsContainer {
+    position: absolute;
+    top: 7.5vh;
+    left: 0;
+    width: 100vw;
+    z-index: 15;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .mobileBeingsRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 375px;
+    pointer-events: auto;
+  }
+
+  /* Esfera no mobile: fixa, com imagem direta, sem scaling de crescimento */
+  .mobileBeingSphere {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #000000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+    flex-shrink: 0;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+    /* Animação sincronizada que muda suavemente a cor da esfera quando os vidros piscam */
+    animation: mobileSphereColorCycle 7s infinite ease-in-out;
+  }
+
+  .mobileBeingImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  @keyframes mobileSphereColorCycle {
+    /* 0 - 3.5s (0% - 50%): Esfera preta / escura com brilho sutil cinza */
+    0%, 50% {
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+      filter: brightness(0.68) grayscale(45%);
+    }
+    /* 3.5s - 6s (50% - 85.7%): Vidros colorem -> muda a cor da esfera para a cor canônica! */
+    70%, 85.7% {
+      border-color: var(--being-color, #ffffff);
+      box-shadow: 0 0 12px var(--being-color, #ffffff), 0 0 4px #ffffff;
+      filter: brightness(1.05) grayscale(0%);
+    }
+    /* 6s - 7s (85.7% - 100%): Retorna suavemente ao preto / escuro */
+    100% {
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+      filter: brightness(0.68) grayscale(45%);
+    }
+  }
+
+  /* Card de login no mobile: centralizado e sem travar a renderização */
+  .authCard {
+    width: 90vw !important;
+    max-width: 360px !important;
+    margin: auto !important;
+    transform: scale(0.92) !important;
+    margin-top: 11vh !important;
+  }
+
+  .voidCoreWrapper {
+    top: 1vh;
   }
 }
 

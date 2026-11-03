@@ -7,6 +7,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, Unlock, Sparkles, Fingerprint, Eye, Zap, X, MoreHorizontal } from 'lucide-react';
 import styles from './auth.module.css';
 
+// Sequência canônica dos 8 seres da esquerda para a direita com suas respectivas cores
+const CANONICAL_AUTH_BEINGS = [
+  { name: 'Luxyus', color: '#ffffff', image: '/personagens/Luxyus.png' },
+  { name: 'Luxênus', color: '#ff4081', image: '/personagens/Luxenus.png' },
+  { name: 'Gúpiter', color: '#a855f7', image: '/personagens/Gupiter.png' },
+  { name: 'Iramar', color: '#ef4444', image: '/personagens/Iramar.png' },
+  { name: 'Avarcúrio', color: '#f97316', image: '/personagens/Avarcurio.png' },
+  { name: 'Sobturno', color: '#ffd700', image: '/personagens/Sobturno.png' },
+  { name: 'Inveranus', color: '#22c55e', image: '/personagens/Inveranus.png' },
+  { name: 'Pretuno', color: '#00b0ff', image: '/personagens/Pretuno.png' },
+];
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [lang, setLang] = useState<'pt' | 'en'>('pt');
@@ -81,16 +93,7 @@ export default function AuthPage() {
     },
   }[lang];
 
-  const radarColors = [
-    'rgba(255, 105, 180, 0.8)', // Shard 1 - Invidrax (Rosa)
-    'rgba(147, 112, 219, 0.8)', // Shard 2 - Luxarys (Roxo)
-    'rgba(255, 0, 0, 0.8)',     // Shard 3 - Avarok (Vermelho)
-    'rgba(255, 140, 0, 0.8)',   // Shard 4 - Vorath (Laranja)
-    'rgba(255, 255, 0, 0.8)',   // Shard 5 - Soberath (Amarelo)
-    'rgba(0, 255, 0, 0.8)',     // Shard 6 - Acedrion (Verde)
-    'rgba(0, 120, 255, 0.8)',   // Shard 7 - Irázor (Azul)
-    'rgba(255, 255, 255, 0.8)'  // Shard 8 - Lumíar (Branco)
-  ];
+  const radarColors = CANONICAL_AUTH_BEINGS.map(b => b.color);
 
   useEffect(() => {
     // Checa se o usuário retornou de confirmação de e-mail
@@ -102,21 +105,7 @@ export default function AuthPage() {
       );
     }
 
-    // Inject registered characters into the crystal shards
-    const fetchAvatars = async () => {
-      const registeredCharacters = [
-        '/personagens/Invidrax.png?v=8',
-        '/personagens/Luxarys.png?v=8',
-        '/personagens/Avarok.png?v=8',
-        '/personagens/Vorath.png?v=8',
-        '/personagens/Soberath.png?v=8',
-        '/personagens/Acedrion.png?v=8',
-        '/personagens/Irazor.png?v=8',
-        '/personagens/Lumiar.png?v=8'
-      ];
-      setCrystalAvatars(registeredCharacters);
-    };
-    fetchAvatars();
+    setCrystalAvatars(CANONICAL_AUTH_BEINGS.map(b => b.image));
   }, []);
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -228,22 +217,44 @@ export default function AuthPage() {
           </div>
         </div>
 
-        {[...Array(8)].map((_, i) => (
-          <div 
-            key={`shard-${i+1}`}
-            className={`${styles.crystalShard} ${styles[`shard${i+1}` as keyof typeof styles]}`}
-          >
-            {crystalAvatars[i] && (
+        {/* Desktop Shards (Vidros com reflexos de esferas) */}
+        <div className={styles.desktopShards}>
+          {CANONICAL_AUTH_BEINGS.map((being, i) => (
+            <div 
+              key={`shard-${i+1}`}
+              className={`${styles.crystalShard} ${styles[`shard${i+1}` as keyof typeof styles]}`}
+              style={{ '--being-color': being.color } as any}
+            >
               <div className={styles.reflectionWrapper}>
                 <img 
-                  src={crystalAvatars[i]} 
+                  src={being.image} 
                   className={styles.shardReflection} 
-                  alt="" 
+                  alt={being.name} 
                 />
               </div>
-            )}
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile: 8 Esferas com imagens diretamente (sem efeito de crescer), mudando de cor quando os vidros piscam */}
+        <div className={styles.mobileBeingsContainer}>
+          <div className={styles.mobileBeingsRow}>
+            {CANONICAL_AUTH_BEINGS.map((being, i) => (
+              <div 
+                key={`mobile-being-${i}`}
+                className={styles.mobileBeingSphere}
+                style={{ '--being-color': being.color } as any}
+                title={`${being.name} (${being.color})`}
+              >
+                <img 
+                  src={being.image} 
+                  className={styles.mobileBeingImage} 
+                  alt={being.name} 
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
 
       {/* Left side announcement */}
