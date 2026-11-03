@@ -390,6 +390,17 @@ const CARE_EMOJIS = [
   { emoji: '♾', label: 'Harmonia' },
 ];
 
+const ALL_EIGHT_BEINGS = [
+  { id: '00000000-0000-0000-0000-000000000001', username: 'Luxyus', label: 'União dos Sete Pecados ✨', image: '/personagens/Luxyus.png' },
+  { id: '00000000-0000-0000-0000-000000000004', username: 'Luxênus', label: 'Inveja 🌊', image: '/personagens/Luxenus.png' },
+  { id: '00000000-0000-0000-0000-000000000007', username: 'Gúpiter', label: 'Luxúria 💋', image: '/personagens/Gupiter.png' },
+  { id: '00000000-0000-0000-0000-000000000003', username: 'Iramar', label: 'Avareza 💰', image: '/personagens/Iramar.png' },
+  { id: '00000000-0000-0000-0000-000000000005', username: 'Avarcúrio', label: 'Gula 🔥', image: '/personagens/Avarcurio.png' },
+  { id: '00000000-0000-0000-0000-000000000002', username: 'Sobturno', label: 'Soberba ⚡', image: '/personagens/Sobturno.png' },
+  { id: '00000000-0000-0000-0000-000000000006', username: 'Inveranus', label: 'Preguiça 💤', image: '/personagens/Inveranus.png' },
+  { id: '00000000-0000-0000-0000-000000000008', username: 'Pretuno', label: 'Ira 💢', image: '/personagens/Pretuno.png' },
+];
+
 function HomeContent() {
   const router = useRouter(); 
   const searchParams = useSearchParams();
@@ -1623,6 +1634,89 @@ function HomeContent() {
     }
   };
 
+  const renderSphereItem = (rawBeing: any, i: number) => {
+    const eff = getEffectiveBeing(rawBeing.id, user?.id, isUserLevel100);
+    const s = { ...rawBeing, username: eff.username, image: eff.image };
+    const hasShutter = s.id !== '00000000-0000-0000-0000-000000000001';
+    const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
+    return (
+      <div key={s.id || i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
+        <div 
+          className={styles.sideStoryRing}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenLatestPost(s);
+          }}
+          title={`Ver última manifestação de ${s.username}`}
+        >
+          <div className={styles.sideStoryAvatar}>
+            {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
+            {hasShutter && (
+              <div className={`${styles.capsuleEyelids} ${isSelected ? styles.capsuleOpen : ''}`}>
+                <div className={styles.shutterBladeTop} />
+                <div className={styles.shutterBladeBottom} />
+                <div className={styles.shutterEyeSeam} />
+              </div>
+            )}
+          </div>
+        </div>
+        <span 
+          className={styles.sideStoryName}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenProfilePreview(s);
+          }}
+          title={`Ver perfil de ${s.username}`}
+        >
+          {s.username}
+        </span>
+      </div>
+    );
+  };
+
+  const renderRealUserItem = (slotIndex: number) => {
+    const s = recentUsers[slotIndex];
+    if (s) {
+      return (
+        <div key={s.id || slotIndex} className={`${styles.sideStoryItem} glass-hover`} data-phase={slotIndex}>
+          <div 
+            className={styles.sideStoryRing}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenLatestPost(s);
+            }}
+            title={`Ver última manifestação de ${s.username}`}
+          >
+            <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
+              {s.avatar_url ? (
+                <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+              ) : (s.username?.[0] || '?')}
+            </div>
+          </div>
+          <span 
+            className={styles.sideStoryName}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenProfilePreview(s);
+            }}
+            title={`Ver perfil de ${s.username}`}
+          >
+            {s.username || 'Manifestação'}
+          </span>
+        </div>
+      );
+    }
+    return (
+      <div key={`empty-${slotIndex}`} className={styles.sideStoryItem} style={{ opacity: 0.35, pointerEvents: 'none' }}>
+        <div className={styles.sideStoryRing} style={{ cursor: 'default' }}>
+          <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`} style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, fontSize: '0.9rem' }}>
+            0
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (loading) {
     return (
       <div className={styles.container} style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -2084,105 +2178,22 @@ function HomeContent() {
         >
 
           <div className={styles.feedHeader}>
-            {/* Left stories */}
-            <div className={styles.sideStories} data-active={sparkActive ? '1' : '0'}>
+            {/* Desktop Left Stories */}
+            <div className={`${styles.sideStories} ${styles.desktopOnlyStories}`} data-active={sparkActive ? '1' : '0'}>
               <AnimatePresence mode="wait">
                 {!showRealStories ? (
                   <motion.div key="bots-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {[
-                      { id: '00000000-0000-0000-0000-000000000001', username: 'Luxyus', label: 'União dos Sete Pecados ✨', image: '/personagens/Luxyus.png' },
-                      { id: '00000000-0000-0000-0000-000000000004', username: 'Luxênus', label: 'Inveja 🌊', image: '/personagens/Luxenus.png' },
-                      { id: '00000000-0000-0000-0000-000000000007', username: 'Gúpiter', label: 'Luxúria 💋', image: '/personagens/Gupiter.png' },
-                      { id: '00000000-0000-0000-0000-000000000003', username: 'Iramar', label: 'Avareza 💰', image: '/personagens/Iramar.png' },
-                    ].map((rawBeing, i) => {
-                      const eff = getEffectiveBeing(rawBeing.id, user?.id, isUserLevel100);
-                      const s = { ...rawBeing, username: eff.username, image: eff.image };
-                      const hasShutter = s.id !== '00000000-0000-0000-0000-000000000001';
-                      const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
-                      return (
-                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i}>
-                        <div 
-                          className={styles.sideStoryRing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenLatestPost(s);
-                          }}
-                          title={`Ver última manifestação de ${s.username}`}
-                        >
-                          <div className={styles.sideStoryAvatar}>
-                            {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
-                            {hasShutter && (
-                              <div className={`${styles.capsuleEyelids} ${isSelected ? styles.capsuleOpen : ''}`}>
-                                <div className={styles.shutterBladeTop} />
-                                <div className={styles.shutterBladeBottom} />
-                                <div className={styles.shutterEyeSeam} />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <span 
-                          className={styles.sideStoryName}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenProfilePreview(s);
-                          }}
-                          title={`Ver perfil de ${s.username}`}
-                        >
-                          {s.username}
-                        </span>
-                      </div>
-                    );})}
+                    {ALL_EIGHT_BEINGS.slice(0, 4).map((rawBeing, i) => renderSphereItem(rawBeing, i))}
                   </motion.div>
                 ) : (
                   <motion.div key="real-left" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {[0, 1, 2, 3].map((slotIndex) => {
-                      const s = recentUsers[slotIndex];
-                      if (s) {
-                        return (
-                          <div key={s.id || slotIndex} className={`${styles.sideStoryItem} glass-hover`} data-phase={slotIndex}>
-                            <div 
-                              className={styles.sideStoryRing}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenLatestPost(s);
-                              }}
-                              title={`Ver última manifestação de ${s.username}`}
-                            >
-                              <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
-                                {s.avatar_url ? (
-                                  <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                                ) : (s.username?.[0] || '?')}
-                              </div>
-                            </div>
-                            <span 
-                              className={styles.sideStoryName}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenProfilePreview(s);
-                              }}
-                              title={`Ver perfil de ${s.username}`}
-                            >
-                              {s.username || 'Manifestação'}
-                            </span>
-                          </div>
-                        );
-                      }
-                      return (
-                        <div key={`empty-left-${slotIndex}`} className={styles.sideStoryItem} style={{ opacity: 0.35, pointerEvents: 'none' }}>
-                          <div className={styles.sideStoryRing} style={{ cursor: 'default' }}>
-                            <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`} style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, fontSize: '1rem' }}>
-                              0
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {[0, 1, 2, 3].map((slotIndex) => renderRealUserItem(slotIndex))}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Center — title + sparks + pulse + toggle */}
+            {/* Center — title + sparks + pulse + mobile 8 spheres + toggle */}
             <div className={styles.feedHeaderCenter}>
               <div className={styles.fluxoTitleWrap}>
                 {/* Faíscas ATRÁS da lua, com burst colorido a cada 7s */}
@@ -2217,10 +2228,28 @@ function HomeContent() {
                   Nascente Universal
                 </h2>
               </div>
+
+              {/* Sincronizado mais para cima no centro */}
               <div className={styles.pulseRow}>
                 <RealtimePulse channelName="universal-connection" label="Sincronizado" />
               </div>
-              {/* Toggle button between bot and real stories */}
+
+              {/* Mobile Only: As 8 esferas dos 8 seres em linha reta horizontal, movidas para baixo e maiores */}
+              <div className={styles.mobileSpheresRow}>
+                <AnimatePresence mode="wait">
+                  {!showRealStories ? (
+                    <motion.div key="bots-mobile" className={styles.mobileSpheresInner} initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.25 }}>
+                      {ALL_EIGHT_BEINGS.map((rawBeing, i) => renderSphereItem(rawBeing, i))}
+                    </motion.div>
+                  ) : (
+                    <motion.div key="real-mobile" className={styles.mobileSpheresInner} initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} transition={{ duration: 0.25 }}>
+                      {[0, 1, 2, 3, 4, 5, 6, 7].map((slotIndex) => renderRealUserItem(slotIndex))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Toggle button between bot and real stories — mais para baixo */}
               <button 
                 className={styles.storyToggleBtn} 
                 onClick={() => setShowRealStories(!showRealStories)}
@@ -2240,104 +2269,19 @@ function HomeContent() {
                     : (showRealStories ? 'Realidade' : 'Espiritualidade')
                   }
                 </span>
-
               </button>
-
             </div>
 
-            {/* Right stories */}
-            <div className={styles.sideStories} data-active={sparkActive ? '1' : '0'}>
+            {/* Desktop Right Stories */}
+            <div className={`${styles.sideStories} ${styles.desktopOnlyStories}`} data-active={sparkActive ? '1' : '0'}>
               <AnimatePresence mode="wait">
                 {!showRealStories ? (
                   <motion.div key="bots-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {[
-                      { id: '00000000-0000-0000-0000-000000000005', username: 'Avarcúrio', label: 'Gula 🔥', image: '/personagens/Avarcurio.png' },
-                      { id: '00000000-0000-0000-0000-000000000002', username: 'Sobturno', label: 'Soberba ⚡', image: '/personagens/Sobturno.png' },
-                      { id: '00000000-0000-0000-0000-000000000006', username: 'Inveranus', label: 'Preguiça 💤', image: '/personagens/Inveranus.png' },
-                      { id: '00000000-0000-0000-0000-000000000008', username: 'Pretuno', label: 'Ira 💢', image: '/personagens/Pretuno.png' },
-                    ].map((rawBeing, i) => {
-                      const eff = getEffectiveBeing(rawBeing.id, user?.id, isUserLevel100);
-                      const s = { ...rawBeing, username: eff.username, image: eff.image };
-                      const hasShutter = true;
-                      const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
-                      return (
-                      <div key={i} className={`${styles.sideStoryItem} glass-hover`} data-phase={i + 4}>
-                        <div 
-                          className={styles.sideStoryRing}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenLatestPost(s);
-                          }}
-                          title={`Ver última manifestação de ${s.username}`}
-                        >
-                          <div className={styles.sideStoryAvatar}>
-                            {s.image ? (<img src={s.image} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />) : s.username[0]}
-                            {hasShutter && (
-                              <div className={`${styles.capsuleEyelids} ${isSelected ? styles.capsuleOpen : ''}`}>
-                                <div className={styles.shutterBladeTop} />
-                                <div className={styles.shutterBladeBottom} />
-                                <div className={styles.shutterEyeSeam} />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <span 
-                          className={styles.sideStoryName}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenProfilePreview(s);
-                          }}
-                          title={`Ver perfil de ${s.username}`}
-                        >
-                          {s.username}
-                        </span>
-                      </div>
-                    );})}
+                    {ALL_EIGHT_BEINGS.slice(4, 8).map((rawBeing, i) => renderSphereItem(rawBeing, i + 4))}
                   </motion.div>
                 ) : (
                   <motion.div key="real-right" className={styles.sideStoriesInner} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.3 }}>
-                    {[4, 5, 6, 7].map((slotIndex) => {
-                      const s = recentUsers[slotIndex];
-                      if (s) {
-                        return (
-                          <div key={s.id || slotIndex} className={`${styles.sideStoryItem} glass-hover`} data-phase={slotIndex}>
-                            <div 
-                              className={styles.sideStoryRing}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenLatestPost(s);
-                              }}
-                              title={`Ver última manifestação de ${s.username}`}
-                            >
-                              <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`}>
-                                {s.avatar_url ? (
-                                  <img src={s.avatar_url} alt={s.username} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                                ) : (s.username?.[0] || '?')}
-                              </div>
-                            </div>
-                            <span 
-                              className={styles.sideStoryName}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOpenProfilePreview(s);
-                              }}
-                              title={`Ver perfil de ${s.username}`}
-                            >
-                              {s.username || 'Manifestação'}
-                            </span>
-                          </div>
-                        );
-                      }
-                      return (
-                        <div key={`empty-right-${slotIndex}`} className={styles.sideStoryItem} style={{ opacity: 0.35, pointerEvents: 'none' }}>
-                          <div className={styles.sideStoryRing} style={{ cursor: 'default' }}>
-                            <div className={`${styles.sideStoryAvatar} ${styles.realStoryAvatar}`} style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 800, fontSize: '1rem' }}>
-                              0
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                    {[4, 5, 6, 7].map((slotIndex) => renderRealUserItem(slotIndex))}
                   </motion.div>
                 )}
               </AnimatePresence>
