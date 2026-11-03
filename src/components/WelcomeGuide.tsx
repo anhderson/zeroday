@@ -61,52 +61,56 @@ export const WelcomeGuide: React.FC = () => {
   return (
     <div className={styles.overlay}>
       <motion.div 
-        className={styles.modal}
+        className={styles.modalWrapper}
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className={styles.decoration}>
-          <div className={styles.line} />
-          <BookOpen className={styles.mainIcon} size={32} />
-          <div className={styles.line} />
-        </div>
-
-        <div className={styles.content}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -50, opacity: 0 }}
-              className={styles.stepContainer}
-            >
-              <div className={styles.stepIcon}>
-                {STEPS[currentStep].icon}
-              </div>
-              <h2 className={styles.stepTitle}>{STEPS[currentStep].title}</h2>
-              <p className={styles.stepDescription}>
-                {STEPS[currentStep].content}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className={styles.footer}>
-          <div className={styles.dots}>
-            {STEPS.map((_, i) => (
-              <div 
-                key={i} 
-                className={`${styles.dot} ${i === currentStep ? styles.activeDot : ''}`} 
-              />
-            ))}
+        <div className={styles.modalInner}>
+          <div className={styles.decoration}>
+            <div className={styles.line} />
+            <BookOpen className={styles.mainIcon} size={30} />
+            <div className={styles.line} />
           </div>
-          <button className={styles.nextBtn} onClick={handleNext}>
-            {currentStep === STEPS.length - 1 ? (
-              <>Concluir <Check size={18} /></>
-            ) : (
-              <>Próximo <ChevronRight size={18} /></>
-            )}
-          </button>
+
+          <div className={styles.content}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ x: 40, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: -40, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className={styles.stepContainer}
+              >
+                <div className={styles.stepIcon}>
+                  {STEPS[currentStep].icon}
+                </div>
+                <h2 className={styles.stepTitle}>{STEPS[currentStep].title}</h2>
+                <p className={styles.stepDescription}>
+                  {STEPS[currentStep].content}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className={styles.footer}>
+            <div className={styles.dots}>
+              {STEPS.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`${styles.dot} ${i === currentStep ? styles.activeDot : ''}`} 
+                />
+              ))}
+            </div>
+            <button className={styles.nextBtn} onClick={handleNext}>
+              {currentStep === STEPS.length - 1 ? (
+                <>Concluir <Check size={18} /></>
+              ) : (
+                <>Próximo <ChevronRight size={18} /></>
+              )}
+            </button>
+          </div>
         </div>
       </motion.div>
     </div>

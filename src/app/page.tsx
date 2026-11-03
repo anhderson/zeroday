@@ -1650,7 +1650,7 @@ function HomeContent() {
           }
         }}
         data-active={trianglesActive}
-        title="Ativar Fronteiras Neon"
+        title={trianglesActive ? "Desativar Ciclo" : "Ativar Ciclo"}
       >
         <div 
           className={styles.triangleIcon}
@@ -1704,7 +1704,8 @@ function HomeContent() {
             }, 1800);
           }
         }}
-        title="Ativar Ciclo via Laser"
+        data-active={laserActive}
+        title={laserActive ? "Desativar Fronteiras" : "Ativar Fronteiras"}
       >
         <div 
           className={styles.triangleIconRed}

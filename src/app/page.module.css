@@ -3478,19 +3478,26 @@
   transform: scale(1.1);
 }
 
+/* Botão da direita (Triângulo pra cima - Ativar Ciclo): cinza claro por padrão */
 .triangleIcon {
   width: 0;
   height: 0;
   border-left: 20px solid transparent;
   border-right: 20px solid transparent;
-  border-bottom: 35px solid rgba(0, 255, 255, 0.3);
-  filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
-  transition: all 0.3s ease;
+  border-bottom: 35px solid rgba(220, 225, 235, 0.45);
+  filter: drop-shadow(0 0 6px rgba(220, 225, 235, 0.4));
+  transition: all 0.35s ease;
+}
+
+/* Ao passar o mouse: revela a cor azul */
+.triangleBtn:hover .triangleIcon {
+  border-bottom-color: rgba(0, 243, 255, 1);
+  filter: drop-shadow(0 0 15px rgba(0, 243, 255, 1)) drop-shadow(0 0 30px rgba(0, 243, 255, 0.8));
 }
 
 .triangleBtn[data-active="true"] .triangleIcon {
-  border-bottom-color: rgba(0, 255, 255, 1);
-  filter: drop-shadow(0 0 20px rgba(0, 255, 255, 1)) drop-shadow(0 0 40px rgba(0, 255, 255, 0.8));
+  border-bottom-color: rgba(0, 243, 255, 1);
+  filter: drop-shadow(0 0 20px rgba(0, 243, 255, 1)) drop-shadow(0 0 40px rgba(0, 243, 255, 0.8));
 }
 
 .triangleBtnRed {
@@ -3514,19 +3521,26 @@
   transform: scale(1.1);
 }
 
+/* Botão da esquerda (Triângulo pra baixo - Ativar Fronteiras): cinza escuro por padrão */
 .triangleIconRed {
   width: 0;
   height: 0;
   border-left: 20px solid transparent;
   border-right: 20px solid transparent;
-  border-top: 35px solid rgba(255, 0, 0, 0.5); /* Pointed down */
-  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
-  transition: all 0.3s ease;
+  border-top: 35px solid rgba(75, 85, 100, 0.65); /* Pointed down */
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.7));
+  transition: all 0.35s ease;
 }
 
+/* Ao passar o mouse: revela a cor vermelha */
 .triangleBtnRed:hover .triangleIconRed {
-  border-top-color: rgba(255, 0, 0, 1);
-  filter: drop-shadow(0 0 20px rgba(255, 0, 0, 1));
+  border-top-color: rgba(255, 30, 60, 1);
+  filter: drop-shadow(0 0 15px rgba(255, 30, 60, 1)) drop-shadow(0 0 30px rgba(255, 30, 60, 0.8));
+}
+
+.triangleBtnRed[data-active="true"] .triangleIconRed {
+  border-top-color: rgba(255, 30, 60, 1);
+  filter: drop-shadow(0 0 20px rgba(255, 30, 60, 1)) drop-shadow(0 0 40px rgba(255, 30, 60, 0.8));
 }
 
 
