@@ -13,10 +13,10 @@
   border-radius: 50%;
 }
 
-/* Luz em torno justa como borda da Lua (em vez de borda sombreada difusa) */
+/* Luz em torno justa como borda da Lua (diminuída em 10% para encaixar perfeitamente nas bordas da lua) */
 .moonWhiteAura {
   position: absolute;
-  inset: 0px;
+  inset: 6px;
   border-radius: 50%;
   pointer-events: none;
   z-index: 5;

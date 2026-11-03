@@ -1079,6 +1079,36 @@
   transition: width 0.5s ease-out;
 }
 
+/* Botão de Realidade Própria desbloqueado no Nível 100 */
+.scouterRealityBtn {
+  margin-top: 0.6rem;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.18), rgba(255, 255, 255, 0.15));
+  border: 1px solid rgba(255, 215, 0, 0.6);
+  color: #ffd700;
+  font-family: var(--font-orbitron), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.scouterRealityBtn:hover {
+  background: #ffd700;
+  color: #0a0a0c;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+  transform: translateY(-1px);
+}
+
 /* 12 Cores da Nascente */
 .scouterSpectrumContainer {
   margin-bottom: 0.8rem;

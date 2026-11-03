@@ -235,3 +235,81 @@ export function normalizeNodeProfiles<T extends { user_id?: string | null; profi
   }
   return node;
 }
+
+/* ========================================================
+   SISTEMA DE REALIDADE PRÓPRIA (NÍVEL 100)
+   Permite ao usuário no nível 100 customizar os 8 seres
+   visíveis exclusivamente para a sua própria consciência.
+   ======================================================== */
+
+export interface CanonicalBeingDef {
+  id: string;
+  canonicalName: string;
+  label: string;
+  avatar: string;
+  sin: string;
+}
+
+export const CANONICAL_8_BEINGS_ORDER: CanonicalBeingDef[] = [
+  { id: '00000000-0000-0000-0000-000000000001', canonicalName: 'Luxyus', label: 'União dos Sete Pecados ✨', avatar: '/personagens/Luxyus.png', sin: 'União' },
+  { id: '00000000-0000-0000-0000-000000000004', canonicalName: 'Luxênus', label: 'Inveja 🌊', avatar: '/personagens/Luxenus.png', sin: 'Inveja' },
+  { id: '00000000-0000-0000-0000-000000000007', canonicalName: 'Gúpiter', label: 'Luxúria 💋', avatar: '/personagens/Gupiter.png', sin: 'Luxúria' },
+  { id: '00000000-0000-0000-0000-000000000003', canonicalName: 'Iramar', label: 'Avareza 💰', avatar: '/personagens/Iramar.png', sin: 'Avareza' },
+  { id: '00000000-0000-0000-0000-000000000005', canonicalName: 'Avarcúrio', label: 'Gula 🔥', avatar: '/personagens/Avarcurio.png', sin: 'Gula' },
+  { id: '00000000-0000-0000-0000-000000000002', canonicalName: 'Sobturno', label: 'Soberba ⚡', avatar: '/personagens/Sobturno.png', sin: 'Soberba' },
+  { id: '00000000-0000-0000-0000-000000000006', canonicalName: 'Inveranus', label: 'Preguiça 💤', avatar: '/personagens/Inveranus.png', sin: 'Preguiça' },
+  { id: '00000000-0000-0000-0000-000000000008', canonicalName: 'Pretuno', label: 'Ira 💢', avatar: '/personagens/Pretuno.png', sin: 'Ira' },
+];
+
+export interface CustomBeingEntry {
+  name: string;
+  image: string;
+}
+
+export function getUserCustomBeings(userId?: string | null): Record<string, CustomBeingEntry> | null {
+  if (!userId || typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(`zeroday_custom_archetypes_${userId}`);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    console.error("Erro ao carregar seres customizados:", e);
+  }
+  return null;
+}
+
+export function saveUserCustomBeings(userId: string, data: Record<string, CustomBeingEntry>): void {
+  if (!userId || typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(`zeroday_custom_archetypes_${userId}`, JSON.stringify(data));
+    window.dispatchEvent(new CustomEvent('zeroday:custom_beings_updated', { detail: { userId, data } }));
+  } catch (e) {
+    console.error("Erro ao salvar seres customizados:", e);
+  }
+}
+
+export function getEffectiveBeing(
+  beingId: string, 
+  viewerUserId?: string | null, 
+  viewerIsLevel100?: boolean
+): { username: string; image: string } {
+  const canon = ARCHETYPE_PROFILES[beingId];
+  const defaultRes = {
+    username: canon?.name || 'Consciência',
+    image: canon?.avatar || '/personagens/Luxyus.png'
+  };
+
+  if (!viewerIsLevel100 || !viewerUserId) {
+    return defaultRes;
+  }
+
+  const customMap = getUserCustomBeings(viewerUserId);
+  if (customMap && customMap[beingId]) {
+    const custom = customMap[beingId];
+    return {
+      username: custom.name?.trim() ? custom.name.trim() : defaultRes.username,
+      image: custom.image?.trim() ? custom.image.trim() : defaultRes.image,
+    };
+  }
+
+  return defaultRes;
+}

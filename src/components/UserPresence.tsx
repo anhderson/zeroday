@@ -7,10 +7,11 @@ import {
   X, LogOut, History, Award, 
   Settings, ChevronRight, 
   Minimize2, Maximize2, User,
-  Sparkles, Palette
+  Sparkles, Palette, Crown
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { getCleanUsername, getCleanAvatar, resolveArchetype } from "@/lib/archetypes";
+import CustomRealityModal from "./CustomRealityModal";
 import styles from "./UserPresence.module.css";
 
 interface UserPresenceProps {
@@ -46,6 +47,7 @@ export default function UserPresence({
   const [targetManifestations, setTargetManifestations] = useState<any[]>(propProfile && manifestations ? manifestations : []);
   const [pendingRequests, setPendingRequests] = useState<any[]>([]);
   const [isMinimized, setIsMinimized] = useState(initiallyMinimized);
+  const [showCustomRealityModal, setShowCustomRealityModal] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -218,8 +220,17 @@ export default function UserPresence({
   ];
 
   const totalManifestations = targetManifestations.length;
-  const currentLevel = (totalManifestations % 33) || (totalManifestations > 0 ? 33 : 0);
-  const arquetipoIndex = Math.floor(totalManifestations / 33) % ARQUETIPOS.length;
+  // Dificuldade 5x mais difícil de passar de nível: 5 manifestações para cada nível de consciência
+  const savedLevelOverride = typeof window !== 'undefined' ? parseInt(localStorage.getItem(`zeroday_level_override_${profile?.id}`) || '0') : 0;
+  const calculatedLevel = Math.max(1, Math.floor(totalManifestations / 5) + (totalManifestations > 0 ? 1 : 0));
+  const currentLevel = savedLevelOverride > 0 
+    ? savedLevelOverride 
+    : ((profile?.level && profile.level >= 100) ? profile.level : calculatedLevel);
+
+  const expInLevel = totalManifestations % 5;
+  const currentLevelProgress = currentLevel >= 100 ? 100 : (expInLevel / 5) * 100;
+
+  const arquetipoIndex = Math.floor(currentLevel / 12) % ARQUETIPOS.length;
   const currentArquetipo = ARQUETIPOS[arquetipoIndex];
   const cleanRankTitle = currentArquetipo.replace(/[^\w\s()À-ÿ]/g, '').trim();
   const levelColorIndex = Math.max(0, (currentLevel > 0 ? currentLevel - 1 : 0)) % NASCENTE_12_COLORS.length;
@@ -679,7 +690,19 @@ export default function UserPresence({
             <span className={styles.scouterConsciousnessLabel}>NÍVEL DE CONSCIÊNCIA</span>
             
             {/* Hexágono com apenas borda na cor do nível (12 cores da nascente), sem rotação */}
-            <div className={styles.scouterHexWrapper}>
+            <div 
+              className={styles.scouterHexWrapper}
+              onClick={() => {
+                if (typeof window !== 'undefined' && profile?.id) {
+                  const curr = parseInt(localStorage.getItem(`zeroday_level_override_${profile.id}`) || '0');
+                  const next = curr >= 100 ? 0 : 100;
+                  localStorage.setItem(`zeroday_level_override_${profile.id}`, next.toString());
+                  window.location.reload();
+                }
+              }}
+              title="Nível de Consciência (Clique para alternar teste de Nível 100)"
+              style={{ cursor: 'pointer' }}
+            >
               <svg viewBox="0 0 100 115.47" className={styles.scouterHexSvg}>
                 <polygon
                   points="50 3, 97 29.8, 97 85.6, 50 112.5, 3 85.6, 3 29.8"
@@ -708,12 +731,23 @@ export default function UserPresence({
               <div 
                 className={styles.scouterExpFill} 
                 style={{ 
-                  width: `${Math.min(100, Math.max(4, (currentLevel / 33) * 100))}%`,
+                  width: `${Math.min(100, Math.max(4, currentLevelProgress))}%`,
                   background: `linear-gradient(90deg, ${currentConsciousnessColor}88, ${currentConsciousnessColor})`,
                   boxShadow: `0 0 10px ${currentConsciousnessColor}`
                 }}
               />
             </div>
+
+            {/* Desbloqueio do Nível 100: Criar Sua Própria Realidade */}
+            {currentLevel >= 100 && (
+              <button 
+                className={styles.scouterRealityBtn}
+                onClick={() => setShowCustomRealityModal(true)}
+                title="Desbloqueado no Nível 100: Customize os 8 seres da sua realidade"
+              >
+                <Crown size={14} /> CRIAR SUA PRÓPRIA REALIDADE
+              </button>
+            )}
           </div>
 
           {/* Espectro das 12 Cores da Nascente */}
@@ -874,6 +908,14 @@ export default function UserPresence({
               </div>
             </div>
       </div>
+
+      {profile?.id && (
+        <CustomRealityModal 
+          isOpen={showCustomRealityModal} 
+          onClose={() => setShowCustomRealityModal(false)} 
+          userId={profile.id} 
+        />
+      )}
     </motion.div>
   );
 }

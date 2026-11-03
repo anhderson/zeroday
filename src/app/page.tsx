@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -25,7 +25,7 @@ import LuaProjetada, { MoonState } from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
 import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
-import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES, getBeingCanonicalColor } from "@/lib/archetypes";
+import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES, getBeingCanonicalColor, getEffectiveBeing } from "@/lib/archetypes";
 import styles from "./page.module.css";
 
 export const TRANSCEND_ACTION_COLORS: Record<string, string> = {
@@ -461,6 +461,24 @@ function HomeContent() {
   const [storyModalLoading, setStoryModalLoading] = useState<boolean>(false);
   const [storyLatestPost, setStoryLatestPost] = useState<any | null>(null);
   const [storyProfileData, setStoryProfileData] = useState<any | null>(null);
+  const [customArchetypesTrigger, setCustomArchetypesTrigger] = useState(0);
+
+  useEffect(() => {
+    const handleCustomUpdate = () => setCustomArchetypesTrigger(prev => prev + 1);
+    window.addEventListener('zeroday:custom_beings_updated', handleCustomUpdate);
+    return () => window.removeEventListener('zeroday:custom_beings_updated', handleCustomUpdate);
+  }, []);
+
+  const isUserLevel100 = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    if (user?.id) {
+      const override = parseInt(localStorage.getItem(`zeroday_level_override_${user.id}`) || '0');
+      if (override >= 100) return true;
+    }
+    if (profile?.level && profile.level >= 100) return true;
+    const userNodesCount = manifestations.filter(m => m.user_id === user?.id).length;
+    return Math.floor(userNodesCount / 5) >= 100;
+  }, [user?.id, profile?.level, manifestations, customArchetypesTrigger]);
 
   // Logo physics
   const [logoHovered, setLogoHovered] = useState(false);
@@ -586,7 +604,7 @@ function HomeContent() {
 
   const triggerLaserConvergence = () => {
     setRitualSixSec(true);
-    setTimeout(() => setRitualSixSec(false), 1600);
+    setTimeout(() => setRitualSixSec(false), 2000);
 
     // Quando as 8 luzes atingirem o centro no topo (~800ms):
     setTimeout(() => {
@@ -802,6 +820,7 @@ function HomeContent() {
         // Fallback caso seja um arquétipo sem post recente no banco
         const arc = ARCHETYPE_PROFILES[userId];
         if (arc) {
+          const eff = getEffectiveBeing(userId, user?.id, isUserLevel100);
           setStoryLatestPost({
             id: `arc-post-${userId}`,
             user_id: userId,
@@ -810,8 +829,8 @@ function HomeContent() {
             created_at: new Date().toISOString(),
             profiles: {
               id: userId,
-              username: arc.name,
-              avatar_url: arc.avatar
+              username: eff.username,
+              avatar_url: eff.image
             }
           });
         }
@@ -842,11 +861,12 @@ function HomeContent() {
       } else {
         const arc = ARCHETYPE_PROFILES[userId];
         if (arc) {
+          const eff = getEffectiveBeing(userId, user?.id, isUserLevel100);
           setStoryProfileData({
             id: userId,
-            username: arc.name,
-            full_name: arc.name,
-            avatar_url: arc.avatar,
+            username: eff.username,
+            full_name: eff.username,
+            avatar_url: eff.image,
             bio: arc.phrase,
             title: arc.title
           });
@@ -2072,7 +2092,9 @@ function HomeContent() {
                       { id: '00000000-0000-0000-0000-000000000004', username: 'Luxênus', label: 'Inveja 🌊', image: '/personagens/Luxenus.png' },
                       { id: '00000000-0000-0000-0000-000000000007', username: 'Gúpiter', label: 'Luxúria 💋', image: '/personagens/Gupiter.png' },
                       { id: '00000000-0000-0000-0000-000000000003', username: 'Iramar', label: 'Avareza 💰', image: '/personagens/Iramar.png' },
-                    ].map((s, i) => {
+                    ].map((rawBeing, i) => {
+                      const eff = getEffectiveBeing(rawBeing.id, user?.id, isUserLevel100);
+                      const s = { ...rawBeing, username: eff.username, image: eff.image };
                       const hasShutter = s.id !== '00000000-0000-0000-0000-000000000001';
                       const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
                       return (
@@ -2231,7 +2253,9 @@ function HomeContent() {
                       { id: '00000000-0000-0000-0000-000000000002', username: 'Sobturno', label: 'Soberba ⚡', image: '/personagens/Sobturno.png' },
                       { id: '00000000-0000-0000-0000-000000000006', username: 'Inveranus', label: 'Preguiça 💤', image: '/personagens/Inveranus.png' },
                       { id: '00000000-0000-0000-0000-000000000008', username: 'Pretuno', label: 'Ira 💢', image: '/personagens/Pretuno.png' },
-                    ].map((s, i) => {
+                    ].map((rawBeing, i) => {
+                      const eff = getEffectiveBeing(rawBeing.id, user?.id, isUserLevel100);
+                      const s = { ...rawBeing, username: eff.username, image: eff.image };
                       const hasShutter = true;
                       const isSelected = !!storyModalType && storyModalTarget?.id === s.id;
                       return (
@@ -3474,6 +3498,14 @@ function HomeContent() {
                     <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
                   </linearGradient>
                 ))}
+                {/* Gradiente do cone vermelho ofuscante de cima para baixo */}
+                <linearGradient id="redConeGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="5%" stopColor="#ff0022" stopOpacity="0.95" />
+                  <stop offset="30%" stopColor="#ff1744" stopOpacity="0.85" />
+                  <stop offset="70%" stopColor="#d50000" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#880000" stopOpacity="0.0" />
+                </linearGradient>
               </defs>
               {BEING_BEAM_COLORS.map((color, idx) => {
                 const isLeft = idx < 4;
@@ -3502,16 +3534,30 @@ function HomeContent() {
                   />
                 );
               })}
-              {/* Ponto central de encontro com flash no topo na lua */}
+              {/* Ponto central de encontro com flash no topo na lua: surge e desaparece mais rápido (~0.32s) */}
               <motion.circle
                 cx={typeof window !== 'undefined' ? window.innerWidth / 2 : 960}
                 cy={65}
                 r={24}
                 fill="#ffffff"
                 initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: [0, 1.8, 0], opacity: [0, 1, 0] }}
-                transition={{ duration: 0.6, delay: 0.75 }}
+                animate={{ scale: [0, 1.6, 0], opacity: [0, 1, 0] }}
+                transition={{ duration: 0.32, delay: 0.75, ease: "easeOut" }}
                 style={{ filter: 'drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px #ffffff)' }}
+              />
+
+              {/* Assim que a esfera branca desaparece (delay 1.07s): pisca luz vermelha forte na página toda em forma de cone triangular partindo do ponto central */}
+              <motion.polygon
+                points={`${typeof window !== 'undefined' ? window.innerWidth / 2 : 960},65 -150,${typeof window !== 'undefined' ? window.innerHeight + 150 : 1230} ${typeof window !== 'undefined' ? window.innerWidth + 150 : 2070},${typeof window !== 'undefined' ? window.innerHeight + 150 : 1230}`}
+                fill="url(#redConeGradient)"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.95, 0] }}
+                transition={{ duration: 0.45, delay: 1.07, ease: "easeInOut" }}
+                style={{ 
+                  filter: 'drop-shadow(0 0 35px #ff0022) drop-shadow(0 0 70px #ff1744) blur(1.5px)',
+                  mixBlendMode: 'screen',
+                  pointerEvents: 'none'
+                }}
               />
             </svg>
           )}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Shield, Sparkles, Brain, Check, ChevronRight, Hash } from 'lucide-react';
+import { BookOpen, Shield, Sparkles, Brain, Check, ChevronRight, Hash, Crown } from 'lucide-react';
 import styles from './WelcomeGuide.module.css';
 
 const STEPS = [
@@ -29,6 +29,12 @@ const STEPS = [
     title: 'Santuário de Harmonia',
     icon: <Sparkles size={24} />,
     content: 'Este é um ambiente de recreação arcanas, onde a magia se encontra com a saúde mental. Divirta-se, explore o impossível e mantenha seu campo áurico limpo e vibrante.',
+  },
+  {
+    id: 'level100',
+    title: 'Nível 100: Realidade Própria',
+    icon: <Crown size={24} />,
+    content: 'Ao alcançar o Level 100 de Consciência, você ascende ao ápice da existência: você poderá criar a sua própria realidade em Zero Day. A aplicação permitirá que você redefina os 8 seres arquetípicos com suas próprias imagens e nomes personalizados que representem sua verdade, visíveis exclusivamente na sua percepção cósmica.',
   }
 ];
 
