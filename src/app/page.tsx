@@ -463,6 +463,7 @@ function HomeContent() {
   const [storyProfileData, setStoryProfileData] = useState<any | null>(null);
   const [customArchetypesTrigger, setCustomArchetypesTrigger] = useState(0);
   const [showTypingPreview, setShowTypingPreview] = useState(false);
+  const [isTextareaActive, setIsTextareaActive] = useState(false);
 
   useEffect(() => {
     const handleCustomUpdate = () => setCustomArchetypesTrigger(prev => prev + 1);
@@ -3750,13 +3751,16 @@ function HomeContent() {
           {showTypingPreview && (
             <motion.div 
               className={styles.typingPreviewOverlay} 
-              onClick={() => setShowTypingPreview(false)}
+              onClick={() => {
+                setShowTypingPreview(false);
+                setIsTextareaActive(false);
+              }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
               <motion.div 
-                className={styles.typingPreviewModal}
+                className={`${styles.typingPreviewModal} ${isTextareaActive ? styles.typingPreviewModalShifted : ''}`}
                 initial={{ opacity: 0, scale: 0.93, y: 15 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.93, y: 15 }}
@@ -3782,7 +3786,10 @@ function HomeContent() {
                   <button 
                     type="button" 
                     className={styles.typingPreviewCloseBtn}
-                    onClick={() => setShowTypingPreview(false)}
+                    onClick={() => {
+                      setShowTypingPreview(false);
+                      setIsTextareaActive(false);
+                    }}
                     title="Fechar Pré-visualização"
                   >
                     <X size={18} />
@@ -3832,12 +3839,17 @@ function HomeContent() {
                 </div>
 
                 {/* Input Textarea direta na Janela de Digitação */}
-                <div className={styles.typingPreviewInputWrapper}>
+                <div 
+                  className={styles.typingPreviewInputWrapper}
+                  onClick={() => setIsTextareaActive(true)}
+                >
                   <textarea
                     autoFocus
                     rows={3}
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
+                    onClick={() => setIsTextareaActive(true)}
+                    onFocus={() => setIsTextareaActive(true)}
                     placeholder="Digite o que sua consciência deseja manifestar..."
                     className={styles.typingPreviewTextarea}
                     disabled={isSending}
@@ -3880,6 +3892,7 @@ function HomeContent() {
                     onClick={async () => {
                       await handleSendChatMessage();
                       setShowTypingPreview(false);
+                      setIsTextareaActive(false);
                     }}
                     disabled={(!chatMessage.trim() && !attachedFiles.image && !attachedFiles.audio) || isSending}
                     style={{ 
