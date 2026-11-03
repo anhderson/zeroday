@@ -7,9 +7,10 @@ export type MoonState = "normal" | "red" | "flash_black";
 
 interface LuaProjetadaProps {
   moonState?: MoonState;
+  isGlitching?: boolean;
 }
 
-export default function LuaProjetada({ moonState: propMoonState }: LuaProjetadaProps) {
+export default function LuaProjetada({ moonState: propMoonState, isGlitching }: LuaProjetadaProps) {
   const [internalState, setInternalState] = useState<MoonState>("normal");
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function LuaProjetada({ moonState: propMoonState }: LuaProjetadaP
       aria-hidden="true"
       className={styles.moonContainer}
     >
-      {/* Luz ofuscante de sombreamento por volta na cor branca */}
+      {/* Luz em torno justa como borda da Lua */}
       <div className={styles.moonWhiteAura} />
 
       {/* Camada 1: Luacheiapreto como último na camada (base) */}
@@ -50,7 +51,9 @@ export default function LuaProjetada({ moonState: propMoonState }: LuaProjetadaP
         src="/esferas/Luacheiabranca.png"
         alt="Lua Cheia Branca"
         className={`${styles.moonLayer} ${styles.layerWhite} ${
-          currentState === "flash_black"
+          isGlitching
+            ? styles.whiteInvisible
+            : currentState === "flash_black"
             ? styles.whiteBlink
             : currentState === "red"
             ? styles.whiteDimmed

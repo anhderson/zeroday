@@ -3,32 +3,38 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 140px;
-  height: 140px;
+  width: 124px;
+  height: 124px;
   z-index: 1;
   pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Luz ofuscante de sombreamento por volta na cor branca */
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.95))
-          drop-shadow(0 0 50px rgba(255, 255, 255, 0.6))
-          drop-shadow(0 0 85px rgba(255, 255, 255, 0.3));
+  border-radius: 50%;
 }
 
+/* Luz em torno justa como borda da Lua (em vez de borda sombreada difusa) */
 .moonWhiteAura {
   position: absolute;
-  inset: -12px;
+  inset: 0px;
   border-radius: 50%;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.25) 50%, transparent 75%);
   pointer-events: none;
-  z-index: 0;
-  animation: whiteAuraPulse 4s ease-in-out infinite alternate;
+  z-index: 5;
+  border: 1.5px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(255, 255, 255, 0.5),
+    inset 0 0 6px rgba(255, 255, 255, 0.7);
+  animation: whiteRimGlow 3s ease-in-out infinite alternate;
 }
 
-@keyframes whiteAuraPulse {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  100% { transform: scale(1.08); opacity: 1; }
+@keyframes whiteRimGlow {
+  0% {
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 12px rgba(255, 255, 255, 0.4), inset 0 0 5px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.85);
+  }
 }
 
 .moonLayer {
@@ -51,7 +57,7 @@
 /* Camada 2: Luacheiabranca (no meio por cima da preta) */
 .layerWhite {
   z-index: 2;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease-in-out;
 }
 
 .whiteNormal {
@@ -60,6 +66,12 @@
 
 .whiteDimmed {
   opacity: 0.15;
+}
+
+/* Esmaecer a Luacheiabranca deixando invisível durante 1 segundo quando o texto treme e fica preto */
+.whiteInvisible {
+  opacity: 0 !important;
+  transition: opacity 0.35s ease-in-out;
 }
 
 /* Piscar durante 1 segundo mostrando melhor a Luacheiapreto */

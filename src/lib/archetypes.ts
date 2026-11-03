@@ -122,6 +122,79 @@ export const OLD_NAME_TO_ARCHETYPE: Record<string, string> = {
   daemon: '00000000-0000-0000-0000-000000000008',
 };
 
+// Cores canônicas dos 8 seres
+export const BEING_CANONICAL_COLORS: Record<string, string> = {
+  // Luxyus: Branco
+  '00000000-0000-0000-0000-000000000001': '#ffffff',
+  luxyus: '#ffffff',
+  lumiar: '#ffffff',
+  lumíar: '#ffffff',
+  ilusionmon: '#ffffff',
+
+  // Luxênus: Rosa
+  '00000000-0000-0000-0000-000000000004': '#ff4081',
+  luxênus: '#ff4081',
+  luxenus: '#ff4081',
+  invidrax: '#ff4081',
+  leviamon: '#ff4081',
+
+  // Gúpiter: Roxo
+  '00000000-0000-0000-0000-000000000007': '#a855f7',
+  gúpiter: '#a855f7',
+  gupiter: '#a855f7',
+  luxarys: '#a855f7',
+  lilithmon: '#a855f7',
+
+  // Iramar: Vermelho
+  '00000000-0000-0000-0000-000000000003': '#ef4444',
+  iramar: '#ef4444',
+  avarok: '#ef4444',
+  barbamon: '#ef4444',
+
+  // Avarcúrio: Laranja
+  '00000000-0000-0000-0000-000000000005': '#f97316',
+  avarcúrio: '#f97316',
+  avarcurio: '#f97316',
+  vorath: '#f97316',
+  beelzemon: '#f97316',
+
+  // Sobturno: Amarelo
+  '00000000-0000-0000-0000-000000000002': '#ffd700',
+  sobturno: '#ffd700',
+  soberath: '#ffd700',
+  lucemon: '#ffd700',
+
+  // Inveranus: Verde
+  '00000000-0000-0000-0000-000000000006': '#22c55e',
+  inveranus: '#22c55e',
+  acedrion: '#22c55e',
+  belphemon: '#22c55e',
+
+  // Pretuno: Azul
+  '00000000-0000-0000-0000-000000000008': '#00b0ff',
+  pretuno: '#00b0ff',
+  irazor: '#00b0ff',
+  irázor: '#00b0ff',
+  daemon: '#00b0ff'
+};
+
+export function getBeingCanonicalColor(userId?: string | null, rawUsername?: string | null): string | null {
+  if (userId && BEING_CANONICAL_COLORS[userId]) {
+    return BEING_CANONICAL_COLORS[userId];
+  }
+  if (rawUsername) {
+    const key = rawUsername.toLowerCase().trim();
+    if (BEING_CANONICAL_COLORS[key]) {
+      return BEING_CANONICAL_COLORS[key];
+    }
+    const id = OLD_NAME_TO_ARCHETYPE[key];
+    if (id && BEING_CANONICAL_COLORS[id]) {
+      return BEING_CANONICAL_COLORS[id];
+    }
+  }
+  return null;
+}
+
 export function resolveArchetype(userId?: string | null, rawUsername?: string | null): ArchetypeProfile | null {
   if (userId && ARCHETYPE_PROFILES[userId]) {
     return ARCHETYPE_PROFILES[userId];

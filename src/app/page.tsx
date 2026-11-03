@@ -25,7 +25,7 @@ import LuaProjetada, { MoonState } from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
 import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
-import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES } from "@/lib/archetypes";
+import { normalizeNodeProfiles, getCleanUsername, getCleanAvatar, ARCHETYPE_PROFILES, getBeingCanonicalColor } from "@/lib/archetypes";
 import styles from "./page.module.css";
 
 export const TRANSCEND_ACTION_COLORS: Record<string, string> = {
@@ -2186,8 +2186,8 @@ function HomeContent() {
                   );
                 })}
 
-                {/* Lua com as 3 camadas (Preto, Branca, Vermelho) e luz ofuscante branca */}
-                <LuaProjetada moonState={moonState} />
+                {/* Lua com as 3 camadas (Preto, Branca, Vermelho) e luz em torno como borda justa */}
+                <LuaProjetada moonState={moonState} isGlitching={sparkActive} />
                 <h2 className={styles.fluxoTitle} data-active={sparkActive ? '1' : '0'}>
                   Nascente Universal
                 </h2>
@@ -2366,6 +2366,15 @@ function HomeContent() {
                }));
 
 
+               const beingColor = getBeingCanonicalColor(manifest.user_id, manifest.profiles?.username);
+               const activeVibeColor = beingColor || (transcendActive ? (ACTION_NEON_COLORS[manifest.type] || '#ffffff') : '#ffffff');
+               const activeVibeGlow = beingColor 
+                 ? `${beingColor}66`
+                 : (transcendActive 
+                     ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${ACTION_NEON_COLORS[manifest.type] || '#fff'}44`)
+                     : 'rgba(255, 255, 255, 0.25)');
+               const activeDesignNeon = beingColor || ACTION_NEON_COLORS[manifest.type] || '#00f3ff';
+
                return (
               <motion.div 
                 key={manifest.id}
@@ -2377,17 +2386,15 @@ function HomeContent() {
                 data-window="true"
                 style={{ 
                   transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-                  '--vibe-color': transcendActive ? (ACTION_NEON_COLORS[manifest.type] || '#ffffff') : '#ffffff',
-                  '--vibe-glow': transcendActive 
-                    ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${ACTION_NEON_COLORS[manifest.type] || '#fff'}44`)
-                    : 'rgba(255, 255, 255, 0.25)',
-                  '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff'
+                  '--vibe-color': activeVibeColor,
+                  '--vibe-glow': activeVibeGlow,
+                  '--design-neon': activeDesignNeon
                 } as any}
               >
                 <div className={styles.manifestHeader}>
                   <div className={styles.headerColumn}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      <span className={styles.username}>
+                      <span className={styles.username} style={beingColor ? { color: beingColor, textShadow: `0 0 10px ${beingColor}66` } : undefined}>
                         @{getCleanUsername(manifest.user_id, manifest.profiles?.username, `presenca_${manifest.id.slice(0, 4)}`)}
                       </span>
                       {isInterference && (

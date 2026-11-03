@@ -13,7 +13,7 @@ import {
   Heart, Scale, Leaf, Cloud, Minus, Plus
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { getCleanUsername, getCleanAvatar, resolveArchetype, normalizeNodeProfiles } from "@/lib/archetypes";
+import { getCleanUsername, getCleanAvatar, resolveArchetype, normalizeNodeProfiles, getBeingCanonicalColor } from "@/lib/archetypes";
 import UserPresence from "@/components/UserPresence";
 import ProfileSettings from "@/components/ProfileSettings";
 import StoryBar from "@/components/StoryBar";
@@ -530,12 +530,29 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
           .single();
         if (uprofile) {
           const arc = resolveArchetype(uprofile.id, uprofile.username);
+          const canonColor = getBeingCanonicalColor(uprofile.id, uprofile.username || arc?.name);
           setCurrentUserProfile(arc ? {
             ...uprofile,
             username: arc.name,
             full_name: arc.name,
-            avatar_url: arc.avatar
-          } : uprofile);
+            avatar_url: arc.avatar,
+            ...(canonColor ? {
+              nexo_color: canonColor,
+              cloak_color: canonColor,
+              hat_color: canonColor,
+              stone_border_color: canonColor,
+              stone_internal_color: canonColor,
+              cloak_emblem_color: canonColor,
+            } : {})
+          } : (canonColor ? {
+            ...uprofile,
+            nexo_color: canonColor,
+            cloak_color: canonColor,
+            hat_color: canonColor,
+            stone_border_color: canonColor,
+            stone_internal_color: canonColor,
+            cloak_emblem_color: canonColor,
+          } : uprofile));
         }
       }
     };
@@ -582,14 +599,31 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       if (profileError) throw profileError;
       if (profileData) {
         const arc = resolveArchetype(profileData.id, profileData.username);
+        const canonColor = getBeingCanonicalColor(profileData.id, profileData.username || arc?.name);
         setProfile(arc ? {
           ...profileData,
           username: arc.name,
           full_name: arc.name,
           character_name: profileData.character_name || arc.name,
           real_name: profileData.real_name || arc.name,
-          avatar_url: arc.avatar
-        } : profileData);
+          avatar_url: arc.avatar,
+          ...(canonColor ? {
+            nexo_color: canonColor,
+            cloak_color: canonColor,
+            hat_color: canonColor,
+            stone_border_color: canonColor,
+            stone_internal_color: canonColor,
+            cloak_emblem_color: canonColor,
+          } : {})
+        } : (canonColor ? {
+          ...profileData,
+          nexo_color: canonColor,
+          cloak_color: canonColor,
+          hat_color: canonColor,
+          stone_border_color: canonColor,
+          stone_internal_color: canonColor,
+          cloak_emblem_color: canonColor,
+        } : profileData));
       }
 
       const { data: manifestationsData, error: manifestationsError } = await supabase
@@ -610,6 +644,25 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
       if (currentUser) fetchFollowedUsers(currentUser.id);
     } catch (err) {
       console.error("Error load profile:", err);
+      const arc = resolveArchetype(userId);
+      if (arc) {
+        const canonColor = getBeingCanonicalColor(userId, arc.name);
+        setProfile({
+          id: userId,
+          username: arc.name,
+          full_name: arc.name,
+          character_name: arc.name,
+          real_name: arc.name,
+          avatar_url: arc.avatar,
+          bio: arc.phrase,
+          nexo_color: canonColor || '#00f3ff',
+          cloak_color: canonColor || '#00f3ff',
+          hat_color: canonColor || '#00f3ff',
+          stone_border_color: canonColor || '#00f3ff',
+          stone_internal_color: canonColor || '#00f3ff',
+          cloak_emblem_color: canonColor || '#00f3ff',
+        } as any);
+      }
     } finally {
       setLoading(false);
     }
@@ -7924,7 +7977,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                       );
                     })}
 
-                    <LuaProjetada />
+                    <LuaProjetada isGlitching={sparkActive} />
                     <h2 className={styles.fluxoTitle} data-active={sparkActive ? '1' : '0'}>
                       Fluxo de Consciência
                     </h2>
@@ -7971,6 +8024,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                   `consciencia_${manifest.id.slice(0, 4)}`
                 );
 
+                const beingColor = getBeingCanonicalColor(manifest.user_id, authorUsername);
+
                 return (
                 <motion.div 
                   key={manifest.id}
@@ -7982,17 +8037,19 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                   data-window="true"
                   style={{ 
                     transition: 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-                    '--vibe-color': transcendActive ? (ACTION_NEON_COLORS[manifest.type] || '#ffffff') : '#ffffff',
-                    '--vibe-glow': transcendActive 
-                      ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${ACTION_NEON_COLORS[manifest.type] || '#fff'}44`)
-                      : 'rgba(255, 255, 255, 0.25)',
-                    '--design-neon': ACTION_NEON_COLORS[manifest.type] || '#00f3ff'
+                    '--vibe-color': beingColor || (transcendActive ? (ACTION_NEON_COLORS[manifest.type] || '#ffffff') : '#ffffff'),
+                    '--vibe-glow': beingColor
+                      ? `${beingColor}44`
+                      : (transcendActive 
+                        ? (manifest.type === 'integrar' ? 'rgba(255,255,255,0.4)' : `${ACTION_NEON_COLORS[manifest.type] || '#fff'}44`)
+                        : 'rgba(255, 255, 255, 0.25)'),
+                    '--design-neon': beingColor || ACTION_NEON_COLORS[manifest.type] || '#00f3ff'
                   } as any}
                 >
                   <div className={styles.manifestHeader}>
                     <div className={styles.headerColumn}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                        <span className={styles.username}>
+                        <span className={styles.username} style={beingColor ? { color: beingColor, textShadow: `0 0 8px ${beingColor}` } : {}}>
                           @{authorUsername}
                         </span>
                         {isInterference && (
