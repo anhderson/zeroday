@@ -63,9 +63,28 @@ export default function UserSearch({
         .from('profiles')
         .select('id, username, full_name, avatar_url')
         .ilike('username', `%${query}%`)
-        .limit(5);
+        .limit(10);
 
-      setResults(profileData || []);
+      const allowedIds = new Set([
+        '00000000-0000-0000-0000-000000000001',
+        '00000000-0000-0000-0000-000000000002',
+        '00000000-0000-0000-0000-000000000003',
+        '00000000-0000-0000-0000-000000000004',
+        '00000000-0000-0000-0000-000000000005',
+        '00000000-0000-0000-0000-000000000006',
+        '00000000-0000-0000-0000-000000000007',
+        '00000000-0000-0000-0000-000000000008',
+        '8c656cd4-3dd8-465c-8e0f-826158202f0b',
+        'd81e4f3a-dea8-4c3f-bc29-5a3ed6c1ba0f'
+      ]);
+
+      const filteredProfiles = (profileData || []).filter(p => 
+        allowedIds.has(p.id) || 
+        (p.username && p.username.toLowerCase().includes('zero')) ||
+        (p.full_name && p.full_name.toLowerCase().includes('anderson'))
+      );
+
+      setResults(filteredProfiles);
 
       // 2. Buscar Tags (na tabela de sentimentos que começam com tag:)
       const cleanQuery = query.replace('#', '').toLowerCase();

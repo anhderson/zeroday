@@ -1,0 +1,95 @@
+.moonContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Luz ofuscante de sombreamento por volta na cor branca */
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.95))
+          drop-shadow(0 0 50px rgba(255, 255, 255, 0.6))
+          drop-shadow(0 0 85px rgba(255, 255, 255, 0.3));
+}
+
+.moonWhiteAura {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.25) 50%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+  animation: whiteAuraPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes whiteAuraPulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1; }
+}
+
+.moonLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Camada 1: Luacheiapreto (última camada na base) */
+.layerBlack {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Camada 2: Luacheiabranca (no meio por cima da preta) */
+.layerWhite {
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.whiteNormal {
+  opacity: 1;
+}
+
+.whiteDimmed {
+  opacity: 0.15;
+}
+
+/* Piscar durante 1 segundo mostrando melhor a Luacheiapreto */
+.whiteBlink {
+  animation: whiteFlicker 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes whiteFlicker {
+  0% { opacity: 1; }
+  15% { opacity: 0; }
+  25% { opacity: 0.75; }
+  40% { opacity: 0; }
+  55% { opacity: 0.5; }
+  70% { opacity: 0; }
+  85% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* Camada 3: Luacheiavermelho */
+.layerRed {
+  z-index: 3;
+  transition: opacity 0.4s ease-in-out, filter 0.4s ease-in-out;
+}
+
+.redHidden {
+  opacity: 0;
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+.redActive {
+  opacity: 1;
+  filter: drop-shadow(0 0 18px rgba(255, 30, 30, 0.9)) drop-shadow(0 0 35px rgba(255, 0, 0, 0.5));
+}

@@ -21,7 +21,7 @@ import ProfileSettings from "@/components/ProfileSettings";
 import StoryBar from "@/components/StoryBar";
 import UserSearch from "@/components/UserSearch";
 import RealtimePulse from "@/components/RealtimePulse";
-import LuaProjetada from "@/components/LuaProjetada";
+import LuaProjetada, { MoonState } from "@/components/LuaProjetada";
 import StarField from "@/components/StarField";
 import SpiritualWater from "@/components/SpiritualWater";
 import ManifestationsGuideModal from "@/components/ManifestationsGuideModal";
@@ -121,6 +121,18 @@ const SPARK_COLORS = [
   '#00e676', // 10. Integrar (Verde)
   '#00f3ff', // 11. Soltar (Ciano / azul-turquesa)
   '#0066ff', // 12. Transcender (Azul)
+];
+
+// Cores correspondentes às 8 luzes dos seres (Luxyus, Luxênus, Gúpiter, Iramar, Avarcúrio, Sobturno, Inveranus, Pretuno)
+const BEING_BEAM_COLORS = [
+  '#ffffff', // 1. Luxyus (Branca)
+  '#ff4081', // 2. Luxênus (Rosa)
+  '#a855f7', // 3. Gúpiter (Roxo)
+  '#ef4444', // 4. Iramar (Vermelho)
+  '#f97316', // 5. Avarcúrio (Laranja)
+  '#ffd700', // 6. Sobturno (Amarelo)
+  '#22c55e', // 7. Inveranus (Verde)
+  '#00b0ff', // 8. Pretuno (Azul)
 ];
 
 const ACTION_NEON_COLORS: Record<string, string> = {
@@ -418,6 +430,7 @@ function HomeContent() {
   const [profile, setProfile] = useState<any>(null);
   const [moonPhaseIdx, setMoonPhaseIdx] = useState(0);
   const [sparkActive, setSparkActive] = useState(false);
+  const [moonState, setMoonState] = useState<MoonState>('normal');
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [selectedDesignColor, setSelectedDesignColor] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -571,6 +584,24 @@ function HomeContent() {
     }
   };
 
+  const triggerLaserConvergence = () => {
+    setRitualSixSec(true);
+    setTimeout(() => setRitualSixSec(false), 1600);
+
+    // Quando as 8 luzes atingirem o centro no topo (~800ms):
+    setTimeout(() => {
+      setMoonState('red'); // Transforma esmaecendo para Luacheiavermelho durante 1 segundo
+
+      setTimeout(() => {
+        setMoonState('flash_black'); // Piscar durante 1 segundo Luacheiabranca mostrando melhor a Luacheiapreto
+
+        setTimeout(() => {
+          setMoonState('normal'); // Volta ao normal
+        }, 1000);
+      }, 1000);
+    }, 800);
+  };
+
   // Unified Harmonic Ritual: Sync with Nascente Spells
   useEffect(() => {
     const interval = setInterval(() => {
@@ -581,12 +612,11 @@ function HomeContent() {
       setSparkCount(prev => {
         const next = prev + 1;
         
-        // At 2nd spark (14s), queue lasers for 20s mark (6s later)
+        // At 2nd spark (14s), queue lasers for convergence mark (6s later)
         if (next === 2) {
           setTimeout(() => {
-            setRitualSixSec(true);
-            setTimeout(() => setRitualSixSec(false), 1200);
-          }, 6000); // 14s + 6s = 20s
+            triggerLaserConvergence();
+          }, 4500);
         }
         
         // At 3rd spark (21s), trigger Mega Hexagram Blink
@@ -661,6 +691,25 @@ function HomeContent() {
         'lumiar', 'soberath', 'avarok', 'invidrax', 'vorath', 'acedrion', 'luxarys', 'irazor', 'zero'
       ]);
 
+      const isZeroAnderson = (uid: string, p: any) => {
+        const validIds = new Set([
+          '8c656cd4-3dd8-465c-8e0f-826158202f0b',
+          'd81e4f3a-dea8-4c3f-bc29-5a3ed6c1ba0f',
+          '4e94cfe4-7690-4114-8521-aaa114610bdf'
+        ]);
+        if (validIds.has(uid) || (p?.id && validIds.has(p.id))) return true;
+        const uname = (p?.username || '').toLowerCase();
+        const fname = (p?.full_name || '').toLowerCase();
+        const rname = (p?.real_name || '').toLowerCase();
+        const cname = (p?.character_name || '').toLowerCase();
+        return (
+          uname === 'zero' ||
+          cname === 'zero' ||
+          fname.includes('anderson') ||
+          rname.includes('anderson')
+        );
+      };
+
       // 1. Buscar os posts mais recentes para ordenar os usuários da esquerda para a direita pelo post mais novo
       const { data: recentNodes } = await supabase
         .from('consciousness_nodes')
@@ -679,16 +728,15 @@ function HomeContent() {
           const uid = item.user_id;
           if (!uid || BOT_IDS.has(uid) || uid.startsWith('00000000') || Object.keys(ARCHETYPE_PROFILES).includes(uid)) continue;
           const p = Array.isArray(item.profiles) ? item.profiles[0] : item.profiles;
-          const uname = (p?.username || '').toLowerCase();
-          if (BOT_NAMES.has(uname)) continue;
+          if (!isZeroAnderson(uid, p)) continue;
 
           if (!realUsersMap.has(uid)) {
             realUsersMap.set(uid, {
               id: uid,
-              username: p?.username || 'consciencia',
+              username: p?.character_name || p?.username || 'Zero',
               avatar_url: p?.avatar_url,
-              full_name: p?.full_name,
-              character_name: p?.character_name,
+              full_name: p?.full_name || 'Zero Anderson',
+              character_name: p?.character_name || 'Zero',
               latest_post_at: item.created_at
             });
           }
@@ -696,8 +744,8 @@ function HomeContent() {
         }
       }
 
-      // 2. Completar com outros perfis reais cadastrados que ainda não postaram
-      if (realUsersMap.size < 8) {
+      // 2. Se Zero Anderson ainda não postou, buscar nos perfis
+      if (realUsersMap.size === 0) {
         const { data: allProfiles } = await supabase
           .from('profiles')
           .select('*')
@@ -706,20 +754,19 @@ function HomeContent() {
         if (allProfiles) {
           for (const p of allProfiles) {
             if (!p || !p.id || BOT_IDS.has(p.id) || p.id.startsWith('00000000') || Object.keys(ARCHETYPE_PROFILES).includes(p.id)) continue;
-            const uname = (p.username || '').toLowerCase();
-            if (BOT_NAMES.has(uname)) continue;
+            if (!isZeroAnderson(p.id, p)) continue;
 
             if (!realUsersMap.has(p.id)) {
               realUsersMap.set(p.id, {
                 id: p.id,
-                username: p.username || 'consciencia',
+                username: p.character_name || p.username || 'Zero',
                 avatar_url: p.avatar_url,
-                full_name: p.full_name,
-                character_name: p.character_name,
+                full_name: p.full_name || 'Zero Anderson',
+                character_name: p.character_name || 'Zero',
                 latest_post_at: null
               });
             }
-            if (realUsersMap.size >= 8) break;
+            break;
           }
         }
       }
@@ -2139,8 +2186,8 @@ function HomeContent() {
                   );
                 })}
 
-                {/* Lua transparente — sobre as faíscas, abaixo do título */}
-                <LuaProjetada />
+                {/* Lua com as 3 camadas (Preto, Branca, Vermelho) e luz ofuscante branca */}
+                <LuaProjetada moonState={moonState} />
                 <h2 className={styles.fluxoTitle} data-active={sparkActive ? '1' : '0'}>
                   Nascente Universal
                 </h2>
@@ -3409,23 +3456,26 @@ function HomeContent() {
             <svg 
               className={styles.convergenceOverlay} 
               viewBox={`0 0 ${typeof window !== 'undefined' ? window.innerWidth : 1920} ${typeof window !== 'undefined' ? window.innerHeight : 1080}`}
+              style={{ pointerEvents: 'none' }}
             >
               <defs>
-                <linearGradient id="convergenceGradientTop" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="white" stopOpacity="0" />
-                  <stop offset="50%" stopColor="white" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="white" stopOpacity="1" />
-                </linearGradient>
+                {BEING_BEAM_COLORS.map((color, idx) => (
+                  <linearGradient key={`conv-grad-${idx}`} id={`convergenceGrad-${idx}`} x1="0%" y1="100%" x2="0%" y2="0%">
+                    <stop offset="0%" stopColor={color} stopOpacity="0" />
+                    <stop offset="35%" stopColor={color} stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                  </linearGradient>
+                ))}
               </defs>
-              {Array.from({ length: 8 }).map((_, idx) => {
+              {BEING_BEAM_COLORS.map((color, idx) => {
                 const isLeft = idx < 4;
                 const screenW = typeof window !== 'undefined' ? window.innerWidth : 1920;
                 const startX = isLeft 
-                  ? (screenW * 0.15) + (idx * 60) 
-                  : (screenW * 0.65) + ((idx - 4) * 60);
+                  ? (screenW * 0.13) + (idx * 65) 
+                  : (screenW * 0.66) + ((idx - 4) * 65);
                 const startY = 180;
                 const targetX = screenW / 2;
-                const targetY = 55;
+                const targetY = 65;
 
                 return (
                   <motion.line
@@ -3434,16 +3484,27 @@ function HomeContent() {
                     y1={startY}
                     x2={targetX}
                     y2={targetY}
-                    stroke="url(#convergenceGradientTop)"
-                    strokeWidth="2.5"
+                    stroke={`url(#convergenceGrad-${idx})`}
+                    strokeWidth="3.2"
                     initial={{ pathLength: 0, opacity: 0 }}
                     animate={{ pathLength: 1, opacity: [0, 1, 0] }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut", delay: idx * 0.05 }}
-                    style={{ filter: 'drop-shadow(0 0 15px white) drop-shadow(0 0 8px white)' }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: idx * 0.04 }}
+                    style={{ filter: `drop-shadow(0 0 14px ${color}) drop-shadow(0 0 6px #ffffff)` }}
                   />
                 );
               })}
+              {/* Ponto central de encontro com flash no topo na lua */}
+              <motion.circle
+                cx={typeof window !== 'undefined' ? window.innerWidth / 2 : 960}
+                cy={65}
+                r={24}
+                fill="#ffffff"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: [0, 1.8, 0], opacity: [0, 1, 0] }}
+                transition={{ duration: 0.6, delay: 0.75 }}
+                style={{ filter: 'drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px #ffffff)' }}
+              />
             </svg>
           )}
         </AnimatePresence>
